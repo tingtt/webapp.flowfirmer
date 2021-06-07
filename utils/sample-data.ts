@@ -16,7 +16,7 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
     },
 ]
 
-export const sampleTarget: Target[] = [
+export const sampleTargets: Target[] = [
     {
         id: 0,
         user_id: 0,
