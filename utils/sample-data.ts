@@ -14,6 +14,19 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         targetValue: null,
         defaultValue: 20
     },
+    {
+        id: 1,
+        user_id: 0,
+
+        target_id: 0,
+
+        name: "腹筋",
+        unitName: "回",
+
+        statisticsRule: "Max",
+        targetValue: null,
+        defaultValue: 20
+    }
 ]
 
 export const sampleTargets: Target[] = [
@@ -36,8 +49,8 @@ export const sampleToDos: ToDo[] = [
         id: 0,
         user_id: 0,
 
-        name: "",
-        description: "",
+        name: "1セット",
+        description: "スクワットと腹筋",
 
         startDatetimeScheduled: new Date,
         processingTimeScheduled: 25,
@@ -47,4 +60,15 @@ export const sampleToDos: ToDo[] = [
 
         status: false
     },
+]
+
+export const smapleHabitReminds: HabitRemind[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "トレーニングが終わったら水分補給をする",
+
+        target: sampleTargets[0]
+    }
 ]
