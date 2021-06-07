@@ -9,7 +9,7 @@ export type Term = {
     name: string
     description: string
 
-    targetList: [Target]
+    targetList: Target[]
 
     startDatetimeScheduled: Date
     endDatetimeScheduled: Date
@@ -17,7 +17,7 @@ export type Term = {
     startDatetime: Date
     endDatetime: Date
 
-    toDoList: [ToDo]
+    toDoList: ToDo[]
 
-    documentList: [Document]
+    documentList: Document[]
 }

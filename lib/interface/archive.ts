@@ -11,7 +11,7 @@ export type Archive = {
     // to-doかリマインドを紐付け
     ref: { toDo: ToDo, habitRemind: null} | {toDo: null, habitRemind: HabitRemind}
 
-    targets: [Target]
+    targets: Target[]
 
     // 成果リスト
     outcomes: [

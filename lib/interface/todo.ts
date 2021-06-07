@@ -11,7 +11,7 @@ export type ToDo = {
     startDatetimeScheduled: Date
     processingTimeScheduled: number
 
-    targetList: [Target]
+    targetList: Target[]
     term: Term
 
     status: Boolean
