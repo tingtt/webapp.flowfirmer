@@ -12,7 +12,7 @@ export type ToDo = {
     processingTimeScheduled: number
 
     targetList: Target[]
-    term: Term
+    term: Term | null
 
     status: Boolean
 }
