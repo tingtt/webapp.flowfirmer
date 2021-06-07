@@ -53,7 +53,11 @@ export const sampleToDos: ToDo[] = [
         description: "スクワットと腹筋",
 
         startDatetimeScheduled: new Date,
+        timeInfoExisted: false,
         processingTimeScheduled: 25,
+
+        repeatPattern: null,
+        repeatWeeklyCondition: null,
 
         targetList: sampleTargets,
         term: null,
