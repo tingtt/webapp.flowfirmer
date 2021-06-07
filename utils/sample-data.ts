@@ -30,3 +30,21 @@ export const sampleTargets: Target[] = [
         parentTarget: null
     }
 ]
+
+export const sampleToDos: ToDo[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "",
+        description: "",
+
+        startDatetimeScheduled: new Date,
+        processingTimeScheduled: 25,
+
+        targetList: sampleTargets,
+        term: null,
+
+        status: false
+    },
+]
