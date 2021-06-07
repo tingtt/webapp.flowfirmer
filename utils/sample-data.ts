@@ -52,17 +52,36 @@ export const sampleToDos: ToDo[] = [
         name: "1セット",
         description: "スクワットと腹筋",
 
-        startDatetimeScheduled: new Date,
-        timeInfoExisted: false,
+        startDatetimeScheduled: new Date(2001, 6, 7, 17),
+        timeInfoExisted: true,
         processingTimeScheduled: 25,
 
-        repeatPattern: null,
-        repeatWeeklyCondition: null,
+        repeatPattern: 'Weekly',
+        repeatDayForWeekly: ['Mon.', 'Thu.'],
 
-        targetList: sampleTargets,
+        targetList: [sampleTargets[0]],
         term: null,
 
-        status: false
+        completed: true
+    },
+    {
+        id: 1,
+        user_id: 0,
+
+        name: "1セット",
+        description: "スクワットと腹筋",
+
+        startDatetimeScheduled: new Date(2001, 6, 10, 17),
+        timeInfoExisted: true,
+        processingTimeScheduled: 25,
+
+        repeatPattern: 'Weekly',
+        repeatDayForWeekly: ['Mon.', 'Thu.'],
+
+        targetList: [sampleTargets[0]],
+        term: null,
+
+        completed: false
     },
 ]
 
