@@ -15,13 +15,13 @@ export type ToDo = {
 
     processingTimeScheduled: number
 
-    // to-doの繰り返し情報
+    // 繰り返し周期
     repeatPattern: null | 'Daily' | 'Weekly' | 'Monthly'
     // 毎週の繰り返す曜日情報
-    repeatWeeklyCondition: null | number[]
+    repeatDayForWeekly: null | ('Sun.' | 'Mon.' | 'Tue.' | 'Web.' | 'Thu.' | 'Fri.' | 'Sat.')[]
 
     targetList: Target[]
     term: Term | null
 
-    status: Boolean
+    completed: Boolean
 }
