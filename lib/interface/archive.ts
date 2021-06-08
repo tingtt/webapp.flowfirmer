@@ -8,7 +8,7 @@ export type Archive = {
     user_id: number
 
     // to-doかリマインドを紐付け（ToDoやリマインドに紐付いていない記録の場合はundefined）
-    refType: undefined | 'ToDo' | 'HabitRemind'
+    refType?: 'ToDo' | 'HabitRemind'
     ref?: ToDo | HabitRemind
 
     targets?: Target[]
