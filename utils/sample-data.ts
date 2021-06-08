@@ -85,6 +85,28 @@ export const sampleToDos: ToDo[] = [
     },
 ]
 
+export const sampleTerms: Term[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "スクワットと腹筋の習慣化",
+        description: "腹筋割るぞ−",
+
+        targetList: [sampleTargets[0]],
+
+        startDatetimeScheduled: new Date(2001, 6, 1),
+        endDatetimeScheduled: new Date(2001, 6, 1),
+
+        startDatetime: new Date(2001, 6, 1),
+        endDatetime: null,
+
+        toDoList: [sampleToDos[0], sampleToDos[1]],
+
+        documentList: []
+    },
+]
+
 export const smapleHabitReminds: HabitRemind[] = [
     {
         id: 0,
