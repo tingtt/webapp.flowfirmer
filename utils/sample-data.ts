@@ -57,7 +57,7 @@ export const sampleToDos: ToDo[] = [
         processingTimeScheduled: 25,
 
         repeatPattern: 'Weekly',
-        repeatDayForWeekly: ['Mon.', 'Thu.'],
+        repeatDayForWeekly: ['Mon.'],
 
         targetList: [sampleTargets[0]],
         term: undefined,
@@ -76,7 +76,7 @@ export const sampleToDos: ToDo[] = [
         processingTimeScheduled: 25,
 
         repeatPattern: 'Weekly',
-        repeatDayForWeekly: ['Mon.', 'Thu.'],
+        repeatDayForWeekly: ['Thu.'],
 
         targetList: [sampleTargets[0]],
         term: undefined,
@@ -163,7 +163,7 @@ export const smapleArchives: Archive[] = [
             }
         ],
 
-        text: "",
+        text: "きつかったけどスッキリした〜",
         feelingList: [
             {
                 feeling: sampleFeelingTypes[0],
@@ -174,4 +174,24 @@ export const smapleArchives: Archive[] = [
 
         datetime: new Date(2001, 6, 7, 17)
     },
+    {
+        id: 1,
+        user_id: 0,
+
+        refType: 'HabitRemind',
+        ref: smapleHabitReminds[0],
+
+        targets: [sampleTargets[0]],
+
+        text: "水飲んで生き返った〜",
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 60,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 7, 17, 30)
+    }
 ]
