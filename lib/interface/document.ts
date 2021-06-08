@@ -5,5 +5,5 @@ export type Document = {
     user_id: number
 
     name: string
-    url: Url
+    url: URL
 }
