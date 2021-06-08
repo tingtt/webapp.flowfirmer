@@ -1,4 +1,4 @@
-import { Target, OutcomeScheme, ToDo, Term, HabitRemind, Document, Archive} from "../lib/interface/index";
+import { Target, OutcomeScheme, ToDo, Term, HabitRemind, Document, Archive, FeelingType} from "../lib/interface/index";
 
 export const sampleOutcomeSchemes: OutcomeScheme[] = [
     {
@@ -128,4 +128,51 @@ export const smapleHabitReminds: HabitRemind[] = [
 
         target: sampleTargets[0]
     }
+]
+
+export const sampleFeelingTypes: FeelingType[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "スッキリ",
+
+        defaultPositivePercent: 70,
+        defaultNegativePercent: 0
+    },
+]
+
+export const smapleArchives: Archive[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[0],
+
+        targets: [sampleTargets[0]],
+
+        // 成果リスト
+        outcomes?: [
+            {
+                scheme: sampleOutcomeSchemes[0],
+                value: 20
+            },
+            {
+                scheme: sampleOutcomeSchemes[1],
+                value: 20
+            }
+        ],
+
+        text: "",
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 7, 17)
+    },
 ]
