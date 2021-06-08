@@ -1,3 +1,4 @@
+import { Document } from "./document";
 import { Target } from "./target"
 import { Term } from "./term";
 
@@ -22,6 +23,8 @@ export type ToDo = {
 
     targetList?: Target[]
     term?: Term
+
+    documentList?: Document[]
 
     completed: Boolean
 }

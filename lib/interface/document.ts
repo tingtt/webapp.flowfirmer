@@ -1,9 +1,11 @@
-import { Url } from "url";
+import { Target } from "./target";
 
 export type Document = {
     id: number
     user_id: number
 
     name: string
-    url: Url
+    url: URL
+
+    targetList: Target[]
 }
