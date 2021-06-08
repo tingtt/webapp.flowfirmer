@@ -153,7 +153,7 @@ export const smapleArchives: Archive[] = [
         targets: [sampleTargets[0]],
 
         // 成果リスト
-        outcomes?: [
+        outcomes: [
             {
                 scheme: sampleOutcomeSchemes[0],
                 value: 20
