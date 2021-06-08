@@ -6,5 +6,5 @@ export type HabitRemind = {
 
     name: string
 
-    target: Target
+    target?: Target
 }

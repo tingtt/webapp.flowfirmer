@@ -9,12 +9,12 @@ export type Archive = {
     user_id: number
 
     // to-doかリマインドを紐付け
-    ref: { toDo: ToDo, habitRemind: null} | {toDo: null, habitRemind: HabitRemind}
+    ref?: { toDo: ToDo, habitRemind: null} | {toDo: null, habitRemind: HabitRemind}
 
-    targets: Target[]
+    targets?: Target[]
 
     // 成果リスト
-    outcomes: [
+    outcomes?: [
         {
             scheme: OutcomeScheme,
             value: string | number
@@ -22,7 +22,7 @@ export type Archive = {
     ]
 
     // 日記
-    diary: Diary | null
+    diary?: Diary
 
     // 記録日時（ToDoなら実行時間の中間の時間を取る）
     datetime: Date
