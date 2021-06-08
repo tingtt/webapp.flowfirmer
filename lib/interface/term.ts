@@ -14,8 +14,8 @@ export type Term = {
     startDatetimeScheduled: Date
     endDatetimeScheduled: Date
 
-    startDatetime: Date
-    endDatetime: Date
+    startDatetime: null | Date
+    endDatetime: null | Date
 
     toDoList: ToDo[]
 
