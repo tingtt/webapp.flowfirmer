@@ -5,10 +5,10 @@ export type Target = {
     name: string
     themeColor: string
 
-    outcomeSchemes: OutcomeScheme[] | null
+    outcomeSchemes?: OutcomeScheme[]
 
-    childTargetList: Target[] | null
-    parentTarget: Target | null
+    childTargetList?: Target[]
+    parentTarget?: Target
 }
 
 // 成果記録の型
@@ -20,12 +20,12 @@ export type OutcomeScheme = {
 
     name: string
     //単位
-    unitName: string
+    unitName?: string
 
     // 記録の計算法
     statisticsRule: 'String' | 'Sum' | 'Max' | 'Min'
     // 目標値（記録のデータ型がstringの場合はnull）
-    targetValue: number | null
+    targetValue?: number
     // 入力デフォルト値
-    defaultValue: string | number
+    defaultValue?: string | number
 }

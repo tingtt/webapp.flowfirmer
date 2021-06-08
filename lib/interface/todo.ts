@@ -8,20 +8,20 @@ export type ToDo = {
     name: string
     description: string
 
-    startDatetimeScheduled: Date
+    startDatetimeScheduled?: Date
 
     // 開始時間情報が登録されているかどうか
     timeInfoExisted: Boolean
 
-    processingTimeScheduled: number
+    processingTimeScheduled?: number
 
     // 繰り返し周期
-    repeatPattern: null | 'Daily' | 'Weekly' | 'Monthly'
+    repeatPattern?: 'Daily' | 'Weekly' | 'Monthly'
     // 毎週の繰り返す曜日情報
-    repeatDayForWeekly: null | ('Sun.' | 'Mon.' | 'Tue.' | 'Web.' | 'Thu.' | 'Fri.' | 'Sat.')[]
+    repeatDayForWeekly?: ('Sun.' | 'Mon.' | 'Tue.' | 'Web.' | 'Thu.' | 'Fri.' | 'Sat.')[]
 
-    targetList: Target[]
-    term: Term | null
+    targetList?: Target[]
+    term?: Term
 
     completed: Boolean
 }

@@ -7,17 +7,17 @@ export type Term = {
     user_id: number
 
     name: string
-    description: string
+    description?: string
 
-    targetList: Target[]
+    targetList?: Target[]
 
     startDatetimeScheduled: Date
     endDatetimeScheduled: Date
 
-    startDatetime: Date
-    endDatetime: Date
+    startDatetime?: Date
+    endDatetime?: Date
 
-    toDoList: ToDo[]
+    toDoList?: ToDo[]
 
-    documentList: Document[]
+    documentList?: Document[]
 }
