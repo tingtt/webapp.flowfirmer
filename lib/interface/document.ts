@@ -1,3 +1,4 @@
+import { Target } from "./target";
 
 export type Document = {
     id: number
@@ -5,4 +6,6 @@ export type Document = {
 
     name: string
     url: URL
+
+    targetList: Target[]
 }
