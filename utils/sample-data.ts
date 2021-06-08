@@ -1,4 +1,4 @@
-import { Target, OutcomeScheme, ToDo, Term, HabitRemind, Document, Diary, Archive} from "../lib/interface/index";
+import { Target, OutcomeScheme, ToDo, Term, HabitRemind, Document, Archive} from "../lib/interface/index";
 
 export const sampleOutcomeSchemes: OutcomeScheme[] = [
     {
@@ -105,6 +105,18 @@ export const sampleTerms: Term[] = [
 
         documentList: undefined
     },
+]
+
+export const sampleDocument: Document[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "sample document",
+        url: new URL("https://www.notion.so/tingtt/API-0401a6a3f8904a5988c9661c04243c4f"),
+
+        targetList: [sampleTargets[0]]
+    }
 ]
 
 export const smapleHabitReminds: HabitRemind[] = [
