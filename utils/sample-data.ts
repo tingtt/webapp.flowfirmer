@@ -11,7 +11,7 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         unitName: "回",
 
         statisticsRule: 'Max',
-        targetValue: null,
+        targetValue: undefined,
         defaultValue: 20
     },
     {
@@ -24,7 +24,7 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         unitName: "回",
 
         statisticsRule: "Max",
-        targetValue: null,
+        targetValue: undefined,
         defaultValue: 20
     }
 ]
@@ -37,10 +37,10 @@ export const sampleTargets: Target[] = [
         name: "トレーニング",
         themeColor: "",
 
-        outcomeSchemes: sampleOutcomeSchemes,
+        outcomeSchemes: [sampleOutcomeSchemes[0], sampleOutcomeSchemes[1]],
 
-        childTargetList: null,
-        parentTarget: null
+        childTargetList: undefined,
+        parentTarget: undefined
     }
 ]
 
@@ -60,7 +60,7 @@ export const sampleToDos: ToDo[] = [
         repeatDayForWeekly: ['Mon.', 'Thu.'],
 
         targetList: [sampleTargets[0]],
-        term: null,
+        term: undefined,
 
         completed: true
     },
@@ -79,7 +79,7 @@ export const sampleToDos: ToDo[] = [
         repeatDayForWeekly: ['Mon.', 'Thu.'],
 
         targetList: [sampleTargets[0]],
-        term: null,
+        term: undefined,
 
         completed: false
     },
@@ -99,11 +99,11 @@ export const sampleTerms: Term[] = [
         endDatetimeScheduled: new Date(2001, 6, 1),
 
         startDatetime: new Date(2001, 6, 1),
-        endDatetime: null,
+        endDatetime: undefined,
 
         toDoList: [sampleToDos[0], sampleToDos[1]],
 
-        documentList: []
+        documentList: undefined
     },
 ]
 
