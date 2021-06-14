@@ -62,10 +62,7 @@ export default function NavigationDrawer(props: Props) {
                     <ListItem button key={navigationState.name} onClick={()=>props.setNav(navigationState)}>
                         <ListItemIcon>
                             {/* アイコンの切り替え */}
-                            {navigationState.name == 'All' && <AllInbox />}
-                            {navigationState.name == 'Today' && <Today />}
-                            {navigationState.name == 'Weekly' && <ViewWeek />}
-                            {navigationState.name == 'Dashboard' && <Dashboard />}
+                            {navigationState.name == 'All' ? <AllInbox /> : navigationState.name == 'Today' ? <Today /> : navigationState.name == 'Weekly' ? <ViewWeek /> : null}
                         </ListItemIcon>
                         <ListItemText primary={navigationState.name} />
                     </ListItem>
