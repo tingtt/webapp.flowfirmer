@@ -57,43 +57,43 @@ export default function NavigationDrawer(props: Props) {
             <Divider />
             <List>
                 {/* ナビゲーションリスト */}
-                {appNavigationManager.navigationListItems.originalItems.map((navigationState) => {
-                    // 不正なNavigationStateが読み込まれたらエラー
-                    if (navigationState.name == 'Target') {
-                        throw new Error("Incorrect NavigationState.");
-                    }
-                    return (
-                        <ListItem button key={navigationState.name} onClick={()=>props.setNav(navigationState)}>
-                            <ListItemIcon>
-                                {/* アイコンの切り替え */}
-                                {navigationState.name == 'All' && <AllInbox />}
-                                {navigationState.name == 'Today' && <Today />}
-                                {navigationState.name == 'Weekly' && <ViewWeek />}
-                                {navigationState.name == 'Dashboard' && <Dashboard />}
-                            </ListItemIcon>
-                            <ListItemText primary={navigationState.name} />
-                        </ListItem>
-                    );
-                })}
+                {/* TargetとDashboard以外を抽出して表示 */}
+                {appNavigationManager.navigationListItems.originalItems.filter(value => value.name != 'Target' && value.name != 'Dashboard').map((navigationState) => (
+                    <ListItem button key={navigationState.name} onClick={()=>props.setNav(navigationState)}>
+                        <ListItemIcon>
+                            {/* アイコンの切り替え */}
+                            {navigationState.name == 'All' && <AllInbox />}
+                            {navigationState.name == 'Today' && <Today />}
+                            {navigationState.name == 'Weekly' && <ViewWeek />}
+                            {navigationState.name == 'Dashboard' && <Dashboard />}
+                        </ListItemIcon>
+                        <ListItemText primary={navigationState.name} />
+                    </ListItem>
+                ))}
             </List>
             <Divider />
             <List>
                 {/* Targetのナビゲーションリスト */}
-                {[...appNavigationManager.navigationListItems.pinnedTargets, ...appNavigationManager.navigationListItems.otherTargets].map((navigationState) => {
-                    // Target以外のNavigationStateが読み込まれたらエラー
-                    if (navigationState.name != 'Target') {
-                        throw new Error("Incorrect NavigationState.");
-                    }
-                    return (
-                        <ListItem button key={navigationState.target.name} onClick={()=>props.setNav(navigationState)}>
-                            <ListItemIcon>
-                                {/* ピン留めされているかの判定でアイコンを切り替え */}
-                                {(navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
-                            </ListItemIcon>
-                            <ListItemText primary={navigationState.target.name} />
-                        </ListItem>
-                    );
-                })}
+                {[...appNavigationManager.navigationListItems.pinnedTargets, ...appNavigationManager.navigationListItems.otherTargets].filter(value => value.name == 'Target').map((navigationState) => (
+                    <ListItem button key={navigationState.name == 'Target' ? navigationState.target.name : ""} onClick={()=>props.setNav(navigationState)}>
+                        <ListItemIcon>
+                            {/* ピン留めされているかの判定でアイコンを切り替え */}
+                            {(navigationState.name == 'Target' && navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
+                        </ListItemIcon>
+                        <ListItemText primary={navigationState.name == 'Target' ? navigationState.target.name : ""} />
+                    </ListItem>
+
+                    /**
+                     * TODO:VSCodeでエラー判定だから一旦（エラーは出ないはずだからデプロイ時に変更する）
+                     */
+                    // <ListItem button key={navigationState.target.name} onClick={()=>props.setNav(navigationState)}>
+                    // <ListItemIcon>
+                    //     {/* ピン留めされているかの判定でアイコンを切り替え */}
+                    //     {(navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
+                    // </ListItemIcon>
+                    // <ListItemText primary={navigationState.target.name} />
+                    // </ListItem>
+                ))}
             </List>
         </Drawer>
     );
