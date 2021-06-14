@@ -92,6 +92,20 @@ export default function NavigationDrawer(props: Props) {
                     // </ListItem>
                 ))}
             </List>
+            {/* TODO: 以下のDividerとListの表示位置をbottomに修正 */}
+            <Divider />
+            <List>
+                {/* Dashboard */}
+                {/* navigationListItemにDashboardが含まれていて、hiddenがundefinedの場合に表示 */}
+                {appNavigationManager.navigationListItems.originalItems.filter(value => value.name == 'Dashboard' && value.hidden == undefined).length != 0 &&
+                    <ListItem button key={'Dashboard'} onClick={()=>props.setNav({name: 'Dashboard'})}>
+                        <ListItemIcon>
+                            <Dashboard />
+                        </ListItemIcon>
+                        <ListItemText primary={'Dashboard'} />
+                    </ListItem>
+                }
+            </List>
         </Drawer>
     );
 }
