@@ -9,6 +9,9 @@ export type Target = {
 
     childTargetList?: Target[]
     parentTarget?: Target
+
+    pinnedAtNavigationList?: true
+    hiddenAtNavigationList?: true
 }
 
 // 成果記録の型
