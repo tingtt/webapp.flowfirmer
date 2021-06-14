@@ -23,25 +23,6 @@ export default function NavigationDrawer(props: Props) {
 
     const appNavigationManager = AppNavigatoinListManager.generateInstance(0);
 
-	const navigationListDefaultItem = (navigationState: NavigationState, setNav: React.Dispatch<React.SetStateAction<NavigationState>>) => {
-		return (
-			<ListItem button key={navigationState.name} onClick={()=>setNav(navigationState)}>
-				<ListItemIcon><InboxIcon/></ListItemIcon>
-				<ListItemText primary={navigationState.name} />
-			</ListItem>
-		);
-	}
-
-	const navigationListTargetItem = (navigationState: NavigationState, setNav: React.Dispatch<React.SetStateAction<NavigationState>>) => {
-		const keyStr = (navigationState.name == 'Target') ? navigationState.target.name : "";
-		return (
-			<ListItem button key={keyStr} onClick={()=>setNav(navigationState)}>
-				<ListItemIcon><InboxIcon/></ListItemIcon>
-				<ListItemText primary={keyStr} />
-			</ListItem>
-		);
-	}
-
     return (
         <Drawer
             className={classes.drawer}
@@ -64,17 +45,32 @@ export default function NavigationDrawer(props: Props) {
         <Divider />
         <List>
             {appNavigationManager.navigationListItems.originalItems.map((navigationState) => (
-                navigationListDefaultItem(navigationState, props.setNav)
+                <ListItem button key={navigationState.name} onClick={()=>props.setNav(navigationState)}>
+                    <ListItemIcon><InboxIcon/></ListItemIcon>
+                    <ListItemText primary={navigationState.name} />
+                </ListItem>
             ))}
         </List>
         <Divider />
         <List>
-            {appNavigationManager.navigationListItems.pinnedTargets.map((navigationState) => (
-                navigationListTargetItem(navigationState, props.setNav)
-            ))}
-            {appNavigationManager.navigationListItems.otherTargets.map((navigationState) => (
-                navigationListTargetItem(navigationState, props.setNav)
-            ))}
+            {appNavigationManager.navigationListItems.pinnedTargets.map((navigationState) => {
+                const keyStr = (navigationState.name == 'Target') ? navigationState.target.name : "";
+                return (
+                    <ListItem button key={keyStr} onClick={()=>props.setNav(navigationState)}>
+                        <ListItemIcon><InboxIcon/></ListItemIcon>
+                        <ListItemText primary={keyStr} />
+                    </ListItem>
+                );
+            })}
+            {appNavigationManager.navigationListItems.otherTargets.map((navigationState) => {
+                const keyStr = (navigationState.name == 'Target') ? navigationState.target.name : "";
+                return (
+                    <ListItem button key={keyStr} onClick={()=>props.setNav(navigationState)}>
+                        <ListItemIcon><InboxIcon/></ListItemIcon>
+                        <ListItemText primary={keyStr} />
+                    </ListItem>
+                );
+            })}
         </List>
         </Drawer>
     );
