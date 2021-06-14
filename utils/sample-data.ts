@@ -41,6 +41,24 @@ export const sampleTargets: Target[] = [
 
         childTargetList: undefined,
         parentTarget: undefined
+    },
+    {
+        id: 1,
+        user_id: 0,
+
+        name: "Flowfirmer",
+        themeColor: "",
+
+        pinnedAtNavigationList: true
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        name: "IntelliBase",
+        themeColor: "",
+
+        hiddenAtNavigationList: true
     }
 ]
 
