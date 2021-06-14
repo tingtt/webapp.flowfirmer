@@ -52,9 +52,7 @@ export default class AppNavigatoinListManager {
      * @returns NavigationState
      */
     public getInitNavigationState(): NavigationState {
-        /**
-         * TODO: ユーザーが保持しているナビゲーション状態を取得
-         */
+        // TODO: ユーザーが保持しているナビゲーション状態を取得
         return {name: 'All'};
     }
 
@@ -63,16 +61,12 @@ export default class AppNavigatoinListManager {
      * @returns boolean
      */
     public getInitNavigationDrawerOpenState(): boolean {
-        /**
-         * TODO: ユーザーが保持しているドロワー表示状態を取得
-         */
+        // TODO: ユーザーが保持しているドロワー表示状態を取得
         return true;
     }
 
     private getInitNavigationItemList(): NavigationState[] {
-        /**
-         * TODO: ユーザーが設定したナビゲーション項目の表示設定を取得
-         */
+        // TODO: ユーザーが設定したナビゲーション項目の表示設定を取得
         return [
             { name: 'All' },
             { name: 'Today' },

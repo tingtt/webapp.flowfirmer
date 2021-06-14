@@ -80,9 +80,7 @@ export default function NavigationDrawer(props: Props) {
                         <ListItemText primary={navigationState.name == 'Target' ? navigationState.target.name : ""} />
                     </ListItem>
 
-                    /**
-                     * TODO:VSCodeでエラー判定だから一旦（エラーは出ないはずだからデプロイ時に変更する）
-                     */
+                    // TODO:VSCodeでエラー判定だから一旦（エラーは出ないはずだからデプロイ時に変更する）
                     // <ListItem button key={navigationState.target.name} onClick={()=>props.setNav(navigationState)}>
                     // <ListItemIcon>
                     //     {/* ピン留めされているかの判定でアイコンを切り替え */}
