@@ -1,11 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
-import NavigationDrawer from './NavigationDrawer'
 
 import { NavigationState } from '../../lib/state/navigationState'
 
 import { useHotkeys } from 'react-hotkeys-hook';
 import { createStyles, CssBaseline, makeStyles, Theme } from '@material-ui/core';
+
+import NavigationDrawer from './NavigationDrawer'
 import AddForm from './lib/AddForm';
 
 export default function Layout() {
