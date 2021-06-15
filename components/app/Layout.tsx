@@ -6,6 +6,7 @@ import { NavigationState } from '../../lib/state/navigationState'
 
 import { useHotkeys } from 'react-hotkeys-hook';
 import { createStyles, CssBaseline, makeStyles, Theme } from '@material-ui/core';
+import AddForm from './lib/AddForm';
 
 export default function Layout() {
 
@@ -70,6 +71,7 @@ export default function Layout() {
                     [classes.contentShift]: navigationDrawerOpen,
                 })}
             >
+                <AddForm />
                 <p>
                     {(navigationState.name == 'Target')? navigationState.target.name : navigationState.name}
                 </p>
