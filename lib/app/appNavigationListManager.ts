@@ -11,11 +11,11 @@ export default class AppNavigatoinListManager {
     public static generateInstance(user_id: number): AppNavigatoinListManager {
         // インスタンスが既に生成されている場合にエラー
         if (AppNavigatoinListManager._instance) {
-            throw new Error("AppStateManager instance already exists.");
+            throw new Error("AppNavigationManager instance already exists.");
         }
 
+        console.log("Generating 'AppNavigationManager' instance.");
         this._instance = new AppNavigatoinListManager(user_id);
-        console.log("Generating 'AppStateManager' instance.");
 
         return this._instance;
     }
