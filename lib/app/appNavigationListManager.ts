@@ -8,16 +8,10 @@ export default class AppNavigatoinListManager {
 
     private static _instance: AppNavigatoinListManager;
 
-    public static generateInstance(user_id?: number): AppNavigatoinListManager {
-        if (!this._instance) {
-            if (user_id != undefined) {
-                console.log("Generating 'AppStateManager' instance.");
-                this._instance = new AppNavigatoinListManager(user_id);
-            } else {
-                // インスタンス未生成時にユーザーIDが引数に存在しないときにエラー
-                throw new Error("AppStateManager needs 'user_id' to generate instance.");
-            }
-        }
+    public static generateInstance(user_id: number): AppNavigatoinListManager {
+        console.log("Generating 'AppStateManager' instance.");
+        this._instance = new AppNavigatoinListManager(user_id);
+
         return this._instance;
     }
 
