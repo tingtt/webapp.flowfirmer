@@ -79,15 +79,6 @@ export default function NavigationDrawer(props: Props) {
                         </ListItemIcon>
                         <ListItemText primary={navigationState.name == 'Target' ? navigationState.target.name : ""} />
                     </ListItem>
-
-                    // TODO:VSCodeでエラー判定だから一旦（エラーは出ないはずだからデプロイ時に変更する）
-                    // <ListItem button key={navigationState.target.name} onClick={()=>props.setNav(navigationState)}>
-                    // <ListItemIcon>
-                    //     {/* ピン留めされているかの判定でアイコンを切り替え */}
-                    //     {(navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
-                    // </ListItemIcon>
-                    // <ListItemText primary={navigationState.target.name} />
-                    // </ListItem>
                 ))}
             </List>
             {/* TODO: 以下のDividerとListの表示位置をbottomに修正 */}
