@@ -156,7 +156,7 @@ export const sampleDocument: Document[] = [
     }
 ]
 
-export const smapleHabitReminds: HabitRemind[] = [
+export const sampleHabitReminds: HabitRemind[] = [
     {
         id: 0,
         user_id: 0,
@@ -179,7 +179,7 @@ export const sampleFeelingTypes: FeelingType[] = [
     },
 ]
 
-export const smapleArchives: Archive[] = [
+export const sampleArchives: Archive[] = [
     {
         id: 0,
         user_id: 0,
@@ -216,7 +216,7 @@ export const smapleArchives: Archive[] = [
         user_id: 0,
 
         refType: 'HabitRemind',
-        ref: smapleHabitReminds[0],
+        ref: sampleHabitReminds[0],
 
         targets: [sampleTargets[0]],
 
