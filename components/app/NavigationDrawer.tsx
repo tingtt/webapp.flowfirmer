@@ -21,7 +21,14 @@ type Props = {
 export default function NavigationDrawer(props: Props) {
     const classes = props.classes;
 
-    const appNavigationManager = AppNavigatoinListManager.generateInstance(0);
+    const appNavigationManager: AppNavigatoinListManager = (() => {
+        try {
+            return  AppNavigatoinListManager.generateInstance(0)
+        } catch (e) {
+            return  AppNavigatoinListManager.getInstance();
+        }
+    })();
+
 
     return (
         <Drawer

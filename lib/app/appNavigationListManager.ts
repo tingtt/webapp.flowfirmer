@@ -9,8 +9,13 @@ export default class AppNavigatoinListManager {
     private static _instance: AppNavigatoinListManager;
 
     public static generateInstance(user_id: number): AppNavigatoinListManager {
-        console.log("Generating 'AppStateManager' instance.");
+        // インスタンスが既に生成されている場合にエラー
+        if (AppNavigatoinListManager._instance) {
+            throw new Error("AppStateManager instance already exists.");
+        }
+
         this._instance = new AppNavigatoinListManager(user_id);
+        console.log("Generating 'AppStateManager' instance.");
 
         return this._instance;
     }
@@ -78,11 +83,6 @@ export default class AppNavigatoinListManager {
     }
 
     private constructor(user_id: number) {
-
-        // インスタンスが既に生成されている場合にエラー
-        if (AppNavigatoinListManager._instance) {
-            throw new Error("AppStateManager instance already exists.");
-        }
 
         // ユーザーIDを保持
         this.user_id = user_id;
