@@ -15,7 +15,13 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: '3em',
         },
         root: {
-            width: 'max-content',
+            width: '100%',
+        },
+        divInput: {
+            textAlign: 'center',
+        },
+        input: {
+            width: '100%',
         },
         targetChip: {
             margin: theme.spacing(0.5),
@@ -40,7 +46,7 @@ export default function AddForm(props: Props) {
     const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[]>();
     // デフォルト選択のTargetを指定
     if (props.defaultSelectTargetId != undefined) {
-        () => setSelectedTargetIdList([props.defaultSelectTargetId]);
+        () => setSelectedTargetIdList([props.defaultSelectTargetId != undefined ? props.defaultSelectTargetId : -1]);
     }
 
     // Target新規作成用の名前を保持
@@ -149,21 +155,28 @@ export default function AddForm(props: Props) {
             className={classes.root}
         >
             {/* 追加フォーム */}
-            <Input
-                placeholder="New to-do / term"
-                inputProps={{ 'aria-label': 'description' }}
-                onChange={syntaxDetection}
-            />
+            <div
+                className={classes.divInput}
+            >
+                <Input
+                    placeholder="New to-do / term"
+                    inputProps={{ 'aria-label': 'description' }}
+                    onChange={syntaxDetection}
+                    className={classes.input}
+                />
+            </div>
             <br />
             {/* 選択中のTargetリスト */}
-            {selectedTargetIdList && selectedTargetIdList.map(targetId =>
-                <Chip
-                    className={classes.targetChip}
-                    key={targetId}
-                    label={targetList.find(value => value.target.id == targetId)?.target.name}
-                    onDelete={() => removeTarget(targetId)}
-                />
-            )}
+            <div>
+                {selectedTargetIdList && selectedTargetIdList.filter(value => value != -1).map(targetId =>
+                    <Chip
+                        className={classes.targetChip}
+                        key={targetId}
+                        label={targetList.find(value => value.target.id == targetId)?.target.name}
+                        onDelete={() => removeTarget(targetId)}
+                    />
+                )}
+            </div>
             {/* 補完リストメニュー */}
             <Menu
                 className={classes.menu}

@@ -7,7 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { createStyles, CssBaseline, makeStyles, Theme } from '@material-ui/core';
 
 import NavigationDrawer from './NavigationDrawer'
-import AddForm from './lib/AddForm';
+import Today from './Today/Today';
 
 export default function Layout() {
 
@@ -60,6 +60,16 @@ export default function Layout() {
 
     return (
         <div className={classes.root}>
+            {/* 大枠のdivのstyle */}
+            <style global jsx>{`
+                html,
+                body,
+                body > div:first-child,
+                div#__next,
+                div#__next > div {
+                    height: 100%;
+                }
+            `}</style>
             <CssBaseline />
             <NavigationDrawer
                 drawerOpen={navigationDrawerOpen}
@@ -72,7 +82,7 @@ export default function Layout() {
                     [classes.contentShift]: navigationDrawerOpen,
                 })}
             >
-                <AddForm />
+                <Today />
                 <p>
                     {(navigationState.name == 'Target')? navigationState.target.name : navigationState.name}
                 </p>
