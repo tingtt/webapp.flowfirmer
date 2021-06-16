@@ -101,6 +101,25 @@ export const sampleToDos: ToDo[] = [
 
         completed: false
     },
+    {
+        id: 2,
+        user_id: 0,
+
+        name: "1セット",
+        description: "スクワットと腹筋",
+
+        startDatetimeScheduled: new Date(2001, 6, 14, 17),
+        timeInfoExisted: true,
+        processingTimeScheduled: 25,
+
+        repeatPattern: 'Weekly',
+        repeatDayForWeekly: ['Mon.'],
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: false
+    },
 ]
 
 export const sampleTerms: Term[] = [
