@@ -8,6 +8,12 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { createStyles, CssBaseline, makeStyles, Theme } from '@material-ui/core';
 import AddForm from './lib/AddForm';
 
+import AllView from "./All/All";
+import TodayView from './Today/Today';
+import WeeklyView from './Weekly/Weekly';
+import TargetView from './Target/Target';
+import DashboardView from './Dashboard/Dashboard';
+
 export default function Layout() {
 
     const [navigationDrawerOpen, setNavigationDrawerOpen] = React.useState(true);
@@ -72,9 +78,12 @@ export default function Layout() {
                 })}
             >
                 <AddForm />
-                <p>
-                    {(navigationState.name == 'Target')? navigationState.target.name : navigationState.name}
-                </p>
+                {/* navigationStateごとに表示を切り替え */}
+                { navigationState.name == 'All' && <AllView /> }
+                { navigationState.name == 'Today' && <TodayView /> }
+                { navigationState.name == 'Weekly' && <WeeklyView /> }
+                { navigationState.name == 'Target' && <TargetView /> }
+                { navigationState.name == 'Dashboard' && <DashboardView /> }
             </main>
         </div>
     );
