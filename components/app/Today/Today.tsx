@@ -34,8 +34,10 @@ export default function Today() {
                 className={classes.contentLeft}
             >
                 <AddForm />
-                {/* TODO: to-doリスト実装 */}
-                {/* TODO: 完了済to-do、記録済リマインドリスト実装 */}
+                <div>
+                    {/* TODO: to-doリスト実装 */}
+                    {/* TODO: 完了済to-do、記録済リマインドリスト実装 */}
+                </div>
             </div>
             <Divider orientation='vertical' flexItem/>
             {/* 右 */}
