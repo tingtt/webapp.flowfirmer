@@ -7,7 +7,12 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { createStyles, CssBaseline, makeStyles, Theme } from '@material-ui/core';
 
 import NavigationDrawer from './NavigationDrawer'
-import Today from './Today/Today';
+
+import AllView from "./All/All";
+import TodayView from './Today/Today';
+import WeeklyView from './Weekly/Weekly';
+import TargetView from './Target/Target';
+import DashboardView from './Dashboard/Dashboard';
 
 export default function Layout() {
 
@@ -82,10 +87,12 @@ export default function Layout() {
                     [classes.contentShift]: navigationDrawerOpen,
                 })}
             >
-                <Today />
-                <p>
-                    {(navigationState.name == 'Target')? navigationState.target.name : navigationState.name}
-                </p>
+                {/* navigationStateごとに表示を切り替え */}
+                { navigationState.name == 'All' && <AllView /> }
+                { navigationState.name == 'Today' && <TodayView /> }
+                { navigationState.name == 'Weekly' && <WeeklyView /> }
+                { navigationState.name == 'Target' && <TargetView /> }
+                { navigationState.name == 'Dashboard' && <DashboardView /> }
             </main>
         </div>
     );
