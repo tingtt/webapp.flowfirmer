@@ -10,7 +10,7 @@ export default class AppNavigatoinListManager {
 
     public static generateInstance(user_id: number): AppNavigatoinListManager {
         // インスタンスが既に生成されている場合にエラー
-        if (AppNavigatoinListManager._instance) {
+        if (this._instance) {
             throw new Error("AppNavigationManager instance already exists.");
         }
 
