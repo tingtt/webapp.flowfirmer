@@ -5,6 +5,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { createStyles, makeStyles, Theme } from '@material-ui/core';
 
 import { NavigationState } from '../../lib/state/navigationState'
 import { ClassNameMap } from "@material-ui/styles";
@@ -18,8 +19,20 @@ type Props = {
 	classes: ClassNameMap
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        targetListDiv: {
+            overflow: 'auto',
+        },
+        bottomItem: {
+            marginTop: 'auto',
+        }
+    })
+);
+
 export default function NavigationDrawer(props: Props) {
-    const classes = props.classes;
+    const layoutClasses = props.classes;
+    const classes = useStyles();
 
     const appNavigationManager: AppNavigatoinListManager = (() => {
         try {
@@ -32,12 +45,12 @@ export default function NavigationDrawer(props: Props) {
 
     return (
         <Drawer
-            className={classes.drawer}
+            className={layoutClasses.drawer}
             variant="persistent"
             anchor="left"
             open={props.drawerOpen}
             classes={{
-            paper: classes.drawerPaper,
+            paper: layoutClasses.drawerPaper,
             }}
         >
             <Divider />
@@ -76,32 +89,49 @@ export default function NavigationDrawer(props: Props) {
                 ))}
             </List>
             <Divider />
-            <List>
-                {/* Targetのナビゲーションリスト */}
-                {[...appNavigationManager.navigationListItems.pinnedTargets, ...appNavigationManager.navigationListItems.otherTargets].filter(value => value.name == 'Target').map((navigationState) => (
-                    <ListItem button key={navigationState.name == 'Target' ? navigationState.target.name : ""} onClick={()=>props.setNav(navigationState)}>
-                        <ListItemIcon>
-                            {/* ピン留めされているかの判定でアイコンを切り替え */}
-                            {(navigationState.name == 'Target' && navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
-                        </ListItemIcon>
-                        <ListItemText primary={navigationState.name == 'Target' ? navigationState.target.name : ""} />
-                    </ListItem>
-                ))}
-            </List>
-            {/* TODO: 以下のDividerとListの表示位置をbottomに修正 */}
-            <Divider />
-            <List>
-                {/* Dashboard */}
-                {/* navigationListItemにDashboardが含まれていて、hiddenがundefinedの場合に表示 */}
-                {appNavigationManager.navigationListItems.originalItems.filter(value => value.name == 'Dashboard' && value.hidden == undefined).length != 0 &&
-                    <ListItem button key={'Dashboard'} onClick={()=>props.setNav({name: 'Dashboard'})}>
-                        <ListItemIcon>
-                            <Dashboard />
-                        </ListItemIcon>
-                        <ListItemText primary={'Dashboard'} />
-                    </ListItem>
-                }
-            </List>
+            <div
+                className={classes.targetListDiv}
+            >
+                <List>
+                    {/* Targetのナビゲーションリスト */}
+                    {[...appNavigationManager.navigationListItems.pinnedTargets, ...appNavigationManager.navigationListItems.otherTargets].filter(value => value.name == 'Target').map((navigationState) => (
+                        <ListItem button key={navigationState.name == 'Target' ? navigationState.target.name : ""} onClick={()=>props.setNav(navigationState)}>
+                            <ListItemIcon>
+                                {/* ピン留めされているかの判定でアイコンを切り替え */}
+                                {(navigationState.name == 'Target' && navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
+                            </ListItemIcon>
+                            <ListItemText primary={navigationState.name == 'Target' ? navigationState.target.name : ""} />
+                        </ListItem>
+                    ))}
+                </List>
+                <List>
+                    {[...Array(10)].map(_ => (
+                        <ListItem button key={'New'}>
+                            <ListItemIcon>
+                                <AddCircle />
+                            </ListItemIcon>
+                            <ListItemText primary={'New'} />
+                        </ListItem>
+                    ))}
+                </List>
+            </div>
+            <div
+                className={classes.bottomItem}
+            >
+                <Divider />
+                <List>
+                    {/* Dashboard */}
+                    {/* navigationListItemにDashboardが含まれていて、hiddenがundefinedの場合に表示 */}
+                    {appNavigationManager.navigationListItems.originalItems.filter(value => value.name == 'Dashboard' && value.hidden == undefined).length != 0 &&
+                        <ListItem button key={'Dashboard'} onClick={()=>props.setNav({name: 'Dashboard'})}>
+                            <ListItemIcon>
+                                <Dashboard />
+                            </ListItemIcon>
+                            <ListItemText primary={'Dashboard'} />
+                        </ListItem>
+                    }
+                </List>
+            </div>
         </Drawer>
     );
 }
