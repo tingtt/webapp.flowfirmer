@@ -54,11 +54,13 @@ const useStyles = makeStyles((theme: Theme) =>
         detailInfoTopHalf: {
             flex: 1,
             display: 'flex',
+            marginLeft: 'auto',
             alignItems: 'center',
         },
         detailInfoBottomHalf: {
             flex: 1,
             display: 'flex',
+            marginLeft: 'auto',
             alignItems: 'center'
         },
         detailInfoSpan: {
@@ -102,7 +104,7 @@ export default function ToDoListItem(props: Props) {
                 <span
                     className={classes.todoNameSpan}
                 >
-                    {props.todo.name}
+                    {props.todo.name}{[...Array(30)].map(_ => "a")}
                 </span>
 
                 {/* Description */}

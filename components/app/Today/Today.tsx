@@ -14,10 +14,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         contentLeft: {
             flex: 1,
+            overflow: 'auto',
             paddingRight: theme.spacing(2)
         },
         contentRight: {
             flex: 1,
+            overflow: 'auto',
             paddingLeft: theme.spacing(2)
         },
     }),
