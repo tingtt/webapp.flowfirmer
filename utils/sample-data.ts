@@ -62,6 +62,28 @@ export const sampleTargets: Target[] = [
     }
 ]
 
+export const sampleTerms: Term[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "スクワットと腹筋の習慣化",
+        description: "腹筋割るぞ−",
+
+        targetList: [sampleTargets[0]],
+
+        startDatetimeScheduled: new Date(2001, 6, 1),
+        endDatetimeScheduled: new Date(2001, 6, 1),
+
+        startDatetime: new Date(2001, 6, 1),
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: undefined
+    },
+]
+
 export const sampleToDos: ToDo[] = [
     {
         id: 0,
@@ -78,7 +100,7 @@ export const sampleToDos: ToDo[] = [
         repeatDayForWeekly: ['Mon.'],
 
         targetList: [sampleTargets[0]],
-        term: undefined,
+        term: sampleTerms[0],
 
         completed: true
     },
@@ -87,11 +109,10 @@ export const sampleToDos: ToDo[] = [
         user_id: 0,
 
         name: "1セット",
-        description: "スクワットと腹筋",
 
         startDatetimeScheduled: new Date(2001, 6, 10, 17),
         timeInfoExisted: true,
-        processingTimeScheduled: 25,
+        processingTimeScheduled: 70,
 
         repeatPattern: 'Weekly',
         repeatDayForWeekly: ['Thu.'],
@@ -119,28 +140,6 @@ export const sampleToDos: ToDo[] = [
         term: undefined,
 
         completed: false
-    },
-]
-
-export const sampleTerms: Term[] = [
-    {
-        id: 0,
-        user_id: 0,
-
-        name: "スクワットと腹筋の習慣化",
-        description: "腹筋割るぞ−",
-
-        targetList: [sampleTargets[0]],
-
-        startDatetimeScheduled: new Date(2001, 6, 1),
-        endDatetimeScheduled: new Date(2001, 6, 1),
-
-        startDatetime: new Date(2001, 6, 1),
-        endDatetime: undefined,
-
-        toDoList: [sampleToDos[0], sampleToDos[1]],
-
-        documentList: undefined
     },
 ]
 
