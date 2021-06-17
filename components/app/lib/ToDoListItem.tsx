@@ -27,13 +27,14 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             flexWrap: 'wrap',
             height: '100%',
+            whiteSpace: 'nowrap',
+            overflow: 'auto',
         },
         todoNameSpan: {
             flex: 4,
             display: 'flex',
             alignItems: 'center',
             fontSize: theme.spacing(2.4),
-            whiteSpace: 'nowrap',
         },
         todoDescriptionSpan: {
             flex: 0.5,
@@ -51,13 +52,11 @@ const useStyles = makeStyles((theme: Theme) =>
             whiteSpace: 'nowrap'
         },
         detailInfoTopHalf: {
-            marginLeft: 'auto',
             flex: 1,
             display: 'flex',
             alignItems: 'center',
         },
         detailInfoBottomHalf: {
-            marginLeft: 'auto',
             flex: 1,
             display: 'flex',
             alignItems: 'center'
