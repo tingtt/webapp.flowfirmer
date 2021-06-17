@@ -104,16 +104,6 @@ export default function NavigationDrawer(props: Props) {
                         </ListItem>
                     ))}
                 </List>
-                <List>
-                    {[...Array(10)].map(_ => (
-                        <ListItem button key={'New'}>
-                            <ListItemIcon>
-                                <AddCircle />
-                            </ListItemIcon>
-                            <ListItemText primary={'New'} />
-                        </ListItem>
-                    ))}
-                </List>
             </div>
             <div
                 className={classes.bottomItem}
