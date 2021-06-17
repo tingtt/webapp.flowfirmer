@@ -7,7 +7,7 @@ export type ToDo = {
     user_id: number
 
     name: string
-    description: string
+    description?: string
 
     startDatetimeScheduled?: Date
 
