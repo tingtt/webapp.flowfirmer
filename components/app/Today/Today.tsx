@@ -49,7 +49,12 @@ export default function Today() {
                 <div>
                     <Divider />
                     {/* TODO: to-doリスト実装 */}
-                    {appDataManager.todos?.filter(value => !value.completed || true ).map(value => <div><ToDoListItem todo={value} /><Divider /></div>)}
+                    {appDataManager.todos?.filter(value => !value.completed || true ).map(value => (
+                        <div key={value.id}>
+                            <ToDoListItem key={value.id} todo={value} />
+                            <Divider />
+                        </div>
+                    ))}
                     {/* TODO: 完了済to-do、記録済リマインドリスト実装 */}
                 </div>
             </div>
