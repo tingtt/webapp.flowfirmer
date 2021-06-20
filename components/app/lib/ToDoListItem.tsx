@@ -145,6 +145,7 @@ export default function ToDoListItem(props: Props) {
                     <div
                         className={classes.detailInfoDiv}
                     >
+                        {/* 実行時間によって表示を切り替え（1時間以上かどうか） */}
                         {props.todo.processingTimeScheduled != undefined && props.todo.processingTimeScheduled >= 60 ?
                             <span className={classes.detailInfoSpan}>{Math.trunc(props.todo.processingTimeScheduled / 60)}h{props.todo.processingTimeScheduled % 60}min</span>
                             :
