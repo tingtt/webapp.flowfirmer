@@ -100,7 +100,7 @@ export default function ToDoListItem(props: Props) {
 
     const classes = useStyles();
 
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
