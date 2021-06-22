@@ -103,6 +103,7 @@ export default function ToDoListItem(props: Props) {
     const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // TODO:to-do完了状態の更新処理
         setChecked(event.target.checked);
     };
 
