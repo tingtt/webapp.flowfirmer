@@ -52,7 +52,21 @@ export default function Today() {
                 <div>
                     <Divider />
                     {/* TODO: to-doリスト実装 */}
-                    {appDataManager.todos?.filter(value => !value.completed).map(value => (
+                    {appDataManager.todos?.filter(value => !value.completed).sort((a,b) => {
+                        var comparison: number = 0;
+                        if (a.startDatetimeScheduled == undefined) {
+                            if (b.startDatetimeScheduled != undefined) {
+                                comparison = -1;
+                            }
+                        } else {
+                            if (b.startDatetimeScheduled == undefined) {
+                                comparison = 1;
+                            } else {
+                                a.startDatetimeScheduled < b.startDatetimeScheduled ? comparison = -1 : comparison = 1;
+                            }
+                        }
+                        return comparison;
+                    }).map(value => (
                         <div key={value.id} onClick={() => setSelectedToDoId(value.id)} >
                             <ToDoListItem key={value.id} todo={value} />
                             <Divider />
