@@ -7,12 +7,12 @@ export type ToDo = {
     user_id: number
 
     name: string
-    description: string
+    description?: string
 
     startDatetimeScheduled?: Date
 
     // 開始時間情報が登録されているかどうか
-    timeInfoExisted: Boolean
+    timeInfoExisted: boolean
 
     processingTimeScheduled?: number
 
@@ -26,5 +26,5 @@ export type ToDo = {
 
     documentList?: Document[]
 
-    completed: Boolean
+    completed: boolean
 }
