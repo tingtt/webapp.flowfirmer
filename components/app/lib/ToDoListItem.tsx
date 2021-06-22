@@ -140,7 +140,6 @@ export default function ToDoListItem(props: Props) {
                         className={classes.todoNameSpan}
                     >
                         <span>{props.todo.name}</span>
-                        {[...Array(30)].map(_ => "a")}
                     </div>
                     <div
                         className={classes.detailInfoDiv}
@@ -151,7 +150,7 @@ export default function ToDoListItem(props: Props) {
                             :
                             <span className={classes.detailInfoSpan}>{props.todo.processingTimeScheduled}min</span>
                         }
-                        <span className={classes.detailInfoSpan}>6:30</span>
+                        <span className={classes.detailInfoSpan}>{props.todo.startDatetimeScheduled != undefined ? props.todo.startDatetimeScheduled.getHours() + ":" + ('0' + props.todo.startDatetimeScheduled.getMinutes()).slice(-2) : ""}</span>
                     </div>
                 </div>
                 <div
