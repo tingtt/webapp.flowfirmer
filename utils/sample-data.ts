@@ -35,7 +35,7 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "トレーニング",
-        themeColor: "",
+        themeColor: "#1abc9c",
 
         outcomeSchemes: [sampleOutcomeSchemes[0], sampleOutcomeSchemes[1]],
 
@@ -47,7 +47,7 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "Flowfirmer",
-        themeColor: "",
+        themeColor: "#7ed6df",
 
         pinnedAtNavigationList: true
     },
@@ -56,7 +56,7 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "IntelliBase",
-        themeColor: "",
+        themeColor: "#f6e58d",
 
         hiddenAtNavigationList: true
     }
