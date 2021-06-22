@@ -26,7 +26,20 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         statisticsRule: "Max",
         targetValue: undefined,
         defaultValue: 20
-    }
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        target_id: 0,
+
+        name: "HIIT",
+        unitName: "分",
+
+        statisticsRule: "Sum",
+        targetValue: undefined,
+        defaultValue: 4
+    },
 ]
 
 export const sampleTargets: Target[] = [
@@ -35,7 +48,7 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "トレーニング",
-        themeColor: "",
+        themeColor: "#1abc9c",
 
         outcomeSchemes: [sampleOutcomeSchemes[0], sampleOutcomeSchemes[1]],
 
@@ -47,7 +60,7 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "Flowfirmer",
-        themeColor: "",
+        themeColor: "#7ed6df",
 
         pinnedAtNavigationList: true
     },
@@ -56,10 +69,49 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "IntelliBase",
-        themeColor: "",
+        themeColor: "#f6e58d",
 
         hiddenAtNavigationList: true
     }
+]
+
+export const sampleDocument: Document[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "sample document",
+        url: new URL("https://www.notion.so/tingtt/API-0401a6a3f8904a5988c9661c04243c4f"),
+
+        targetList: [sampleTargets[1]]
+    },
+    {
+        id: 1,
+        user_id: 0,
+
+        name: "設計（UIワイヤーフレーム）",
+        url: new URL("https://www.notion.so/tingtt/UI-d0a121463f9e4302b4015197f9165f01"),
+
+        targetList: [sampleTargets[1]]
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        name: "設計（オブジェクトとシナリオ）",
+        url: new URL("https://www.notion.so/tingtt/d8466c9cc66745db909a068d58b76401"),
+
+        targetList: [sampleTargets[1]]
+    },
+    {
+        id: 3,
+        user_id: 0,
+
+        name: "設計（DB）",
+        url: new URL("https://www.notion.so/tingtt/DB-7ee6cf9fdeae4a7198aecb495c324fa2"),
+
+        targetList: [sampleTargets[1]]
+    },
 ]
 
 export const sampleTerms: Term[] = [
@@ -82,6 +134,96 @@ export const sampleTerms: Term[] = [
 
         documentList: undefined
     },
+    {
+        id: 1,
+        user_id: 0,
+
+        name: "ToDay画面",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 14),
+        endDatetimeScheduled: new Date(2001, 6, 18),
+
+        startDatetime: new Date(2001, 6, 14),
+        endDatetime: new Date(2001, 6, 20),
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[1]]
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        name: "Weekly画面",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 21),
+        endDatetimeScheduled: new Date(2001, 6, 25),
+
+        startDatetime: new Date(2001, 6, 21),
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[1]]
+    },
+    {
+        id: 3,
+        user_id: 0,
+
+        name: "データ管理クラス",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 21),
+        endDatetimeScheduled: new Date(2001, 6, 25),
+
+        startDatetime: new Date(2001, 6, 21),
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[2], sampleDocument[3]]
+    },
+    {
+        id: 4,
+        user_id: 0,
+
+        name: "プロパティ更新実装",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 28),
+        endDatetimeScheduled: new Date(2001, 7, 2),
+
+        startDatetime: undefined,
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[2], sampleDocument[3]]
+    },
+    {
+        id: 5,
+        user_id: 0,
+
+        name: "ToDo, Term詳細モーダル",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 28),
+        endDatetimeScheduled: new Date(2001, 7, 2),
+
+        startDatetime: undefined,
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[1]]
+    },
 ]
 
 export const sampleToDos: ToDo[] = [
@@ -90,7 +232,6 @@ export const sampleToDos: ToDo[] = [
         user_id: 0,
 
         name: "1セット",
-        description: "スクワットと腹筋",
 
         startDatetimeScheduled: new Date(2001, 6, 7, 17),
         timeInfoExisted: true,
@@ -141,18 +282,168 @@ export const sampleToDos: ToDo[] = [
 
         completed: false
     },
-]
-
-export const sampleDocument: Document[] = [
     {
-        id: 0,
+        id: 3,
         user_id: 0,
 
-        name: "sample document",
-        url: new URL("https://www.notion.so/tingtt/API-0401a6a3f8904a5988c9661c04243c4f"),
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
 
-        targetList: [sampleTargets[0]]
-    }
+        startDatetimeScheduled: new Date(2001, 6, 14, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 4,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 15, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 5,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 16, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 6,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 17, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 7,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 18, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 8,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 19, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 9,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 20, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 10,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 22, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 11,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 23, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: false
+    },
 ]
 
 export const sampleHabitReminds: HabitRemind[] = [
@@ -229,5 +520,157 @@ export const sampleArchives: Archive[] = [
         ],
 
         datetime: new Date(2001, 6, 7, 17, 30)
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[3],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 14, 5, 30)
+    },
+    {
+        id: 3,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[4],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 15, 5, 30)
+    },
+    {
+        id: 4,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[5],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 16, 5, 30)
+    },
+    {
+        id: 5,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[6],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 17, 5, 30)
+    },
+    {
+        id: 6,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[7],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 80,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 18, 5, 30)
+    },
+    {
+        id: 7,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[8],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 40,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 19, 6)
+    },
+    {
+        id: 8,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[9],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 50,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 20, 5, 30)
+    },
+    {
+        id: 9,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[10],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 60,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 22, 5, 30)
     }
 ]
