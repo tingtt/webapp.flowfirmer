@@ -26,7 +26,20 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         statisticsRule: "Max",
         targetValue: undefined,
         defaultValue: 20
-    }
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        target_id: 0,
+
+        name: "HIIT",
+        unitName: "分",
+
+        statisticsRule: "Sum",
+        targetValue: undefined,
+        defaultValue: 4
+    },
 ]
 
 export const sampleTargets: Target[] = [
@@ -269,6 +282,168 @@ export const sampleToDos: ToDo[] = [
 
         completed: false
     },
+    {
+        id: 3,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 14, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 4,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 15, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 5,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 16, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 6,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 17, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 7,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 18, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 8,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 19, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 9,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 20, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 10,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 22, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: true
+    },
+    {
+        id: 11,
+        user_id: 0,
+
+        name: "朝HIIT",
+        description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
+
+        startDatetimeScheduled: new Date(2001, 6, 23, 5, 30),
+        timeInfoExisted: true,
+        processingTimeScheduled: 4,
+
+        repeatPattern: 'Daily',
+
+        targetList: [sampleTargets[0]],
+        term: undefined,
+
+        completed: false
+    },
 ]
 
 export const sampleHabitReminds: HabitRemind[] = [
@@ -345,5 +520,157 @@ export const sampleArchives: Archive[] = [
         ],
 
         datetime: new Date(2001, 6, 7, 17, 30)
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[3],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 14, 5, 30)
+    },
+    {
+        id: 3,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[4],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 15, 5, 30)
+    },
+    {
+        id: 4,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[5],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 16, 5, 30)
+    },
+    {
+        id: 5,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[6],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 70,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 17, 5, 30)
+    },
+    {
+        id: 6,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[7],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 80,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 18, 5, 30)
+    },
+    {
+        id: 7,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[8],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 40,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 19, 6)
+    },
+    {
+        id: 8,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[9],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 50,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 20, 5, 30)
+    },
+    {
+        id: 9,
+        user_id: 0,
+
+        refType: 'ToDo',
+        ref: sampleToDos[10],
+
+        targets: [sampleTargets[0]],
+
+        feelingList: [
+            {
+                feeling: sampleFeelingTypes[0],
+                positivePercent: 60,
+                negativePercent: 0,
+            }
+        ],
+
+        datetime: new Date(2001, 6, 22, 5, 30)
     }
 ]
