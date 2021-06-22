@@ -62,6 +62,45 @@ export const sampleTargets: Target[] = [
     }
 ]
 
+export const sampleDocument: Document[] = [
+    {
+        id: 0,
+        user_id: 0,
+
+        name: "sample document",
+        url: new URL("https://www.notion.so/tingtt/API-0401a6a3f8904a5988c9661c04243c4f"),
+
+        targetList: [sampleTargets[1]]
+    },
+    {
+        id: 1,
+        user_id: 0,
+
+        name: "設計（UIワイヤーフレーム）",
+        url: new URL("https://www.notion.so/tingtt/UI-d0a121463f9e4302b4015197f9165f01"),
+
+        targetList: [sampleTargets[1]]
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        name: "設計（オブジェクトとシナリオ）",
+        url: new URL("https://www.notion.so/tingtt/d8466c9cc66745db909a068d58b76401"),
+
+        targetList: [sampleTargets[1]]
+    },
+    {
+        id: 3,
+        user_id: 0,
+
+        name: "設計（DB）",
+        url: new URL("https://www.notion.so/tingtt/DB-7ee6cf9fdeae4a7198aecb495c324fa2"),
+
+        targetList: [sampleTargets[1]]
+    },
+]
+
 export const sampleTerms: Term[] = [
     {
         id: 0,
@@ -82,6 +121,96 @@ export const sampleTerms: Term[] = [
 
         documentList: undefined
     },
+    {
+        id: 1,
+        user_id: 0,
+
+        name: "ToDay画面",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 14),
+        endDatetimeScheduled: new Date(2001, 6, 18),
+
+        startDatetime: new Date(2001, 6, 14),
+        endDatetime: new Date(2001, 6, 20),
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[1]]
+    },
+    {
+        id: 2,
+        user_id: 0,
+
+        name: "Weekly画面",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 21),
+        endDatetimeScheduled: new Date(2001, 6, 25),
+
+        startDatetime: new Date(2001, 6, 21),
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[1]]
+    },
+    {
+        id: 3,
+        user_id: 0,
+
+        name: "データ管理クラス",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 21),
+        endDatetimeScheduled: new Date(2001, 6, 25),
+
+        startDatetime: new Date(2001, 6, 21),
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[2], sampleDocument[3]]
+    },
+    {
+        id: 4,
+        user_id: 0,
+
+        name: "プロパティ更新実装",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 28),
+        endDatetimeScheduled: new Date(2001, 7, 2),
+
+        startDatetime: undefined,
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[2], sampleDocument[3]]
+    },
+    {
+        id: 5,
+        user_id: 0,
+
+        name: "ToDo, Term詳細モーダル",
+
+        targetList: [sampleTargets[1]],
+
+        startDatetimeScheduled: new Date(2001, 6, 28),
+        endDatetimeScheduled: new Date(2001, 7, 2),
+
+        startDatetime: undefined,
+        endDatetime: undefined,
+
+        toDoList: undefined,
+
+        documentList: [sampleDocument[1]]
+    },
 ]
 
 export const sampleToDos: ToDo[] = [
@@ -90,7 +219,6 @@ export const sampleToDos: ToDo[] = [
         user_id: 0,
 
         name: "1セット",
-        description: "スクワットと腹筋",
 
         startDatetimeScheduled: new Date(2001, 6, 7, 17),
         timeInfoExisted: true,
@@ -141,18 +269,6 @@ export const sampleToDos: ToDo[] = [
 
         completed: false
     },
-]
-
-export const sampleDocument: Document[] = [
-    {
-        id: 0,
-        user_id: 0,
-
-        name: "sample document",
-        url: new URL("https://www.notion.so/tingtt/API-0401a6a3f8904a5988c9661c04243c4f"),
-
-        targetList: [sampleTargets[0]]
-    }
 ]
 
 export const sampleHabitReminds: HabitRemind[] = [
