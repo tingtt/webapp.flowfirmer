@@ -477,6 +477,9 @@ export const sampleArchives: Archive[] = [
         refType: 'ToDo',
         ref: sampleToDos[0],
 
+        startDateTime: sampleToDos[0].startDatetimeScheduled!,
+        processingTime: sampleToDos[0].processingTimeScheduled!,
+
         targets: [sampleTargets[0]],
 
         outcomes: [
@@ -528,6 +531,9 @@ export const sampleArchives: Archive[] = [
         refType: 'ToDo',
         ref: sampleToDos[3],
 
+        startDateTime: sampleToDos[3].startDatetimeScheduled!,
+        processingTime: sampleToDos[3].processingTimeScheduled!,
+
         targets: [sampleTargets[0]],
 
         feelingList: [
@@ -546,6 +552,9 @@ export const sampleArchives: Archive[] = [
 
         refType: 'ToDo',
         ref: sampleToDos[4],
+
+        startDateTime: sampleToDos[4].startDatetimeScheduled!,
+        processingTime: sampleToDos[4].processingTimeScheduled!,
 
         targets: [sampleTargets[0]],
 
@@ -566,6 +575,9 @@ export const sampleArchives: Archive[] = [
         refType: 'ToDo',
         ref: sampleToDos[5],
 
+        startDateTime: sampleToDos[5].startDatetimeScheduled!,
+        processingTime: sampleToDos[5].processingTimeScheduled!,
+
         targets: [sampleTargets[0]],
 
         feelingList: [
@@ -584,6 +596,9 @@ export const sampleArchives: Archive[] = [
 
         refType: 'ToDo',
         ref: sampleToDos[6],
+
+        startDateTime: sampleToDos[6].startDatetimeScheduled!,
+        processingTime: sampleToDos[6].processingTimeScheduled!,
 
         targets: [sampleTargets[0]],
 
@@ -604,6 +619,9 @@ export const sampleArchives: Archive[] = [
         refType: 'ToDo',
         ref: sampleToDos[7],
 
+        startDateTime: sampleToDos[7].startDatetimeScheduled!,
+        processingTime: sampleToDos[7].processingTimeScheduled!,
+
         targets: [sampleTargets[0]],
 
         feelingList: [
@@ -622,6 +640,9 @@ export const sampleArchives: Archive[] = [
 
         refType: 'ToDo',
         ref: sampleToDos[8],
+
+        startDateTime: sampleToDos[8].startDatetimeScheduled!,
+        processingTime: sampleToDos[8].processingTimeScheduled!,
 
         targets: [sampleTargets[0]],
 
@@ -642,6 +663,9 @@ export const sampleArchives: Archive[] = [
         refType: 'ToDo',
         ref: sampleToDos[9],
 
+        startDateTime: sampleToDos[9].startDatetimeScheduled!,
+        processingTime: sampleToDos[9].processingTimeScheduled!,
+
         targets: [sampleTargets[0]],
 
         feelingList: [
@@ -660,6 +684,9 @@ export const sampleArchives: Archive[] = [
 
         refType: 'ToDo',
         ref: sampleToDos[10],
+
+        startDateTime: sampleToDos[10].startDatetimeScheduled!,
+        processingTime: sampleToDos[10].processingTimeScheduled!,
 
         targets: [sampleTargets[0]],
 
