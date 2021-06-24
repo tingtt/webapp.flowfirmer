@@ -11,7 +11,7 @@ export type Archive = {
     refType: 'ToDo'
     ref: ToDo
 
-    startTime: Date
+    startDateTime: Date
     processingTime: number
 
     targets?: Target[]
