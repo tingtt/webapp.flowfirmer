@@ -1,11 +1,13 @@
-import { createStyles, Theme, makeStyles, Checkbox, Chip } from "@material-ui/core";
+import { createStyles, Theme, makeStyles, Checkbox, Chip, InputBase } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../lib/interface";
 import { Loop } from "@material-ui/icons";
+import AppDataManager from "../../../lib/app/appDataManager";
 
 type Props = {
-    todo: ToDo
+    todo: ToDo,
+    setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -100,11 +102,26 @@ export default function ToDoListItem(props: Props) {
 
     const classes = useStyles();
 
-    const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
+    const appDataManager: AppDataManager = (() => {
+        try {
+            return  AppDataManager.generateInstance(0)
+        } catch (e) {
+            return  AppDataManager.getInstance();
+        }
+    })();
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // TODO:to-do完了状態の更新処理
-        setChecked(event.target.checked);
+    const completionStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // to-do名を更新
+        props.todo.completed = event.target.checked;
+        // APIを叩いて値を更新し、stateも更新
+        props.setTodos(appDataManager.updateTodo(props.todo));
+    };
+
+    const nameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        // to-do名を更新
+        props.todo.name = event.target.value;
+        // APIを叩いて値を更新し、stateも更新
+        props.setTodos(appDataManager.updateTodo(props.todo));
     };
 
     console.log(props.todo);
@@ -121,8 +138,8 @@ export default function ToDoListItem(props: Props) {
                 >
                     <Checkbox
                         className={classes.checkBox}
-                        checked={checked}
-                        onChange={handleChange}
+                        defaultChecked={props.todo.completed}
+                        onChange={completionStateChange}
                     />
                 </div>
                 <div
@@ -140,7 +157,13 @@ export default function ToDoListItem(props: Props) {
                     <div
                         className={classes.todoNameSpan}
                     >
-                        <span>{props.todo.name}</span>
+                        <InputBase
+                            type="text"
+                            name="todoName"
+                            defaultValue={props.todo.name}
+                            inputProps={{ 'aria-label': 'naked' }}
+                            onChange={nameChange}
+                        />
                     </div>
                     <div
                         className={classes.detailInfoDiv}

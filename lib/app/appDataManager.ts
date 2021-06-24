@@ -49,6 +49,29 @@ export default class AppDataManager {
         return sampleHabitReminds.filter(value => value.user_id == this.user_id);
     }
 
+    /**
+     *
+     * @param updatedValue ToDo
+     * @returns ToDo[]
+     */
+    public updateTodo(updatedValue: ToDo) {
+        // TODO: API叩く処理?
+        // 更新
+        this.todos = this.todos != undefined ?
+            // 値の更新(IDが一致するものを更新する)
+            this.todos.map(value => {
+                if (value.id == updatedValue.id) {
+                    return updatedValue
+                }
+                return value
+            })
+            :
+            // 値の追加
+            [updatedValue];
+
+        return this.todos;
+    }
+
     private constructor(user_id: number) {
         this.user_id = user_id;
 
