@@ -16,8 +16,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         contentLeft: {
             flex: 1,
-            overflow: 'auto',
             paddingRight: theme.spacing(2)
+        },
+        list: {
+            height: '100%',
+            overflowY: 'scroll',
+            msOverflowStyle: 'none',    /* IE, Edge 対応 */
+            scrollbarWidth: 'none', /* Firefox 対応 */
+            "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
+                display: 'none',
+            },
         },
         contentRight: {
             flex: 1,
@@ -52,8 +60,10 @@ export default function Today() {
                 className={classes.contentLeft}
             >
                 <AddForm />
-                <div>
-                    <Divider />
+                <Divider />
+                <div
+                    className={classes.list}
+                >
                     {/* TODO: to-doリスト実装 */}
                     {todos?.filter(value => !value.completed).sort((a,b) => {
                         var comparison: number = 0;
