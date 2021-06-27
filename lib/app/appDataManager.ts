@@ -54,6 +54,34 @@ export default class AppDataManager {
         return sampleArchives.filter(value => value.user_id == this.user_id);
     }
 
+    /**
+     *
+     * @param name string
+     * @param themeColor string
+     * @returns Target
+     */
+    public registerTarget(name: string, themeColor?: string): Target {
+        // TODO: APIを叩いてTargetを登録し、IDを取得
+        const id: number = this.targets != undefined ? this.targets.length : 0;
+
+        const newTarget: Target = {
+            id: id,
+            user_id: this.user_id,
+
+            name: name,
+            themeColor: themeColor != undefined ?
+                themeColor
+                :
+                // テーマカラーが指定されていない場合にカラーコードを生成
+                "#" + ("000000" + (Math.random() * 0xFFFFFF | 0).toString(16)).slice(-6),
+        };
+
+        // 新規Targetを追加
+        this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
+
+        return newTarget;
+    }
+
     private constructor(user_id: number) {
         this.user_id = user_id;
 

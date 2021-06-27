@@ -6,8 +6,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 
 import { Target } from "../../../lib/interface/index";
 
-//sampleData
-import { sampleTargets } from "../../../utils/sample-data"
+import AppDataManager from '../../../lib/app/appDataManager';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,8 +38,16 @@ export default function AddForm(props: Props) {
 
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
+    const appDataManager: AppDataManager = (() => {
+        try {
+            return  AppDataManager.generateInstance(0)
+        } catch (e) {
+            return  AppDataManager.getInstance();
+        }
+    })();
+
     // TODO: ユーザーのTargetを取得
-    const [targetList, setTargetList] = React.useState<{hidden: boolean, target: Target}[]>(sampleTargets.filter(value => value.user_id == 0).map(value => ({ hidden: false, target: value})))
+    const [targetList, setTargetList] = React.useState<{hidden: boolean, target: Target}[] | undefined>(appDataManager.targets?.map(value => ({ hidden: false, target: value})))
 
     // Targetの選択状態
     const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[]>();
@@ -68,9 +75,10 @@ export default function AddForm(props: Props) {
         useHotkeys(value, () => menuClose());
     });
 
-    const addTarget = (targetId: number) => {
+    const selectTarget = (targetId: number) => {
         setSelectedTargetIdList(current => current == undefined ? [targetId] : current.concat([targetId]) )
         menuClose('Target');
+        //TODO: Targetを指定する文("#~~")を削除
     };
 
     const removeTarget = (targetId: number) => {
@@ -79,8 +87,12 @@ export default function AddForm(props: Props) {
 
     const createNewTarget = (targetName: string) => {
         // TODO: Targetの新規作成、ID取得処理
-        const newTargetId = 2;
-        addTarget(newTargetId);
+        const newTarget = appDataManager.registerTarget(targetName);
+        // 新規Targetをリストに追加
+        setTargetList(appDataManager.targets?.map(value => ({ hidden: false, target: value })));
+        // 新規Targetを選択
+        selectTarget(newTarget.id);
+        // メニューを閉じる
         menuClose('Target');
     };
 
@@ -97,12 +109,19 @@ export default function AddForm(props: Props) {
             switch (e.target.value) {
                 case '#':
                     // Targetの入力補完リストを表示
-                    setTargetList(targetList.map(value => (
-                        {
-                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
-                            target: value.target
+                    setTargetList(current => {
+                        if (current != undefined) {
+                            // 未選択のTargetを表示
+                            return current.map(value => (
+                                {
+                                    hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
+                                    target: value.target
+                                }
+                            ));
                         }
-                    )));
+                        // Targetが1つもない場合
+                        return undefined;
+                    });
                     setTargetAutoCompleteMenuAnchorEl(e.target);
                     setNewTargetName('');
                     break;
@@ -118,12 +137,19 @@ export default function AddForm(props: Props) {
                  */
                 case ' #':
                     // Targetの入力補完リストを表示
-                    setTargetList(targetList.map(value => (
-                        {
-                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
-                            target: value.target
+                    setTargetList(current => {
+                        if (current != undefined) {
+                            // 未選択のTargetを表示
+                            return current.map(value => (
+                                {
+                                    hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
+                                    target: value.target
+                                }
+                            ));
                         }
-                    )));
+                        // Targetが1つもない場合
+                        return undefined;
+                    });
                     setTargetAutoCompleteMenuAnchorEl(e.target);
                     setNewTargetName('');
                     break;
@@ -133,12 +159,19 @@ export default function AddForm(props: Props) {
                     const str = strAry[strAry.length - 1];
                     switch (str.slice(0,1)) {
                         case '#':
-                            setTargetList(targetList.map(value => (
-                                {
-                                    hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
-                                    target: value.target
+                            setTargetList(current => {
+                                if (current != undefined) {
+                                    // 未選択のTargetから入力している文字列を表示
+                                    return current.map(value => (
+                                        {
+                                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
+                                            target: value.target
+                                        }
+                                    ));
                                 }
-                            )));
+                                // Targetが1つもない場合
+                                return undefined;
+                            });
                             setTargetAutoCompleteMenuAnchorEl(e.target);
                             setNewTargetName(str.slice(1));
                             break;
@@ -168,7 +201,7 @@ export default function AddForm(props: Props) {
             <br />
             {/* 選択中のTargetリスト */}
             <div>
-                {selectedTargetIdList && selectedTargetIdList.filter(value => value != -1).map(targetId =>
+                {selectedTargetIdList != undefined && targetList != undefined && selectedTargetIdList.filter(value => value != -1).map(targetId =>
                     <Chip
                         className={classes.targetChip}
                         key={targetId}
@@ -186,8 +219,8 @@ export default function AddForm(props: Props) {
                 onClose={() => menuClose('Target')}
             >
                 {/* Target補完リスト */}
-                {targetList.map(value => (
-                    !value.hidden && <MenuItem onClick={() => addTarget(value.target.id)} key={value.target.id}>{value.target.name}</MenuItem>
+                {targetList != undefined && targetList.map(value => (
+                    !value.hidden && <MenuItem onClick={() => selectTarget(value.target.id)} key={value.target.id}>{value.target.name}</MenuItem>
                 ))}
                 {/* Target新規追加用 */}
                 {newTargetName != '' && <MenuItem onClick={() => createNewTarget(newTargetName)} key={'newTarget'}>Create new target: {newTargetName}</MenuItem>}
