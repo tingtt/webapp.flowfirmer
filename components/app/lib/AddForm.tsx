@@ -77,6 +77,8 @@ export default function AddForm(props: Props) {
         useHotkeys(value, () => menuClose());
     });
 
+    // Target関連処理
+
     const selectTarget = (targetId: number) => {
         setSelectedTargetIdList(current => current == undefined ? [targetId] : current.concat([targetId]) )
         menuClose('Target');
