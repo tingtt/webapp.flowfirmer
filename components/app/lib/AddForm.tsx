@@ -159,13 +159,13 @@ export default function AddForm(props: Props) {
      */
     const syntaxDetection = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-        const modifyTargetList = (str?: string) => {
+        const modifyTargetList = (str: string) => {
             // Targetの入力補完リストを更新
             setTargetList(current => {
                 if (current != undefined) {
                     // 未選択のTargetを表示
                     return current.map(value => {
-                        if (str != undefined) {
+                        if (str.length != 1) {
                             return {
                                 hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
                                 target: value.target
@@ -182,10 +182,10 @@ export default function AddForm(props: Props) {
             });
         }
 
-        const modifyRepeatPatternList = (str?: string) => {
+        const modifyRepeatPatternList = (str: string) => {
             setRepeatPatternList(current => {
                 var newValue = current;
-                if (str == undefined) {
+                if (str.length == 1) {
                     // Daily, Weekly, Monthlyを表示
                     current.forEach((_, idx) => {newValue[idx].hidden = idx > 2});
                 } else {
@@ -196,66 +196,35 @@ export default function AddForm(props: Props) {
             })
         }
 
-        if (e.target.value.length == 1) {
-            // 1文字のみ入力されている場合
-            switch (e.target.value) {
-                case '#':
+        // 末尾に入力されたブロックを取り出し（スペース区切りでブロック分け）
+        const inputValue = e.target.value.split(/\s+/).reverse().pop();
+        // 末尾ブロックの文字列に'#', '*'が含まれていたら変数strに保持（含まれていなければundefined）
+        const str = inputValue != undefined ? ('#*'.includes(inputValue.slice(0,1)) ? inputValue : undefined) : undefined;
+
+        if (str != undefined) {
+            switch (true) {
+                // '#'
+                case /#\w*/.test(str):
                     // Targetの入力補完リストを更新
-                    modifyTargetList();
+                    modifyTargetList(str);
                     // Targetの入力補完リストを表示
                     setTargetAutoCompleteMenuAnchorEl(e.target);
-                    setNewTargetName('');
-                    break;
-                case '*':
-                    // RepeatPatternの入力補完リストを更新
-                    modifyRepeatPatternList();
-                    // RepeatPatternの入力補完リストを表示
-                    setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            // 2文字以上入力されている場合
-            switch (e.target.value.slice(-2)) {
-                /**
-                 * case * : 末尾がsuntaxリテラルの場合
-                 * default > case * : それ以外（syntaxリテラル後に文字列が入力されている）
-                 */
-                case ' #':
-                    // Targetの入力補完リストを更新
-                    modifyTargetList();
-                    // Targetの入力補完リストを表示
-                    setTargetAutoCompleteMenuAnchorEl(e.target);
-                    setNewTargetName('');
-                    break;
-                case ' *':
-                    // RepeatPatternの入力補完リストを更新
-                    modifyRepeatPatternList();
-                    // RepeatPatternの入力補完リストを表示
-                    setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
-                    break;
-                default:
-                    // 補完リストの絞り込み
-                    const strAry = e.target.value.split(' ');
-                    const str = strAry[strAry.length - 1];
-                    switch (str.slice(0,1)) {
-                        case '#':
-                            // Targetの入力補完リストを更新
-                            modifyTargetList(str);
-                            // Targetの入力補完リストを表示
-                            setTargetAutoCompleteMenuAnchorEl(e.target);
-                            setNewTargetName(str.slice(1));
-                            break;
-                        case '*':
-                            // RepeatPatternの入力補完リストを更新
-                            modifyRepeatPatternList(str);
-                            // RepeatPatternの入力補完リストを表示
-                            setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
-                            break;
-                        default:
-                            break;
+                    if (str.length > 1) {
+                        setNewTargetName(str.slice(1));
+                    } else {
+                        setNewTargetName('');
                     }
+                    break;
+
+                // '*'
+                case /\*\w*/.test(str):
+                    // RepeatPatternの入力補完リストを更新
+                    modifyRepeatPatternList(str);
+                    // RepeatPatternの入力補完リストを表示
+                    setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
+                    break;
+
+                default:
                     break;
             }
         }
