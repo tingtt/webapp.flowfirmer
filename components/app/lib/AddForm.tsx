@@ -36,6 +36,7 @@ export default function AddForm(props: Props) {
 
     const classes = useStyles();
 
+    // Target補完リストのアンカー
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const appDataManager: AppDataManager = (() => {
