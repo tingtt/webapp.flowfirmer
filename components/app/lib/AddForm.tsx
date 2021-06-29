@@ -223,8 +223,8 @@ export default function AddForm(props: Props) {
                 onClose={() => menuClose('Target')}
             >
                 {/* Target補完リスト */}
-                {targetList != undefined && targetList.map(value => (
-                    !value.hidden && <MenuItem onClick={() => selectTarget(value.target.id)} key={value.target.id}>{value.target.name}</MenuItem>
+                {targetList != undefined && targetList.filter(value => !value.hidden).map(value => (
+                    <MenuItem onClick={() => selectTarget(value.target.id)} key={value.target.id}>{value.target.name}</MenuItem>
                 ))}
                 {/* Target新規追加用 */}
                 {newTargetName != '' && <MenuItem onClick={() => createNewTarget(newTargetName)} key={'newTarget'}>Create new target: {newTargetName}</MenuItem>}
