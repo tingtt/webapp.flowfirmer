@@ -60,15 +60,52 @@ export default function AddForm(props: Props) {
     // Target新規作成用の名前を保持
     const [newTargetName, setNewTargetName] = React.useState<string>('');
 
+    // RepeatPattern補完リストのアンカー
+    const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    // RepeatPatternの補完リスト
+    const [repeatPatternList, setRepeatPatternList] = React.useState<[
+        {hidden: boolean, key: 'Daily'},
+        {hidden: boolean, key: 'Weekly'},
+        {hidden: boolean, key: 'Monthly'},
+        {hidden: boolean, key: 'Sun'},
+        {hidden: boolean, key: 'Mon'},
+        {hidden: boolean, key: 'Tue'},
+        {hidden: boolean, key: 'Wed'},
+        {hidden: boolean, key: 'Thu'},
+        {hidden: boolean, key: 'Fri'},
+        {hidden: boolean, key: 'Sat'},
+    ]>(
+        [
+            {hidden: false, key: 'Daily'},
+            {hidden: false, key: 'Weekly'},
+            {hidden: false, key: 'Monthly'},
+            {hidden: true, key: 'Sun'},
+            {hidden: true, key: 'Mon'},
+            {hidden: true, key: 'Tue'},
+            {hidden: true, key: 'Wed'},
+            {hidden: true, key: 'Thu'},
+            {hidden: true, key: 'Fri'},
+            {hidden: true, key: 'Sat'},
+        ]
+    );
+
+    // 選択中のRepeatPatternを保持
+    const [selectedRepeatPattern, setRepeatPattern] = React.useState<'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | undefined>(undefined);
+
     // 補完メニュー非表示
-    const menuClose = (menuType?: 'Target' | 'Term' | 'startDate' | 'startTime' | 'endDate' | 'processingTime') => {
+    const menuClose = (menuType?: 'Target' | 'Term' | 'startDate' | 'startTime' | 'endDate' | 'processingTime' | 'RepeatPattern') => {
         switch (menuType) {
             case 'Target':
                 setTargetAutoCompleteMenuAnchorEl(null);
                 break;
+            case 'RepeatPattern':
+                setRepeatPatternAutoCompleteMenuAnchorEl(null);
+                break;
             default :
                 // すべて閉じる
                 setTargetAutoCompleteMenuAnchorEl(null);
+                setRepeatPatternAutoCompleteMenuAnchorEl(null);
         }
     };
 
@@ -101,6 +138,18 @@ export default function AddForm(props: Props) {
         menuClose('Target');
     };
 
+    // RepeatPattern関連処理
+
+    const selectRepeatPattern = (key: 'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat') => {
+        setRepeatPattern(key);
+        menuClose('RepeatPattern');
+    };
+
+    const removeRepeatPattern = () => {
+        setRepeatPattern(undefined);
+        menuClose('RepeatPattern');
+    };
+
     /**
      * syntaxDetection
      *
@@ -115,16 +164,34 @@ export default function AddForm(props: Props) {
             setTargetList(current => {
                 if (current != undefined) {
                     // 未選択のTargetを表示
-                            return current.map(value => (
-                                {
-                                    hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
-                                    target: value.target
-                                }
-                            ));
+                    return current.map(value => {
+                        if (str != undefined) {
+                            return {
+                                hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
+                                target: value.target
+                            }
                         }
-                        // Targetが1つもない場合
-                        return undefined;
+                        return {
+                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
+                            target: value.target
+                        }
                     });
+                }
+                // Targetが1つもない場合
+                return undefined;
+            });
+        }
+
+        const modifyRepeatPatternList = (str?: string) => {
+            setRepeatPatternList(current => {
+                var newValue = current;
+                if (str == undefined) {
+                    current.forEach((_, idx) => {newValue[idx].hidden = idx > 2});
+                } else {
+                    current.forEach((val, idx) => {newValue[idx].hidden = !val.key.toLowerCase().includes(str.slice(1).toLowerCase())});
+                }
+                return newValue;
+            })
         }
 
         if (e.target.value.length == 1) {
@@ -136,6 +203,12 @@ export default function AddForm(props: Props) {
                     // Targetの入力補完リストを表示
                     setTargetAutoCompleteMenuAnchorEl(e.target);
                     setNewTargetName('');
+                    break;
+                case '*':
+                    // RepeatPatternの入力補完リストを更新
+                    modifyRepeatPatternList();
+                    // RepeatPatternの入力補完リストを表示
+                    setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
                     break;
                 default:
                     break;
@@ -154,6 +227,12 @@ export default function AddForm(props: Props) {
                     setTargetAutoCompleteMenuAnchorEl(e.target);
                     setNewTargetName('');
                     break;
+                case ' *':
+                    // RepeatPatternの入力補完リストを更新
+                    modifyRepeatPatternList();
+                    // RepeatPatternの入力補完リストを表示
+                    setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
+                    break;
                 default:
                     // 補完リストの絞り込み
                     const strAry = e.target.value.split(' ');
@@ -165,6 +244,12 @@ export default function AddForm(props: Props) {
                             // Targetの入力補完リストを表示
                             setTargetAutoCompleteMenuAnchorEl(e.target);
                             setNewTargetName(str.slice(1));
+                            break;
+                        case '*':
+                            // RepeatPatternの入力補完リストを更新
+                            modifyRepeatPatternList(str);
+                            // RepeatPatternの入力補完リストを表示
+                            setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
                             break;
                         default:
                             break;
@@ -216,6 +301,19 @@ export default function AddForm(props: Props) {
                 ))}
                 {/* Target新規追加用 */}
                 {newTargetName != '' && <MenuItem onClick={() => createNewTarget(newTargetName)} key={'newTarget'}>Create new target: {newTargetName}</MenuItem>}
+            </Menu>
+            {/* RepeatPattern補完リスト */}
+            <Menu
+                className={classes.menu}
+                anchorEl={repeatPatternAutoCompleteMenuAnchorEl}
+                keepMounted
+                open={Boolean(repeatPatternAutoCompleteMenuAnchorEl)}
+                onClose={() => menuClose('RepeatPattern')}
+            >
+                {/* RepeatPattern補完リスト */}
+                {repeatPatternList.filter(value => !value.hidden).map(value => (
+                    <MenuItem onClick={() => selectRepeatPattern(value.key)} key={value.key}>{value.key}</MenuItem>
+                ))}
             </Menu>
         </div>
     );
