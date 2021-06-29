@@ -78,6 +78,7 @@ export default function AddForm(props: Props) {
     const selectTarget = (targetId: number) => {
         setSelectedTargetIdList(current => current == undefined ? [targetId] : current.concat([targetId]) )
         menuClose('Target');
+        // #~~を削除
         (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/\s*#\w*\s*/, '');
     };
 
