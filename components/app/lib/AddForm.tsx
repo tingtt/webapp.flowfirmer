@@ -36,9 +36,6 @@ export default function AddForm(props: Props) {
 
     const classes = useStyles();
 
-    // Target補完リストのアンカー
-    const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-
     const appDataManager: AppDataManager = (() => {
         try {
             return  AppDataManager.generateInstance(0)
@@ -47,19 +44,23 @@ export default function AddForm(props: Props) {
         }
     })();
 
-    // TODO: ユーザーのTargetを取得
-    const [targetList, setTargetList] = React.useState<{hidden: boolean, target: Target}[] | undefined>(appDataManager.targets?.map(value => ({ hidden: false, target: value})))
+    // Target補完リストのアンカー
+    const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    // Targetの選択状態
-    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[]>();
-    // デフォルト選択のTargetを指定
-    if (props.defaultSelectTargetId != undefined) {
-        () => setSelectedTargetIdList([props.defaultSelectTargetId != undefined ? props.defaultSelectTargetId : -1]);
-    }
+    // TODO: ユーザーのTargetを取得
+    const [targetList, setTargetList] = React.useState<{hidden: boolean, target: Target}[] | undefined>(
+        appDataManager.targets?.map(value => ({ hidden: false, target: value}))
+    );
+
+    // Targetの選択状態(デフォルト選択があれば指定)
+    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[]>(
+        [props.defaultSelectTargetId != undefined ? props.defaultSelectTargetId : -1]
+    );
 
     // Target新規作成用の名前を保持
     const [newTargetName, setNewTargetName] = React.useState<string>('');
 
+    // 補完メニュー非表示
     const menuClose = (menuType?: 'Target' | 'Term' | 'startDate' | 'startTime' | 'endDate' | 'processingTime') => {
         switch (menuType) {
             case 'Target':
