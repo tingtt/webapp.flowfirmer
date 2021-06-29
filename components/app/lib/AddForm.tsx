@@ -165,14 +165,14 @@ export default function AddForm(props: Props) {
                 if (current != undefined) {
                     // 未選択のTargetを表示
                     return current.map(value => {
-                        if (str.length != 1) {
+                        if (str.length == 1) {
                             return {
-                                hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
+                                hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
                                 target: value.target
                             }
                         }
                         return {
-                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
+                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
                             target: value.target
                         }
                     });
