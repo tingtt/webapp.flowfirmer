@@ -186,8 +186,10 @@ export default function AddForm(props: Props) {
             setRepeatPatternList(current => {
                 var newValue = current;
                 if (str == undefined) {
+                    // Daily, Weekly, Monthlyを表示
                     current.forEach((_, idx) => {newValue[idx].hidden = idx > 2});
                 } else {
+                    // 入力された文字列から補完を表示
                     current.forEach((val, idx) => {newValue[idx].hidden = !val.key.toLowerCase().includes(str.slice(1).toLowerCase())});
                 }
                 return newValue;
