@@ -107,14 +107,12 @@ export default function AddForm(props: Props) {
      * @param e React.ChangeEvent<HTMLInputElement>
      */
     const syntaxDetection = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length == 1) {
-            // 1文字のみ入力されている場合
-            switch (e.target.value) {
-                case '#':
-                    // Targetの入力補完リストを表示
-                    setTargetList(current => {
-                        if (current != undefined) {
-                            // 未選択のTargetを表示
+
+        const modifyTargetList = (str?: string) => {
+            // Targetの入力補完リストを更新
+            setTargetList(current => {
+                if (current != undefined) {
+                    // 未選択のTargetを表示
                             return current.map(value => (
                                 {
                                     hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
@@ -125,6 +123,15 @@ export default function AddForm(props: Props) {
                         // Targetが1つもない場合
                         return undefined;
                     });
+        }
+
+        if (e.target.value.length == 1) {
+            // 1文字のみ入力されている場合
+            switch (e.target.value) {
+                case '#':
+                    // Targetの入力補完リストを更新
+                    modifyTargetList();
+                    // Targetの入力補完リストを表示
                     setTargetAutoCompleteMenuAnchorEl(e.target);
                     setNewTargetName('');
                     break;
@@ -139,20 +146,9 @@ export default function AddForm(props: Props) {
                  * default > case * : それ以外（syntaxリテラル後に文字列が入力されている）
                  */
                 case ' #':
+                    // Targetの入力補完リストを更新
+                    modifyTargetList();
                     // Targetの入力補完リストを表示
-                    setTargetList(current => {
-                        if (current != undefined) {
-                            // 未選択のTargetを表示
-                            return current.map(value => (
-                                {
-                                    hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
-                                    target: value.target
-                                }
-                            ));
-                        }
-                        // Targetが1つもない場合
-                        return undefined;
-                    });
                     setTargetAutoCompleteMenuAnchorEl(e.target);
                     setNewTargetName('');
                     break;
@@ -162,19 +158,9 @@ export default function AddForm(props: Props) {
                     const str = strAry[strAry.length - 1];
                     switch (str.slice(0,1)) {
                         case '#':
-                            setTargetList(current => {
-                                if (current != undefined) {
-                                    // 未選択のTargetから入力している文字列を表示
-                                    return current.map(value => (
-                                        {
-                                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
-                                            target: value.target
-                                        }
-                                    ));
-                                }
-                                // Targetが1つもない場合
-                                return undefined;
-                            });
+                            // Targetの入力補完リストを更新
+                            modifyTargetList(str);
+                            // Targetの入力補完リストを表示
                             setTargetAutoCompleteMenuAnchorEl(e.target);
                             setNewTargetName(str.slice(1));
                             break;
