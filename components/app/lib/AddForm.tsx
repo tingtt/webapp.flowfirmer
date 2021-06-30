@@ -7,6 +7,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { Target } from "../../../lib/interface/index";
 
 import AppDataManager from '../../../lib/app/appDataManager';
+import { Loop } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,9 +23,22 @@ const useStyles = makeStyles((theme: Theme) =>
         input: {
             width: '100%',
         },
+        infoChipsDiv: {
+            display: 'flex',
+        },
+        targetChipDiv: {
+            overflowX: 'auto',
+            whiteSpace: 'nowrap'
+        },
         targetChip: {
             margin: theme.spacing(0.5),
-        }
+        },
+        repeatPatternChipDiv:{
+            marginLeft: 'auto',
+        },
+        repeatPatternChip: {
+            margin: theme.spacing(0.5),
+        },
     }),
 );
 
@@ -251,16 +265,33 @@ export default function AddForm(props: Props) {
                 />
             </div>
             <br />
-            {/* 選択中のTargetリスト */}
-            <div>
-                {selectedTargetIdList != undefined && targetList != undefined && selectedTargetIdList.filter(value => value != -1).map(targetId =>
+            <div
+                className={classes.infoChipsDiv}
+            >
+                {/* 選択中のTargetリスト */}
+                <div
+                    className={classes.targetChipDiv}
+                >
+                    {selectedTargetIdList != undefined && targetList != undefined && selectedTargetIdList.filter(value => value != -1).map(targetId =>
+                        <Chip
+                            className={classes.targetChip}
+                            key={targetId}
+                            label={targetList.find(value => value.target.id == targetId)?.target.name}
+                            onDelete={() => removeTarget(targetId)}
+                        />
+                    )}
+                </div>
+                {/* 選択中のRepeatPattern */}
+                {selectedRepeatPattern != undefined && <div
+                    className={classes.repeatPatternChipDiv}
+                >
                     <Chip
-                        className={classes.targetChip}
-                        key={targetId}
-                        label={targetList.find(value => value.target.id == targetId)?.target.name}
-                        onDelete={() => removeTarget(targetId)}
+                        icon={<Loop />}
+                        className={classes.repeatPatternChip}
+                        onDelete={removeRepeatPattern}
+                        label={selectedRepeatPattern}
                     />
-                )}
+                </div>}
             </div>
             {/* 補完リストメニュー */}
             {/* Target補完リスト */}
