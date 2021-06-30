@@ -197,36 +197,38 @@ export default function AddForm(props: Props) {
         }
 
         // 末尾に入力されたブロックを取り出し（スペース区切りでブロック分け）
-        const inputValue = e.target.value.split(/\s+/).reverse().pop();
-        // 末尾ブロックの文字列に'#', '*'が含まれていたら変数strに保持（含まれていなければundefined）
-        const str = inputValue != undefined ? ('#*'.includes(inputValue.slice(0,1)) ? inputValue : undefined) : undefined;
+        const inputValue = e.target.value.slice(e.target.value.lastIndexOf(' ') + 1);
+        // 末尾ブロックの文字列の先頭が'#', '*'なら変数strに保持（含まれていなければundefined）
+        const str = '#*'.includes(inputValue.slice(0,1)) ? inputValue : undefined;
 
-        if (str != undefined) {
-            switch (true) {
-                // '#'
-                case /#\w*/.test(str):
-                    // Targetの入力補完リストを更新
-                    modifyTargetList(str);
-                    // Targetの入力補完リストを表示
-                    setTargetAutoCompleteMenuAnchorEl(e.target);
-                    if (str.length > 1) {
-                        setNewTargetName(str.slice(1));
-                    } else {
-                        setNewTargetName('');
-                    }
-                    break;
+        if (str == undefined) {
+            return;
+        }
 
-                // '*'
-                case /\*\w*/.test(str):
-                    // RepeatPatternの入力補完リストを更新
-                    modifyRepeatPatternList(str);
-                    // RepeatPatternの入力補完リストを表示
-                    setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
-                    break;
+        switch (true) {
+            // '#'
+            case /#\w*/.test(str):
+                // Targetの入力補完リストを更新
+                modifyTargetList(str);
+                // Targetの入力補完リストを表示
+                setTargetAutoCompleteMenuAnchorEl(e.target);
+                if (str.length > 1) {
+                    setNewTargetName(str.slice(1));
+                } else {
+                    setNewTargetName('');
+                }
+                break;
 
-                default:
-                    break;
-            }
+            // '*'
+            case /\*\w*/.test(str):
+                // RepeatPatternの入力補完リストを更新
+                modifyRepeatPatternList(str);
+                // RepeatPatternの入力補完リストを表示
+                setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
+                break;
+
+            default:
+                break;
         }
     };
 
