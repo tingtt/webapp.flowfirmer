@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import { Menu, MenuItem, Chip } from '@material-ui/core';
@@ -32,6 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         targetChip: {
             margin: theme.spacing(0.5),
+        },
+        clearTargetChip: {
+            backgroundColor: theme.palette.grey.A100,
+            color: theme.palette.grey.A200,
+            borderRadius: theme.spacing(2),
+            height: theme.spacing(4),
+            width: theme.spacing(4),
+            padding: theme.spacing(0.5),
+            verticalAlign: 'middle'
         },
         repeatPatternChipDiv:{
             marginLeft: 'auto',
@@ -286,10 +296,9 @@ export default function AddForm(props: Props) {
                     )}
                     {/* 2つ以上のTargetを選択中に全クリア用のChip */}
                     {selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value > -1).length >= 2 &&
-                        <Chip
-                            className={classes.targetChip}
-                            icon={<Clear />}
-                            onDelete={() => removeTarget()}
+                        <Clear
+                            className={clsx(classes.targetChip, classes.clearTargetChip)}
+                            onClick={() => removeTarget()}
                         />
                     }
                 </div>
