@@ -2,12 +2,12 @@ import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import { Menu, MenuItem, Chip } from '@material-ui/core';
+import { Clear, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { Target } from "../../../lib/interface/index";
 
 import AppDataManager from '../../../lib/app/appDataManager';
-import { Loop } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -138,8 +138,12 @@ export default function AddForm(props: Props) {
         (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/^#\w*\s*/g, '');
     };
 
-    const removeTarget = (targetId: number) => {
-        setSelectedTargetIdList(current => current?.filter(value => value != targetId))
+    const removeTarget = (targetId?: number) => {
+        if (targetId != undefined) {
+            setSelectedTargetIdList(current => current?.filter(value => value != targetId));
+        } else {
+            setSelectedTargetIdList([-1]);
+        }
     };
 
     const createNewTarget = (targetName: string) => {
@@ -280,6 +284,14 @@ export default function AddForm(props: Props) {
                             onDelete={() => removeTarget(targetId)}
                         />
                     )}
+                    {/* 2つ以上のTargetを選択中に全クリア用のChip */}
+                    {selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value > -1).length >= 2 &&
+                        <Chip
+                            className={classes.targetChip}
+                            icon={<Clear />}
+                            onDelete={() => removeTarget()}
+                        />
+                    }
                 </div>
                 {/* 選択中のRepeatPattern */}
                 {selectedRepeatPattern != undefined && <div
