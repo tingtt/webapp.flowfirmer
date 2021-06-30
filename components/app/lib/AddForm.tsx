@@ -120,7 +120,8 @@ export default function AddForm(props: Props) {
         setSelectedTargetIdList(current => current == undefined ? [targetId] : current.concat([targetId]) )
         menuClose('Target');
         // #~~を削除
-        (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/\s*#\w*\s*/, '');
+        (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/\s+#\w*\s*/g, '');
+        (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/^#\w*\s*/g, '');
     };
 
     const removeTarget = (targetId: number) => {
@@ -143,6 +144,8 @@ export default function AddForm(props: Props) {
     const selectRepeatPattern = (key: 'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat') => {
         setRepeatPattern(key);
         menuClose('RepeatPattern');
+        (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value = (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/\s+\*\w*\s*/g, '');
+        (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value = (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/^\*\w*\s*/g, '');
     };
 
     const removeRepeatPattern = () => {
