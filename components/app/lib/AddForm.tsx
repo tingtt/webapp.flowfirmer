@@ -182,7 +182,7 @@ export default function AddForm(props: Props) {
         (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value = (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/^\*\w*\s*/g, '');
     };
 
-    const removeRepeatPattern = () => {
+    const clearRepeatPattern = () => {
         setRepeatPattern(undefined);
         menuClose('RepeatPattern');
     };
@@ -319,7 +319,7 @@ export default function AddForm(props: Props) {
                     <Chip
                         icon={<Loop />}
                         className={classes.repeatPatternChip}
-                        onDelete={removeRepeatPattern}
+                        onDelete={clearRepeatPattern}
                         label={selectedRepeatPattern}
                     />
                 </div>}
