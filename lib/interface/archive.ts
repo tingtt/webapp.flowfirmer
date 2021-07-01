@@ -9,10 +9,6 @@ export type Archive = {
     id: number
     user_id: number
 
-    // to-doを紐付け
-    refType: 'ToDo'
-    ref: ToDo
-
     // 紐付け
     refInfo: {
         refType: 'ToDo'
