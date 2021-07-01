@@ -340,6 +340,7 @@ export default function AddForm(props: Props) {
                 {/* Target新規追加用 */}
                 {newTargetName != '' && <MenuItem onClick={() => createNewTarget(newTargetName)} key={'newTarget'}>Create new target: {newTargetName}</MenuItem>}
             </Menu>
+
             {/* RepeatPattern補完リスト */}
             <Menu
                 className={classes.menu}
