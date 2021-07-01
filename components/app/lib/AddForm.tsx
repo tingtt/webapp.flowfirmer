@@ -34,6 +34,13 @@ const useStyles = makeStyles((theme: Theme) =>
         targetChip: {
             margin: theme.spacing(0.5),
         },
+        clearTargetChipDiv: {
+            display: 'inline-flex',
+            verticalAlign: 'middle',
+            "& :hover": {
+                color: theme.palette.grey[600],
+            },
+        },
         clearTargetChip: {
             backgroundColor: theme.palette.grey.A100,
             color: theme.palette.grey.A200,
@@ -41,7 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: theme.spacing(4),
             width: theme.spacing(4),
             padding: theme.spacing(0.5),
-            verticalAlign: 'middle'
         },
         repeatPatternChipDiv:{
             marginLeft: 'auto',
@@ -296,10 +302,14 @@ export default function AddForm(props: Props) {
                     )}
                     {/* 2つ以上のTargetを選択中に全クリア用のChip */}
                     {selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value > -1).length >= 2 &&
-                        <Clear
-                            className={clsx(classes.targetChip, classes.clearTargetChip)}
-                            onClick={() => removeTarget()}
-                        />
+                        <div
+                            className={classes.clearTargetChipDiv}
+                        >
+                            <Clear
+                                className={clsx(classes.targetChip, classes.clearTargetChip)}
+                                onClick={() => removeTarget()}
+                            />
+                        </div>
                     }
                 </div>
                 {/* 選択中のRepeatPattern */}
