@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import { Menu, MenuItem, Chip } from '@material-ui/core';
-import { Clear, Loop } from '@material-ui/icons';
+import { Clear, Event, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 import { Target } from "../../../lib/interface/index";
@@ -19,10 +19,23 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
         },
         divInput: {
-            textAlign: 'center',
+            display: 'flex',
         },
         input: {
             width: '100%',
+        },
+        dateSelecterDiv: {
+            display: 'inline-flex',
+            verticalAlign: 'middle',
+            "& :hover": {
+                color: theme.palette.grey[600],
+            },
+        },
+        calendarIcon: {
+            margin: 'auto',
+            color: theme.palette.grey.A200,
+            marginLeft: theme.spacing(0.5),
+            borderRadius: theme.spacing(2),
         },
         infoChipsDiv: {
             display: 'flex',
@@ -283,6 +296,13 @@ export default function AddForm(props: Props) {
                     onChange={syntaxDetection}
                     className={classes.input}
                 />
+                <div
+                    className={classes.dateSelecterDiv}
+                >
+                    <Event
+                        className={classes.calendarIcon}
+                    />
+                </div>
             </div>
             <br />
             <div
