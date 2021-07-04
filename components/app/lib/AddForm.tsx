@@ -291,10 +291,6 @@ export default function AddForm(props: Props) {
 
     const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const datetimeInfoMenuClose = () => {
-        setDatetimeInfoSelectMenuAnchorEl(null);
-    }
-
     return (
         <div
             className={classes.root}
