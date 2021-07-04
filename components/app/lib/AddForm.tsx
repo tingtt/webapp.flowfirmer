@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import { Menu, MenuItem, Chip } from '@material-ui/core';
+import { Menu, MenuItem, Chip, Button } from '@material-ui/core';
 import { Clear, Event, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -291,6 +291,10 @@ export default function AddForm(props: Props) {
 
     const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
+    const datetimeInfoMenuClose = () => {
+        setDatetimeInfoSelectMenuAnchorEl(null);
+    }
+
     return (
         <div
             className={classes.root}
@@ -311,14 +315,6 @@ export default function AddForm(props: Props) {
                 >
                     <Event
                         className={classes.calendarIcon}
-                    />
-                    <DateTimeInfoSelectMenu
-                        menuAnchorEl={datetimeInfoSelectMenuAnchorEl}
-                        menuAnchorElSetter={() => setDatetimeInfoSelectMenuAnchorEl(null)}
-                        date={date}
-                        dateSetter={setDate}
-                        timeSettedBool={timeSetted}
-                        timeSettedBoolSetter={setTimeSetted}
                     />
                 </div>
             </div>
@@ -392,6 +388,16 @@ export default function AddForm(props: Props) {
                     <MenuItem onClick={() => selectRepeatPattern(value.key)} key={value.key}>{value.key}</MenuItem>
                 ))}
             </Menu>
+
+            {/* 日時指定用メニュー */}
+            <DateTimeInfoSelectMenu
+                menuAnchorEl={datetimeInfoSelectMenuAnchorEl}
+                menuAnchorElSetter={() => setDatetimeInfoSelectMenuAnchorEl(null)}
+                date={date}
+                dateSetter={setDate}
+                timeSettedBool={timeSetted}
+                timeSettedBoolSetter={setTimeSetted}
+            />
         </div>
     );
 }
