@@ -9,6 +9,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import { Target } from "../../../lib/interface/index";
 
 import AppDataManager from '../../../lib/app/appDataManager';
+import DateTimeInfoSelectMenu from './DateTimeInfoSelectMenu';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -282,6 +283,14 @@ export default function AddForm(props: Props) {
         }
     };
 
+    // Date
+
+    const [date, setDate] = React.useState<Date | null>(null);
+
+    const [timeSetted, setTimeSetted] = React.useState<boolean>(false);
+
+    const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+
     return (
         <div
             className={classes.root}
@@ -298,9 +307,18 @@ export default function AddForm(props: Props) {
                 />
                 <div
                     className={classes.dateSelecterDiv}
+                    onClick={(e: React.MouseEvent<HTMLElement>) => setDatetimeInfoSelectMenuAnchorEl(e.currentTarget)}
                 >
                     <Event
                         className={classes.calendarIcon}
+                    />
+                    <DateTimeInfoSelectMenu
+                        menuAnchorEl={datetimeInfoSelectMenuAnchorEl}
+                        menuAnchorElSetter={() => setDatetimeInfoSelectMenuAnchorEl(null)}
+                        date={date}
+                        dateSetter={setDate}
+                        timeSettedBool={timeSetted}
+                        timeSettedBoolSetter={setTimeSetted}
                     />
                 </div>
             </div>
