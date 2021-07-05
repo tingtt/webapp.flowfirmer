@@ -92,18 +92,13 @@ export default function AddForm(props: Props) {
     // 入力値
     const [inputText, setInputText] = React.useState<string>("");
 
+    // Target
+
     // Target補完リストのアンカー
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    // TODO: ユーザーのTargetを取得
-    const [targetList, setTargetList] = React.useState<{hidden: boolean, target: Target}[] | undefined>(
-        appDataManager.targets?.map(value => ({ hidden: false, target: value}))
-    );
-
     // Targetの選択状態(デフォルト選択があれば指定)
-    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[]>(
-        [props.defaultSelectTargetId != undefined ? props.defaultSelectTargetId : -1]
-    );
+    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[] | undefined>(undefined);
 
     // RepeatPattern補完リストのアンカー
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -161,31 +156,12 @@ export default function AddForm(props: Props) {
 
     // Target関連処理
 
-    const selectTarget = (targetId: number) => {
-        setSelectedTargetIdList(current => current == undefined ? [targetId] : current.concat([targetId]) )
-        menuClose('Target');
-        // #~~を削除
-        (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/\s+#\w*\s*/g, '');
-        (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value = (targetAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/^#\w*\s*/g, '');
-    };
-
     const removeTarget = (targetId?: number) => {
         if (targetId != undefined) {
             setSelectedTargetIdList(current => current?.filter(value => value != targetId));
         } else {
-            setSelectedTargetIdList([-1]);
+            setSelectedTargetIdList(undefined);
         }
-    };
-
-    const createNewTarget = (targetName: string) => {
-        // TODO: Targetの新規作成、ID取得処理
-        const newTarget = appDataManager.registerTarget(targetName);
-        // 新規Targetをリストに追加
-        setTargetList(appDataManager.targets?.map(value => ({ hidden: false, target: value })));
-        // 新規Targetを選択
-        selectTarget(newTarget.id);
-        // メニューを閉じる
-        setTargetAutoCompleteMenuAnchorEl(null);
     };
 
     // RepeatPattern関連処理
@@ -296,11 +272,11 @@ export default function AddForm(props: Props) {
                 <div
                     className={classes.targetChipDiv}
                 >
-                    {selectedTargetIdList != undefined && targetList != undefined && selectedTargetIdList.filter(value => value != -1).map(targetId =>
+                    {appDataManager.targets != undefined && selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value != -1).map(targetId =>
                         <Chip
                             className={classes.targetChip}
                             key={targetId}
-                            label={targetList.find(value => value.target.id == targetId)?.target.name}
+                            label={appDataManager.targets?.find(value => value.id == targetId)?.name}
                             onDelete={() => removeTarget(targetId)}
                         />
                     )}
@@ -337,7 +313,6 @@ export default function AddForm(props: Props) {
                 idListSetter={setSelectedTargetIdList}
                 text={inputText}
                 textSetter={setInputText}
-                targetCreator={createNewTarget}
             />
 
             {/* RepeatPattern補完リスト */}

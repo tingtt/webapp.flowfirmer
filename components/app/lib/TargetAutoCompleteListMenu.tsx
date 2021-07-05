@@ -1,29 +1,18 @@
 import 'date-fns';
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Menu, MenuItem } from '@material-ui/core';
 import AppDataManager from '../../../lib/app/appDataManager';
 
 type Props = {
     menuAnchorEl: null | HTMLElement
     menuAnchorElSetter: React.Dispatch<React.SetStateAction<null | HTMLElement>>
-    selectedIdList: number[]
-    idListSetter: React.Dispatch<React.SetStateAction<number[]>>
+    selectedIdList: number[] | undefined
+    idListSetter: React.Dispatch<React.SetStateAction<number[] | undefined>>
     text: string
     textSetter: React.Dispatch<React.SetStateAction<string>>
-    targetCreator: (targetName: string) => void
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-        },
-    })
-);
-
 export default function DateTimeInfoSelectMenu(props: Props) {
-
-    const classes = useStyles();
 
     const closeMenu = () => {
         props.menuAnchorElSetter(null);
@@ -45,9 +34,18 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         props.textSetter(current => current.replace(/\s+#\w*\s*/g, '').replace(/^#\w*\s*/g, ''));
     };
 
+    // Target新規追加処理
+    const createNewTarget = (targetName: string) => {
+        // TODO: Targetの新規作成、ID取得処理
+        const newTarget = appDataManager.registerTarget(targetName);
+        // 新規Targetを選択
+        selectTarget(newTarget.id);
+        // メニューを閉じる
+        props.menuAnchorElSetter(null);
+    };
+
     return (
         <Menu
-            className={classes.root}
             anchorEl={props.menuAnchorEl}
             getContentAnchorEl={null}
             anchorOrigin={{
@@ -89,7 +87,7 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                     return;
                 }
 
-                return <MenuItem onClick={() => props.targetCreator(str.slice(1))} key={'newTarget'}>Create new target: {str.slice(1)}</MenuItem>;
+                return <MenuItem onClick={() => createNewTarget(str.slice(1))} key={'newTarget'}>Create new target: {str.slice(1)}</MenuItem>;
 
             })()}
         </Menu>
