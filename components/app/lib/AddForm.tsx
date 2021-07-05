@@ -13,9 +13,6 @@ import RepeatPatternAutoCompleteListMenu from './RepeatPatternAutoCompleteListMe
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        menu: {
-            marginTop: '3em',
-        },
         root: {
             width: '100%',
         },
