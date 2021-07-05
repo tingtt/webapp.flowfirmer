@@ -88,21 +88,56 @@ export default function AddForm(props: Props) {
     // 入力値
     const [inputText, setInputText] = React.useState<string>("");
 
-    // Target
+    /**
+     * Target
+     */
 
-    // Target補完リストのアンカー
+    // 補完リストのアンカー
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    // Targetの選択状態(デフォルト選択があれば指定)
+    // 選択状態(デフォルト選択があれば指定)
     const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[] | undefined>(props.defaultSelectTargetId != undefined ? [props.defaultSelectTargetId] : undefined);
 
-    // RepeatPattern
+    // 選択解除
+    const removeTarget = (targetId?: number) => {
+        if (targetId != undefined) {
+            setSelectedTargetIdList(current => current?.filter(value => value != targetId));
+        } else {
+            setSelectedTargetIdList(undefined);
+        }
+    };
 
-    // RepeatPattern補完リストのアンカー
+    /**
+     * RepeatPattern
+     */
+
+    // 補完リストのアンカー
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    // 選択中のRepeatPatternを保持
+    // 選択状態
     const [selectedRepeatPattern, setRepeatPattern] = React.useState<'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | undefined>(undefined);
+
+    // 選択解除
+    const clearRepeatPattern = () => {
+        setRepeatPattern(undefined);
+    };
+
+    /**
+     * Date
+     */
+
+    // 日時情報
+    const [date, setDate] = React.useState<Date | null>(null);
+
+    // 開始時間の指定状態
+    const [timeSetted, setTimeSetted] = React.useState<boolean>(false);
+
+    // メニューのアンカー
+    const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    /**
+     * Hotkeys
+     */
 
     // 修飾キーや上下キー以外が押されたときにメニューを閉じる
     [...'1234567890-=~!@#$%^&*()_+qwertyuiopasdfghjklzxcvbnm[]\\{}|;\':",./<>?'].map(value => {
@@ -113,24 +148,11 @@ export default function AddForm(props: Props) {
             if (repeatPatternAutoCompleteMenuAnchorEl != null) {
                 setRepeatPatternAutoCompleteMenuAnchorEl(null);
             }
+            if (datetimeInfoSelectMenuAnchorEl != null) {
+                setDatetimeInfoSelectMenuAnchorEl(null)
+            }
         });
     });
-
-    // Target関連処理
-
-    const removeTarget = (targetId?: number) => {
-        if (targetId != undefined) {
-            setSelectedTargetIdList(current => current?.filter(value => value != targetId));
-        } else {
-            setSelectedTargetIdList(undefined);
-        }
-    };
-
-    // RepeatPattern関連処理
-
-    const clearRepeatPattern = () => {
-        setRepeatPattern(undefined);
-    };
 
     /**
      * syntaxDetection
@@ -169,14 +191,6 @@ export default function AddForm(props: Props) {
                 break;
         }
     };
-
-    // Date
-
-    const [date, setDate] = React.useState<Date | null>(null);
-
-    const [timeSetted, setTimeSetted] = React.useState<boolean>(false);
-
-    const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     return (
         <div
