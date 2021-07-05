@@ -10,6 +10,7 @@ import { Target } from "../../../lib/interface/index";
 
 import AppDataManager from '../../../lib/app/appDataManager';
 import DateTimeInfoSelectMenu from './DateTimeInfoSelectMenu';
+import TargetAutoCompleteListMenu from './TargetAutoCompleteListMenu';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -88,6 +89,8 @@ export default function AddForm(props: Props) {
         }
     })();
 
+    const [inputText, setInputText] = React.useState<string>("");
+
     // Target補完リストのアンカー
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -100,9 +103,6 @@ export default function AddForm(props: Props) {
     const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[]>(
         [props.defaultSelectTargetId != undefined ? props.defaultSelectTargetId : -1]
     );
-
-    // Target新規作成用の名前を保持
-    const [newTargetName, setNewTargetName] = React.useState<string>('');
 
     // RepeatPattern補完リストのアンカー
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -184,7 +184,7 @@ export default function AddForm(props: Props) {
         // 新規Targetを選択
         selectTarget(newTarget.id);
         // メニューを閉じる
-        menuClose('Target');
+        setTargetAutoCompleteMenuAnchorEl(null);
     };
 
     // RepeatPattern関連処理
@@ -210,28 +210,7 @@ export default function AddForm(props: Props) {
      */
     const syntaxDetection = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-        const modifyTargetList = (str: string) => {
-            // Targetの入力補完リストを更新
-            setTargetList(current => {
-                if (current != undefined) {
-                    // 未選択のTargetを表示
-                    return current.map(value => {
-                        if (str.length == 1) {
-                            return {
-                                hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : false,
-                                target: value.target
-                            }
-                        }
-                        return {
-                            hidden: selectedTargetIdList != undefined && selectedTargetIdList.find(targetId => targetId == value.target.id) != undefined ? true : !value.target.name.toLowerCase().includes(str.slice(1).toLowerCase()),
-                            target: value.target
-                        }
-                    });
-                }
-                // Targetが1つもない場合
-                return undefined;
-            });
-        }
+        setInputText(e.target.value);
 
         const modifyRepeatPatternList = (str: string) => {
             setRepeatPatternList(current => {
@@ -259,15 +238,8 @@ export default function AddForm(props: Props) {
         switch (true) {
             // '#'
             case /#\w*/.test(str):
-                // Targetの入力補完リストを更新
-                modifyTargetList(str);
                 // Targetの入力補完リストを表示
                 setTargetAutoCompleteMenuAnchorEl(e.target);
-                if (str.length > 1) {
-                    setNewTargetName(str.slice(1));
-                } else {
-                    setNewTargetName('');
-                }
                 break;
 
             // '*'
@@ -302,6 +274,7 @@ export default function AddForm(props: Props) {
                 <Input
                     placeholder="New to-do / term"
                     inputProps={{ 'aria-label': 'description' }}
+                    value={inputText}
                     onChange={syntaxDetection}
                     className={classes.input}
                 />
@@ -356,20 +329,15 @@ export default function AddForm(props: Props) {
             </div>
             {/* 補完リストメニュー */}
             {/* Target補完リスト */}
-            <Menu
-                className={classes.menu}
-                anchorEl={targetAutoCompleteMenuAnchorEl}
-                keepMounted
-                open={Boolean(targetAutoCompleteMenuAnchorEl)}
-                onClose={() => menuClose('Target')}
-            >
-                {/* Target補完リスト */}
-                {targetList != undefined && targetList.filter(value => !value.hidden).map(value => (
-                    <MenuItem onClick={() => selectTarget(value.target.id)} key={value.target.id}>{value.target.name}</MenuItem>
-                ))}
-                {/* Target新規追加用 */}
-                {newTargetName != '' && <MenuItem onClick={() => createNewTarget(newTargetName)} key={'newTarget'}>Create new target: {newTargetName}</MenuItem>}
-            </Menu>
+            <TargetAutoCompleteListMenu
+                menuAnchorEl={targetAutoCompleteMenuAnchorEl}
+                menuAnchorElSetter={setTargetAutoCompleteMenuAnchorEl}
+                selectedIdList={selectedTargetIdList}
+                idListSetter={setSelectedTargetIdList}
+                text={inputText}
+                textSetter={setInputText}
+                targetCreator={createNewTarget}
+            />
 
             {/* RepeatPattern補完リスト */}
             <Menu
