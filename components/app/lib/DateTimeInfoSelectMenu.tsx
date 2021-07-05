@@ -1,6 +1,6 @@
 import 'date-fns';
 import React from 'react';
-import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Button, Menu, TextField } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
 
