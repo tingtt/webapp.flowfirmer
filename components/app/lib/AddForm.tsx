@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import { Menu, MenuItem, Chip } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { Clear, Event, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
