@@ -9,6 +9,7 @@ import { useHotkeys } from 'react-hotkeys-hook';
 import AppDataManager from '../../../lib/app/appDataManager';
 import DateTimeInfoSelectMenu from './DateTimeInfoSelectMenu';
 import TargetAutoCompleteListMenu from './TargetAutoCompleteListMenu';
+import RepeatPatternAutoCompleteListMenu from './RepeatPatternAutoCompleteListMenu';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -98,58 +99,24 @@ export default function AddForm(props: Props) {
     // Targetの選択状態(デフォルト選択があれば指定)
     const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[] | undefined>(props.defaultSelectTargetId != undefined ? [props.defaultSelectTargetId] : undefined);
 
+    // RepeatPattern
+
     // RepeatPattern補完リストのアンカー
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    // RepeatPatternの補完リスト
-    const [repeatPatternList, setRepeatPatternList] = React.useState<[
-        {hidden: boolean, key: 'Daily'},
-        {hidden: boolean, key: 'Weekly'},
-        {hidden: boolean, key: 'Monthly'},
-        {hidden: boolean, key: 'Sun'},
-        {hidden: boolean, key: 'Mon'},
-        {hidden: boolean, key: 'Tue'},
-        {hidden: boolean, key: 'Wed'},
-        {hidden: boolean, key: 'Thu'},
-        {hidden: boolean, key: 'Fri'},
-        {hidden: boolean, key: 'Sat'},
-    ]>(
-        [
-            {hidden: false, key: 'Daily'},
-            {hidden: false, key: 'Weekly'},
-            {hidden: false, key: 'Monthly'},
-            {hidden: true, key: 'Sun'},
-            {hidden: true, key: 'Mon'},
-            {hidden: true, key: 'Tue'},
-            {hidden: true, key: 'Wed'},
-            {hidden: true, key: 'Thu'},
-            {hidden: true, key: 'Fri'},
-            {hidden: true, key: 'Sat'},
-        ]
-    );
 
     // 選択中のRepeatPatternを保持
     const [selectedRepeatPattern, setRepeatPattern] = React.useState<'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | undefined>(undefined);
 
-    // 補完メニュー非表示
-    const menuClose = (menuType?: 'Target' | 'Term' | 'startDate' | 'startTime' | 'endDate' | 'processingTime' | 'RepeatPattern') => {
-        switch (menuType) {
-            case 'Target':
-                setTargetAutoCompleteMenuAnchorEl(null);
-                break;
-            case 'RepeatPattern':
-                setRepeatPatternAutoCompleteMenuAnchorEl(null);
-                break;
-            default :
-                // すべて閉じる
-                setTargetAutoCompleteMenuAnchorEl(null);
-                setRepeatPatternAutoCompleteMenuAnchorEl(null);
-        }
-    };
-
     // 修飾キーや上下キー以外が押されたときにメニューを閉じる
     [...'1234567890-=~!@#$%^&*()_+qwertyuiopasdfghjklzxcvbnm[]\\{}|;\':",./<>?'].map(value => {
-        useHotkeys(value, () => menuClose());
+        useHotkeys(value, () => {
+            if (targetAutoCompleteMenuAnchorEl != null) {
+                setTargetAutoCompleteMenuAnchorEl(null);
+            }
+            if (repeatPatternAutoCompleteMenuAnchorEl != null) {
+                setRepeatPatternAutoCompleteMenuAnchorEl(null);
+            }
+        });
     });
 
     // Target関連処理
@@ -164,16 +131,8 @@ export default function AddForm(props: Props) {
 
     // RepeatPattern関連処理
 
-    const selectRepeatPattern = (key: 'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat') => {
-        setRepeatPattern(key);
-        menuClose('RepeatPattern');
-        (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value = (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/\s+\*\w*\s*/g, '');
-        (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value = (repeatPatternAutoCompleteMenuAnchorEl as HTMLInputElement).value.replace(/^\*\w*\s*/g, '');
-    };
-
     const clearRepeatPattern = () => {
         setRepeatPattern(undefined);
-        menuClose('RepeatPattern');
     };
 
     /**
@@ -186,20 +145,6 @@ export default function AddForm(props: Props) {
     const syntaxDetection = (e: React.ChangeEvent<HTMLInputElement>) => {
 
         setInputText(e.target.value);
-
-        const modifyRepeatPatternList = (str: string) => {
-            setRepeatPatternList(current => {
-                var newValue = current;
-                if (str.length == 1) {
-                    // Daily, Weekly, Monthlyを表示
-                    current.forEach((_, idx) => {newValue[idx].hidden = idx > 2});
-                } else {
-                    // 入力された文字列から補完を表示
-                    current.forEach((val, idx) => {newValue[idx].hidden = !val.key.toLowerCase().includes(str.slice(1).toLowerCase())});
-                }
-                return newValue;
-            })
-        }
 
         // 末尾に入力されたブロックを取り出し（スペース区切りでブロック分け）
         const inputValue = e.target.value.slice(e.target.value.lastIndexOf(' ') + 1);
@@ -219,8 +164,6 @@ export default function AddForm(props: Props) {
 
             // '*'
             case /\*\w*/.test(str):
-                // RepeatPatternの入力補完リストを更新
-                modifyRepeatPatternList(str);
                 // RepeatPatternの入力補完リストを表示
                 setRepeatPatternAutoCompleteMenuAnchorEl(e.target);
                 break;
@@ -314,18 +257,14 @@ export default function AddForm(props: Props) {
             />
 
             {/* RepeatPattern補完リスト */}
-            <Menu
-                className={classes.menu}
-                anchorEl={repeatPatternAutoCompleteMenuAnchorEl}
-                keepMounted
-                open={Boolean(repeatPatternAutoCompleteMenuAnchorEl)}
-                onClose={() => menuClose('RepeatPattern')}
-            >
-                {/* RepeatPattern補完リスト */}
-                {repeatPatternList.filter(value => !value.hidden).map(value => (
-                    <MenuItem onClick={() => selectRepeatPattern(value.key)} key={value.key}>{value.key}</MenuItem>
-                ))}
-            </Menu>
+            <RepeatPatternAutoCompleteListMenu
+                menuAnchorEl={repeatPatternAutoCompleteMenuAnchorEl}
+                menuAnchorElSetter={setRepeatPatternAutoCompleteMenuAnchorEl}
+                selectedRepeatPattern={selectedRepeatPattern}
+                repeatPatternSetter={setRepeatPattern}
+                text={inputText}
+                textSetter={setInputText}
+            />
 
             {/* 日時指定用メニュー */}
             <DateTimeInfoSelectMenu
