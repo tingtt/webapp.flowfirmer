@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
-import { Menu, MenuItem, Chip, Button } from '@material-ui/core';
+import { Menu, MenuItem, Chip } from '@material-ui/core';
 import { Clear, Event, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -89,6 +89,7 @@ export default function AddForm(props: Props) {
         }
     })();
 
+    // 入力値
     const [inputText, setInputText] = React.useState<string>("");
 
     // Target補完リストのアンカー

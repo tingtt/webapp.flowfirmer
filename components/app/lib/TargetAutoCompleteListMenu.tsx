@@ -3,7 +3,6 @@ import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Menu, MenuItem } from '@material-ui/core';
 import AppDataManager from '../../../lib/app/appDataManager';
-import { Target } from '../../../lib/interface';
 
 type Props = {
     menuAnchorEl: null | HTMLElement
