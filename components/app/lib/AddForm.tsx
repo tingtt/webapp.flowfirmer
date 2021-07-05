@@ -6,8 +6,6 @@ import { Menu, MenuItem, Chip } from '@material-ui/core';
 import { Clear, Event, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
-import { Target } from "../../../lib/interface/index";
-
 import AppDataManager from '../../../lib/app/appDataManager';
 import DateTimeInfoSelectMenu from './DateTimeInfoSelectMenu';
 import TargetAutoCompleteListMenu from './TargetAutoCompleteListMenu';
@@ -98,7 +96,7 @@ export default function AddForm(props: Props) {
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // Targetの選択状態(デフォルト選択があれば指定)
-    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[] | undefined>(undefined);
+    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[] | undefined>(props.defaultSelectTargetId != undefined ? [props.defaultSelectTargetId] : undefined);
 
     // RepeatPattern補完リストのアンカー
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
