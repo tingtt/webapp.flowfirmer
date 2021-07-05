@@ -1,6 +1,6 @@
 import 'date-fns';
 import React from 'react';
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles, useTheme } from '@material-ui/core/styles';
 import { Button, Menu, TextField } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
 
@@ -16,7 +16,6 @@ type Props = {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            marginTop: '3em',
             "& .MuiPopover-paper": {
                 width: theme.spacing(40),
             }
@@ -135,6 +134,8 @@ export default function DateTimeInfoSelectMenu(props: Props) {
     const clearAll = () => {
         props.dateSetter(null);
         props.timeSettedBoolSetter(false);
+        setDateStr("");
+        setTimeStr("");
         props.menuAnchorElSetter(null);
     }
 
@@ -142,6 +143,15 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         <Menu
             className={classes.root}
             anchorEl={props.menuAnchorEl}
+            getContentAnchorEl={null}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: "right"
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right'
+            }}
             keepMounted
             open={Boolean(props.menuAnchorEl)}
             onClose={() => props.menuAnchorElSetter(null)}
