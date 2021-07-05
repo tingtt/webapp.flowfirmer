@@ -4,7 +4,6 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import Input from '@material-ui/core/Input';
 import { Chip } from '@material-ui/core';
 import { Clear, Event, Loop } from '@material-ui/icons';
-import { useHotkeys } from 'react-hotkeys-hook';
 
 import AppDataManager from '../../../lib/app/appDataManager';
 import DateTimeInfoSelectMenu from './DateTimeInfoSelectMenu';
@@ -134,25 +133,6 @@ export default function AddForm(props: Props) {
 
     // メニューのアンカー
     const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    /**
-     * Hotkeys
-     */
-
-    // 修飾キーや上下キー以外が押されたときにメニューを閉じる
-    [...'1234567890-=~!@#$%^&*()_+qwertyuiopasdfghjklzxcvbnm[]\\{}|;\':",./<>?'].map(value => {
-        useHotkeys(value, () => {
-            if (targetAutoCompleteMenuAnchorEl != null) {
-                setTargetAutoCompleteMenuAnchorEl(null);
-            }
-            if (repeatPatternAutoCompleteMenuAnchorEl != null) {
-                setRepeatPatternAutoCompleteMenuAnchorEl(null);
-            }
-            if (datetimeInfoSelectMenuAnchorEl != null) {
-                setDatetimeInfoSelectMenuAnchorEl(null)
-            }
-        });
-    });
 
     /**
      * syntaxDetection

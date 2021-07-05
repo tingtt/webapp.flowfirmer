@@ -3,6 +3,7 @@ import React from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Button, Menu, TextField } from '@material-ui/core';
 import { Clear } from '@material-ui/icons';
+import { useHotkeys } from 'react-hotkeys-hook';
 
 type Props = {
     menuAnchorEl: null | HTMLElement
@@ -59,6 +60,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function DateTimeInfoSelectMenu(props: Props) {
 
     const classes = useStyles();
+
+    useHotkeys('command+\\', () =>props.menuAnchorElSetter(null))
 
     // 日付の文字列
     const [dateStr, setDateStr] = React.useState<string>(props.date != null ?

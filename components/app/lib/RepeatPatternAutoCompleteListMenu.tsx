@@ -1,5 +1,6 @@
 import { Menu, MenuItem } from "@material-ui/core";
 import React from "react";
+import { useHotkeys } from "react-hotkeys-hook";
 
 type Props = {
     menuAnchorEl: null | HTMLElement
@@ -15,6 +16,11 @@ export default function RepeatPatternAutoCompleteListMenu(props: Props) {
     const closeMenu = () => {
         props.menuAnchorElSetter(null);
     };
+
+    // 修飾キーや上下キー以外が押されたときにメニューを閉じる
+    [...'1234567890-=~!@#$%^&*()_+qwertyuiopasdfghjklzxcvbnm[]\\{}|;\':",./<>?'].map(value => {
+        useHotkeys(value, () => {props.menuAnchorElSetter(null)});
+    });
 
     const selectRepeatPattern = (key: 'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat') => {
         props.repeatPatternSetter(key);
