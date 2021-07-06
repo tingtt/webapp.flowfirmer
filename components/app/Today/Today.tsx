@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
                 display: 'none',
             },
+            paddingBottom: theme.spacing(8),
         },
         contentRight: {
             flex: 1,
