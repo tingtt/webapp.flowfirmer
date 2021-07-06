@@ -1,8 +1,9 @@
 import 'date-fns';
 import React from 'react';
+import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Button, Menu, TextField } from '@material-ui/core';
-import { Clear } from '@material-ui/icons';
+import { Button, Menu, MenuItem, TextField } from '@material-ui/core';
+import { Clear, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
 type Props = {
@@ -12,6 +13,12 @@ type Props = {
     dateSetter: React.Dispatch<React.SetStateAction<Date | null>>
     timeSettedBool: boolean
     timeSettedBoolSetter: React.Dispatch<React.SetStateAction<boolean>>
+    dateStr: string
+    dateStrSetter: React.Dispatch<React.SetStateAction<string>>
+    timeStr: string
+    timeStrSetter: React.Dispatch<React.SetStateAction<string>>
+    repeatPattern: 'Daily' | 'Weekly' | 'Monthly' | null
+    repeatPatternSetter: React.Dispatch<React.SetStateAction<"Daily" | "Weekly" | "Monthly" | null>>
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,13 +45,30 @@ const useStyles = makeStyles((theme: Theme) =>
             marginRight: theme.spacing(1),
             width: "100%"
         },
-        celearButtonDiv: {
+        repeatPatternSelecterDiv: {
+            display: 'flex',
+            marginBottom: theme.spacing(2),
+        },
+        repeatPatternSelecterItem: {
+            width: theme.spacing(35),
+        },
+        clearButtonDiv: {
             marginTop: theme.spacing(2.4),
             margin: 'auto',
             color: theme.palette.grey.A200,
             "& :hover": {
                 color: theme.palette.grey[600]
             }
+        },
+        clearRepeatPatternDiv: {
+            margin: 'auto',
+            color: theme.palette.grey.A200,
+            "& :hover": {
+                color: theme.palette.grey[600]
+            }
+        },
+        buttonFontColorPrimary: {
+            color: theme.palette.primary.main
         },
         mainButtonsDiv: {
             display: 'flex',
@@ -63,24 +87,10 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
     useHotkeys('command+\\', () =>props.menuAnchorElSetter(null))
 
-    // 日付の文字列
-    const [dateStr, setDateStr] = React.useState<string>(props.date != null ?
-        `${props.date.getFullYear()}-${("0" + (props.date.getMonth() + 1)).slice(-2)}-${("0" + props.date.getDate()).slice(-2)}`
-        :
-        ""
-    );
-
-    // 時間の文字列
-    const [timeStr, setTimeStr] = React.useState<string>(props.date != null && props.timeSettedBool ?
-        `${("0" + props.date.getHours()).slice(-2)}:${("0" + props.date.getMinutes()).slice(-2)}`
-        :
-        ""
-    );
-
     // 日付指定
     const setDate = (e: React.ChangeEvent<HTMLInputElement>) => {
         // TextFieldの値を更新
-        setDateStr(e.target.value);
+        props.dateStrSetter(e.target.value);
 
         if (e.target.value == "") {
             // 初期化
@@ -107,7 +117,7 @@ export default function DateTimeInfoSelectMenu(props: Props) {
     // 時間指定
     const setTime = (e: React.ChangeEvent<HTMLInputElement>) => {
         // TextFieldの値を更新
-        setTimeStr(e.target.value);
+        props.timeStrSetter(e.target.value);
 
         if (e.target.value == "") {
             // 初期化
@@ -126,20 +136,23 @@ export default function DateTimeInfoSelectMenu(props: Props) {
             }
             const newDate = new Date();
             newDate.setHours(splited[0], splited[1]);
-            setDateStr(`${newDate.getFullYear()}-${("0" + (newDate.getMonth() + 1)).slice(-2)}-${("0" + newDate.getDate()).slice(-2)}`);
+            props.dateStrSetter(`${newDate.getFullYear()}-${("0" + (newDate.getMonth() + 1)).slice(-2)}-${("0" + newDate.getDate()).slice(-2)}`);
             return newDate;
         })
 
         props.timeSettedBoolSetter(true);
     };
 
+    const [repeatPatternMenuAnchorEl, setRepeatPatternMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+
     // Clear all
     const clearAll = () => {
         props.dateSetter(null);
         props.timeSettedBoolSetter(false);
-        setDateStr("");
-        setTimeStr("");
+        props.dateStrSetter("");
+        props.timeStrSetter("");
         props.menuAnchorElSetter(null);
+        props.repeatPatternSetter(null);
     }
 
     return (
@@ -169,19 +182,20 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                         className={classes.textField}
                         label="Date"
                         type="date"
-                        value={dateStr}
+                        value={props.dateStr}
                         onChange={setDate}
                         InputLabelProps={{
                             shrink: true,
                         }}
                     />
                     {props.date != null && <div
-                        className={classes.celearButtonDiv}
+                        className={classes.clearButtonDiv}
                         onClick={() => {
                             props.dateSetter(null);
                             props.timeSettedBoolSetter(false);
-                            setDateStr("");
-                            setTimeStr("");
+                            props.dateStrSetter("");
+                            props.timeStrSetter("");
+                            props.repeatPatternSetter(null);
                         }}
                     >
                         <Clear />
@@ -194,20 +208,41 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                         className={classes.textField}
                         label="Start time"
                         type="time"
-                        value={timeStr}
+                        value={props.timeStr}
                         onChange={setTime}
                         InputLabelProps={{
                             shrink: true,
                         }}
                     />
                     {props.timeSettedBool &&  <div
-                        className={classes.celearButtonDiv}
+                        className={classes.clearButtonDiv}
                         onClick={() => {
                             props.timeSettedBoolSetter(false);
-                            setTimeStr("");
+                            props.timeStrSetter("");
                         }}
                     >
                         <Clear/>
+                    </div>}
+                </div>
+                <div
+                    className={classes.repeatPatternSelecterDiv}
+                >
+                    <Button
+                        className={clsx(classes.button, {
+                            [classes.buttonFontColorPrimary]: props.repeatPattern != undefined
+                        })}
+                        variant="outlined"
+                        onClick={(e: React.MouseEvent<HTMLElement>) => setRepeatPatternMenuAnchorEl(e.currentTarget)}
+                    >
+                        <Loop />{props.repeatPattern != undefined ? props.repeatPattern : "Repeat"}
+                    </Button>
+                    {props.repeatPattern != undefined && <div
+                        className={classes.clearRepeatPatternDiv}
+                        onClick={() => {
+                            props.repeatPatternSetter(null);
+                        }}
+                    >
+                        <Clear />
                     </div>}
                 </div>
                 <div
@@ -230,6 +265,42 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                     </Button>
                 </div>
             </div>
+            <Menu
+                anchorEl={repeatPatternMenuAnchorEl}
+                open={Boolean(repeatPatternMenuAnchorEl)}
+                keepMounted
+                getContentAnchorEl={null}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: "center"
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+                onClose={() => setRepeatPatternMenuAnchorEl(null)}
+            >
+                {(["Daily" , "Weekly" , "Monthly"] as ("Daily" | "Weekly" | "Monthly")[]).map(value => (
+                    <MenuItem
+                        className={classes.repeatPatternSelecterItem}
+                        key={value}
+                        onClick={() => {
+                            props.repeatPatternSetter(value);
+                            if (props.date == null) {
+                                // 繰り返しパターン指定時に日付が指定されていないときに当日を指定
+                                const nowDate = new Date();
+                                props.dateSetter(nowDate);
+                                props.timeSettedBoolSetter(false);
+                                props.dateStrSetter(`${nowDate.getFullYear()}-${("0" + (nowDate.getMonth() + 1)).slice(-2)}-${("0" + nowDate.getDate()).slice(-2)}`);
+                                props.timeStrSetter("");
+                            }
+                            setRepeatPatternMenuAnchorEl(null);
+                        }}
+                    >
+                        {value}
+                    </MenuItem>
+                ))}
+            </Menu>
         </Menu>
     );
 }

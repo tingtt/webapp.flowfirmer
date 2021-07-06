@@ -114,11 +114,11 @@ export default function AddForm(props: Props) {
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // 選択状態
-    const [selectedRepeatPattern, setRepeatPattern] = React.useState<'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | undefined>(undefined);
+    const [selectedRepeatPattern, setRepeatPattern] = React.useState<'Daily' | 'Weekly' | 'Monthly' | null>(null);
 
     // 選択解除
     const clearRepeatPattern = () => {
-        setRepeatPattern(undefined);
+        setRepeatPattern(null);
     };
 
     /**
@@ -133,6 +133,10 @@ export default function AddForm(props: Props) {
 
     // メニューのアンカー
     const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+
+    // 日時指定テキストフィールド用の文字列
+    const [dateStr, setDateStr] = React.useState<string>("");
+    const [timeStr, setTimeStr] = React.useState<string>("");
 
     /**
      * syntaxDetection
@@ -225,7 +229,7 @@ export default function AddForm(props: Props) {
                     }
                 </div>
                 {/* 選択中のRepeatPattern */}
-                {selectedRepeatPattern != undefined && <div
+                {selectedRepeatPattern != null && <div
                     className={classes.repeatPatternChipDiv}
                 >
                     <Chip
@@ -257,6 +261,10 @@ export default function AddForm(props: Props) {
                 menuAnchorElSetter={setRepeatPatternAutoCompleteMenuAnchorEl}
                 selectedRepeatPattern={selectedRepeatPattern}
                 repeatPatternSetter={setRepeatPattern}
+                date={date}
+                dateSetter={setDate}
+                timeSettedBool={timeSetted}
+                dateStrSetter={setDateStr}
                 text={inputText}
                 textSetter={setInputText}
             />
@@ -269,6 +277,12 @@ export default function AddForm(props: Props) {
                 dateSetter={setDate}
                 timeSettedBool={timeSetted}
                 timeSettedBoolSetter={setTimeSetted}
+                dateStr={dateStr}
+                dateStrSetter={setDateStr}
+                timeStr={timeStr}
+                timeStrSetter={setTimeStr}
+                repeatPattern={selectedRepeatPattern}
+                repeatPatternSetter={setRepeatPattern}
             />
         </div>
     );

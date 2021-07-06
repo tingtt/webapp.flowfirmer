@@ -5,8 +5,12 @@ import { useHotkeys } from "react-hotkeys-hook";
 type Props = {
     menuAnchorEl: null | HTMLElement
     menuAnchorElSetter: React.Dispatch<React.SetStateAction<null | HTMLElement>>
-    selectedRepeatPattern: "Daily" | "Weekly" | "Monthly" | "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | undefined
-    repeatPatternSetter: React.Dispatch<React.SetStateAction<"Daily" | "Weekly" | "Monthly" | "Sun" | "Mon" | "Tue" | "Wed" | "Thu" | "Fri" | "Sat" | undefined>>
+    selectedRepeatPattern: "Daily" | "Weekly" | "Monthly" | null
+    repeatPatternSetter: React.Dispatch<React.SetStateAction<"Daily" | "Weekly" | "Monthly" | null>>
+    date: Date | null
+    dateSetter: React.Dispatch<React.SetStateAction<Date | null>>
+    timeSettedBool: boolean
+    dateStrSetter: React.Dispatch<React.SetStateAction<string>>
     text: string
     textSetter: React.Dispatch<React.SetStateAction<string>>
 }
@@ -23,7 +27,48 @@ export default function RepeatPatternAutoCompleteListMenu(props: Props) {
     });
 
     const selectRepeatPattern = (key: 'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat') => {
-        props.repeatPatternSetter(key);
+        if (key == 'Daily'|| key == 'Weekly' || key == 'Monthly') {
+            if (props.date == null) {
+                // 日付が未指定の場合に当日の日付を登録
+                const newDate = new Date();
+
+                props.dateSetter(newDate);
+
+                // 指定する日付から文字列を生成してStateを更新
+                props.dateStrSetter(`${newDate.getFullYear()}-${("0" + (newDate.getMonth() + 1)).slice(-2)}-${("0" + newDate.getDate()).slice(-2)}`)
+            }
+
+            // 繰り返しパターンを指定
+            props.repeatPatternSetter(key);
+        } else {
+            // 指定する曜日番号を取得
+            var dayNum = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].findIndex(value => value == key);
+            if (dayNum == -1) {
+                dayNum = 1;
+            }
+
+            // 指定する曜日になるまで日付を進める
+            const newDate = props.date != null ? props.date : new Date();
+            [...Array(6)].some(_ => {
+                if (newDate.getDay() == dayNum) {
+                    return true;
+                }
+                newDate.setDate(newDate.getDate() + 1);
+            })
+
+            if (props.date != null && props.timeSettedBool) {
+                newDate.setHours(props.date.getHours(), props.date.getMinutes())
+            }
+
+            // 指定曜日の日付を指定
+            props.dateSetter(newDate);
+
+            // 指定する日付から文字列を生成してStateを更新
+            props.dateStrSetter(`${newDate.getFullYear()}-${("0" + (newDate.getMonth() + 1)).slice(-2)}-${("0" + newDate.getDate()).slice(-2)}`)
+
+            // 繰り返しパターンを指定
+            props.repeatPatternSetter('Weekly');
+        }
         // \*~~を削除
         props.textSetter(current => current.replace(/\s+\*\w*\s*/g, '').replace(/^\*\w*\s*/g, ''));
         // メニューを閉じる
