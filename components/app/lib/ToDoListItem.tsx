@@ -87,6 +87,9 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             marginLeft: 'auto',
             alignItems: 'center',
+            '&:hover': {
+                cursor: 'pointer',
+            },
         },
         detailInfoSpan: {
             marginLeft: theme.spacing(1),
@@ -176,12 +179,14 @@ export default function ToDoListItem(props: Props) {
                         className={classes.detailInfoDiv}
                     >
                         {/* 実行時間によって表示を切り替え（1時間以上かどうか） */}
-                        {props.todo.processingTimeScheduled != undefined && props.todo.processingTimeScheduled >= 60 ?
+                        {props.todo.processingTimeScheduled != undefined ? props.todo.processingTimeScheduled >= 60 ?
                             <span className={classes.detailInfoSpan}>{Math.trunc(props.todo.processingTimeScheduled / 60)}h{props.todo.processingTimeScheduled % 60}min</span>
                             :
                             <span className={classes.detailInfoSpan}>{props.todo.processingTimeScheduled}min</span>
+                            :
+                            undefined
                         }
-                        <span className={classes.detailInfoSpan}>{props.todo.startDatetimeScheduled != undefined ? props.todo.startDatetimeScheduled.getHours() + ":" + ('0' + props.todo.startDatetimeScheduled.getMinutes()).slice(-2) : ""}</span>
+                        {props.todo.startDatetimeScheduled != undefined && <span className={classes.detailInfoSpan}>{props.todo.startDatetimeScheduled.getHours() + ":" + ('0' + props.todo.startDatetimeScheduled.getMinutes()).slice(-2)}</span>}
                     </div>
                 </div>
                 {/* bottom half */}
