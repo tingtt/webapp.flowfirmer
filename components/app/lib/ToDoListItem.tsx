@@ -2,7 +2,7 @@ import { createStyles, Theme, makeStyles, Checkbox, InputBase } from "@material-
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../lib/interface";
-import { Loop } from "@material-ui/icons";
+import { Create, Loop } from "@material-ui/icons";
 import AppDataManager from "../../../lib/app/appDataManager";
 
 type Props = {
@@ -93,6 +93,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         detailInfoSpan: {
             marginLeft: theme.spacing(1),
+            marginTop: 'auto',
+            marginBottom: 'auto',
         },
         termSpan: {
             '&:hover': {
@@ -101,6 +103,15 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             whiteSpace: 'nowrap',
         },
+        eDiaryIcon: {
+            height: '100%',
+            width: theme.spacing(5),
+            color: theme.palette.grey.A100,
+            '&:hover': {
+                cursor: 'pointer',
+                color: theme.palette.grey[600]
+            },
+        }
     }),
 );
 
@@ -233,6 +244,14 @@ export default function ToDoListItem(props: Props) {
                     </div>
                 </div>
             </div>
+            {/* expressive diary */}
+            {props.todo.completed && <div
+                onClick={() => {
+                    // 成果、感情日記をつける画面を開く
+                }}
+            >
+                <Create className={classes.eDiaryIcon} />
+            </div>}
         </div>
     );
 }
