@@ -19,7 +19,7 @@ export type ToDo = {
     // 繰り返し周期
     repeatPattern?: 'Daily' | 'Weekly' | 'Monthly'
     // 毎週の繰り返す曜日情報
-    repeatDayForWeekly?: ('Sun.' | 'Mon.' | 'Tue.' | 'Web.' | 'Thu.' | 'Fri.' | 'Sat.')[]
+    repeatDayForWeekly?: number[]
 
     targetList?: Target[]
     term?: Term

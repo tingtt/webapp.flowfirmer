@@ -82,6 +82,58 @@ export default class AppDataManager {
         return newTarget;
     }
 
+    /**
+     * registerTodo
+     * @param name string
+     * @param datetime {date: Date, timeSetted: boolean} | undefined
+     * @param processingTime number | undefined
+     * @param targetIds number[] | undefined
+     * @param termId number | undefined
+     * @param repeatPattern { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay?: number[] } | undefined
+     * @param completed boolean
+     * @returns ToDo
+     */
+    public registerTodo(
+        name: string,
+        datetime?: { date: Date, timeSetted: boolean},
+        processingTime?: number,
+        targetIds?: number[],
+        termId?: number,
+        repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
+        completed = false
+    ) {
+        // TODO: APIを叩いてToDoを登録し、IDを取得
+        const id: number = this.todos != undefined ? this.todos.length : 0;
+
+        const newTodo: ToDo = {
+            id: id,
+            user_id: this.user_id,
+
+            name: name,
+
+            startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
+
+            timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
+
+            processingTimeScheduled: processingTime,
+
+            repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
+
+            repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+
+            targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
+
+            term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
+
+            completed: completed,
+        }
+
+        // 新規Targetを追加
+        this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
+
+        return newTodo;
+    }
+
     private constructor(user_id: number) {
         this.user_id = user_id;
 

@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
         input: {
             width: '100%',
         },
+        form: {
+            width: "100%",
+        },
         dateSelecterDiv: {
             display: 'inline-flex',
             verticalAlign: 'middle',
@@ -114,7 +117,7 @@ export default function AddForm(props: Props) {
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // 選択状態
-    const [selectedRepeatPattern, setRepeatPattern] = React.useState<'Daily' | 'Weekly' | 'Monthly' | null>(null);
+    const [selectedRepeatPattern, setRepeatPattern] = React.useState<{ interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null>(null);
 
     // 選択解除
     const clearRepeatPattern = () => {
@@ -176,6 +179,29 @@ export default function AddForm(props: Props) {
         }
     };
 
+    const clearAll = () => {
+        setInputText("");
+        setDate(null);
+        setDateStr("");
+        setRepeatPattern(null);
+        setSelectedTargetIdList(undefined);
+        setTimeSetted(false);
+        setTimeStr("");
+    }
+
+    const registerTodo = () => {
+        appDataManager.registerTodo(
+            inputText,
+            date != null ? { date : date, timeSetted: timeSetted } : undefined,
+            undefined,
+            selectedTargetIdList,
+            undefined,
+            date != null && selectedRepeatPattern != null ? selectedRepeatPattern : undefined
+        );
+        clearAll();
+        console.log(appDataManager.todos);
+    };
+
     return (
         <div
             className={classes.root}
@@ -184,13 +210,23 @@ export default function AddForm(props: Props) {
             <div
                 className={classes.divInput}
             >
-                <Input
-                    placeholder="New to-do / term"
-                    inputProps={{ 'aria-label': 'description' }}
-                    value={inputText}
-                    onChange={syntaxDetection}
-                    className={classes.input}
-                />
+                <form
+                    autoComplete="off"
+                    className={classes.form}
+                    onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
+                        registerTodo();
+                        e.preventDefault();
+                    }}
+                >
+                    <Input
+                        name="todoName"
+                        placeholder="New to-do / term"
+                        inputProps={{ 'aria-label': 'description' }}
+                        value={inputText}
+                        onChange={syntaxDetection}
+                        className={classes.input}
+                    />
+                </form>
                 <div
                     className={classes.dateSelecterDiv}
                     onClick={(e: React.MouseEvent<HTMLElement>) => setDatetimeInfoSelectMenuAnchorEl(e.currentTarget)}
@@ -236,7 +272,7 @@ export default function AddForm(props: Props) {
                         icon={<Loop />}
                         className={classes.repeatPatternChip}
                         onDelete={clearRepeatPattern}
-                        label={selectedRepeatPattern}
+                        label={selectedRepeatPattern.interval == 'Weekly' ? selectedRepeatPattern.interval + " (" + selectedRepeatPattern.repeatDay.map(value => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][value] + ",") + ")" : selectedRepeatPattern.interval}
                     />
                 </div>}
             </div>

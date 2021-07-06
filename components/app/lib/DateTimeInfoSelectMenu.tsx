@@ -17,8 +17,8 @@ type Props = {
     dateStrSetter: React.Dispatch<React.SetStateAction<string>>
     timeStr: string
     timeStrSetter: React.Dispatch<React.SetStateAction<string>>
-    repeatPattern: 'Daily' | 'Weekly' | 'Monthly' | null
-    repeatPatternSetter: React.Dispatch<React.SetStateAction<"Daily" | "Weekly" | "Monthly" | null>>
+    repeatPattern: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null
+    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null>>
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -234,7 +234,7 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                         variant="outlined"
                         onClick={(e: React.MouseEvent<HTMLElement>) => setRepeatPatternMenuAnchorEl(e.currentTarget)}
                     >
-                        <Loop />{props.repeatPattern != undefined ? props.repeatPattern : "Repeat"}
+                        <Loop />{props.repeatPattern != undefined ? props.repeatPattern.interval == 'Weekly' ? props.repeatPattern.interval + " (" + props.repeatPattern.repeatDay.map(value => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][value] + ",") + ")" : props.repeatPattern.interval : "Repeat"}
                     </Button>
                     {props.repeatPattern != undefined && <div
                         className={classes.clearRepeatPatternDiv}
@@ -285,14 +285,18 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                         className={classes.repeatPatternSelecterItem}
                         key={value}
                         onClick={() => {
-                            props.repeatPatternSetter(value);
+                            const nowDate = new Date();
                             if (props.date == null) {
                                 // 繰り返しパターン指定時に日付が指定されていないときに当日を指定
-                                const nowDate = new Date();
                                 props.dateSetter(nowDate);
                                 props.timeSettedBoolSetter(false);
                                 props.dateStrSetter(`${nowDate.getFullYear()}-${("0" + (nowDate.getMonth() + 1)).slice(-2)}-${("0" + nowDate.getDate()).slice(-2)}`);
                                 props.timeStrSetter("");
+                            }
+                            if (value == 'Weekly') {
+                                props.repeatPatternSetter({ interval: value, repeatDay: [props.date != null ? props.date.getDay() : nowDate.getDay()] });
+                            } else {
+                                props.repeatPatternSetter({ interval: value });
                             }
                             setRepeatPatternMenuAnchorEl(null);
                         }}
