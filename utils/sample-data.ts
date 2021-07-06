@@ -474,11 +474,14 @@ export const sampleArchives: Archive[] = [
         id: 0,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[0],
+        refInfo: {
+            startDateTime: sampleToDos[0].startDatetimeScheduled!,
+            processingTime: sampleToDos[0].processingTimeScheduled!,
+            refType: 'ToDo',
+            ref: sampleToDos[0],
+        },
 
-        startDateTime: sampleToDos[0].startDatetimeScheduled!,
-        processingTime: sampleToDos[0].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 7, 17, 25),
 
         targets: [sampleTargets[0]],
 
@@ -502,14 +505,18 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 7, 17)
+        recordingDateTime: new Date(2001, 6, 7, 17)
     },
     {
         id: 1,
         user_id: 0,
 
-        refType: 'HabitRemind',
-        ref: sampleHabitReminds[0],
+        refInfo: {
+            refType: 'HabitRemind',
+            ref: sampleHabitReminds[0],
+        },
+
+        checkInDateTime: new Date(2001, 6, 7, 17, 30),
 
         targets: [sampleTargets[0]],
 
@@ -522,17 +529,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 7, 17, 30)
+        recordingDateTime: new Date(2001, 6, 7, 17, 30)
     },
     {
         id: 2,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[3],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[3],
+            startDateTime: sampleToDos[3].startDatetimeScheduled!,
+            processingTime: sampleToDos[3].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[3].startDatetimeScheduled!,
-        processingTime: sampleToDos[3].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 14, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -544,17 +554,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 14, 5, 30)
+        recordingDateTime: new Date(2001, 6, 14, 5, 35)
     },
     {
         id: 3,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[4],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[4],
+            startDateTime: sampleToDos[4].startDatetimeScheduled!,
+            processingTime: sampleToDos[4].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[4].startDatetimeScheduled!,
-        processingTime: sampleToDos[4].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 15, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -566,17 +579,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 15, 5, 30)
+        recordingDateTime: new Date(2001, 6, 15, 5, 35)
     },
     {
         id: 4,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[5],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[5],
+            startDateTime: sampleToDos[5].startDatetimeScheduled!,
+            processingTime: sampleToDos[5].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[5].startDatetimeScheduled!,
-        processingTime: sampleToDos[5].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 16, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -588,17 +604,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 16, 5, 30)
+        recordingDateTime: new Date(2001, 6, 16, 5, 35)
     },
     {
         id: 5,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[6],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[6],
+            startDateTime: sampleToDos[6].startDatetimeScheduled!,
+            processingTime: sampleToDos[6].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[6].startDatetimeScheduled!,
-        processingTime: sampleToDos[6].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 17, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -610,17 +629,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 17, 5, 30)
+        recordingDateTime: new Date(2001, 6, 17, 5, 35)
     },
     {
         id: 6,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[7],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[7],
+            startDateTime: sampleToDos[7].startDatetimeScheduled!,
+            processingTime: sampleToDos[7].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[7].startDatetimeScheduled!,
-        processingTime: sampleToDos[7].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 18, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -632,17 +654,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 18, 5, 30)
+        recordingDateTime: new Date(2001, 6, 18, 5, 35),
     },
     {
         id: 7,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[8],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[8],
+            startDateTime: new Date(2001, 6, 19, 6),
+            processingTime: sampleToDos[8].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[8].startDatetimeScheduled!,
-        processingTime: sampleToDos[8].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 19, 6, 4),
 
         targets: [sampleTargets[0]],
 
@@ -654,17 +679,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 19, 6)
+        recordingDateTime: new Date(2001, 6, 19, 6, 10)
     },
     {
         id: 8,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[9],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[9],
+            startDateTime: sampleToDos[9].startDatetimeScheduled!,
+            processingTime: sampleToDos[9].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[9].startDatetimeScheduled!,
-        processingTime: sampleToDos[9].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 20, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -676,17 +704,20 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 20, 5, 30)
+        recordingDateTime: new Date(2001, 6, 20, 5, 35)
     },
     {
         id: 9,
         user_id: 0,
 
-        refType: 'ToDo',
-        ref: sampleToDos[10],
+        refInfo: {
+            refType: 'ToDo',
+            ref: sampleToDos[10],
+            startDateTime: sampleToDos[10].startDatetimeScheduled!,
+            processingTime: sampleToDos[10].processingTimeScheduled!,
+        },
 
-        startDateTime: sampleToDos[10].startDatetimeScheduled!,
-        processingTime: sampleToDos[10].processingTimeScheduled!,
+        checkInDateTime: new Date(2001, 6, 22, 5, 34),
 
         targets: [sampleTargets[0]],
 
@@ -698,6 +729,6 @@ export const sampleArchives: Archive[] = [
             }
         ],
 
-        datetime: new Date(2021, 6, 22, 5, 30)
+        recordingDateTime: new Date(2001, 6, 22, 5, 35)
     }
 ]

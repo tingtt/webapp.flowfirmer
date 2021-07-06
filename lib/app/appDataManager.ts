@@ -1,5 +1,5 @@
-import { sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
-import { HabitRemind, Target, Term, ToDo } from "../interface/index";
+import { sampleArchives, sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
+import { Archive, HabitRemind, Target, Term, ToDo } from "../interface/index";
 
 export default class AppDataManager {
 
@@ -30,6 +30,7 @@ export default class AppDataManager {
     public todos?: ToDo[];
     public terms?: Term[];
     public habitReminds?: HabitRemind[];
+    public archives?: Archive[];
 
     // TODO: ユーザーの登録データを取得
 
@@ -49,6 +50,10 @@ export default class AppDataManager {
         return sampleHabitReminds.filter(value => value.user_id == this.user_id);
     }
 
+    private getArchives() {
+        return sampleArchives.filter(value => value.user_id == this.user_id);
+    }
+
     private constructor(user_id: number) {
         this.user_id = user_id;
 
@@ -56,5 +61,6 @@ export default class AppDataManager {
         this.todos = this.getToDos();
         this.terms = this.getTerms();
         this.habitReminds = this.getHabitReminds();
+        this.archives = this.getArchives();
     }
 }
