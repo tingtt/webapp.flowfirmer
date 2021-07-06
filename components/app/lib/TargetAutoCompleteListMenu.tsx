@@ -1,4 +1,3 @@
-import 'date-fns';
 import React from 'react';
 import { Menu, MenuItem } from '@material-ui/core';
 import AppDataManager from '../../../lib/app/appDataManager';
