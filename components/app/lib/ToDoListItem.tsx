@@ -169,7 +169,7 @@ export default function ToDoListItem(props: Props) {
                         <InputBase
                             type="text"
                             name="todoName"
-                            defaultValue={props.todo.name}
+                            value={props.todo.name}
                             inputProps={{ 'aria-label': 'naked' }}
                             onChange={nameChange}
                         />
