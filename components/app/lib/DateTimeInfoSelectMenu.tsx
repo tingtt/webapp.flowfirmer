@@ -104,12 +104,12 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         props.dateSetter(current => {
             if (current != null) {
                 current.setFullYear(splited[0]);
-                current.setMonth(splited[1] - 1);
+                current.setMonth((splited[1] - 1));
                 current.setDate(splited[2]);
                 return current;
             }
 
-            return new Date(splited[0], splited[1], splited[2]);
+            return new Date(splited[0], splited[1] - 1, splited[2]);
         });
     };
 
