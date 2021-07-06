@@ -1,4 +1,4 @@
-import { createStyles, Theme, makeStyles, Checkbox, Chip, InputBase } from "@material-ui/core";
+import { createStyles, Theme, makeStyles, Checkbox, InputBase } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../lib/interface";
