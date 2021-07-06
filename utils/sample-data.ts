@@ -238,7 +238,7 @@ export const sampleToDos: ToDo[] = [
         processingTimeScheduled: 25,
 
         repeatPattern: 'Weekly',
-        repeatDayForWeekly: ['Mon.'],
+        repeatDayForWeekly: [1],
 
         targetList: [sampleTargets[0]],
         term: sampleTerms[0],
@@ -256,7 +256,7 @@ export const sampleToDos: ToDo[] = [
         processingTimeScheduled: 70,
 
         repeatPattern: 'Weekly',
-        repeatDayForWeekly: ['Thu.'],
+        repeatDayForWeekly: [4],
 
         targetList: [sampleTargets[0]],
         term: undefined,
@@ -275,7 +275,7 @@ export const sampleToDos: ToDo[] = [
         processingTimeScheduled: 25,
 
         repeatPattern: 'Weekly',
-        repeatDayForWeekly: ['Mon.'],
+        repeatDayForWeekly: [1],
 
         targetList: [sampleTargets[0]],
         term: undefined,
