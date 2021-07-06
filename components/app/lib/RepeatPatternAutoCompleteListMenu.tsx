@@ -130,6 +130,46 @@ export default function RepeatPatternAutoCompleteListMenu(props: Props) {
             }).map(value => (
                 <MenuItem onClick={() => selectRepeatPattern(value)} key={value}>{value}</MenuItem>
             ))}
+            {(() => {
+                const ary = [...intervalRepeatPatterList.filter(value => {
+                    // 末尾に入力されたブロックを取り出し（スペース区切りでブロック分け）
+                    const inputValue = props.text.slice(props.text.lastIndexOf(' ') + 1);
+                    // 末尾ブロックの文字列の先頭が'*'なら変数strに保持（含まれていなければundefined）
+                    const str = '\*'.includes(inputValue.slice(0,1)) ? inputValue : undefined;
+
+                    if (str == undefined) {
+                        props.menuAnchorElSetter(null);
+                        return false;
+                    }
+
+                    if (str.length == 1) {
+                        return true;
+                    }
+
+                    return value.toLowerCase().includes(str.slice(1).toLowerCase())
+                }), ...dayRepeatPatternList.filter(value => {
+                    // 末尾に入力されたブロックを取り出し（スペース区切りでブロック分け）
+                    const inputValue = props.text.slice(props.text.lastIndexOf(' ') + 1);
+                    // 末尾ブロックの文字列の先頭が'*'なら変数strに保持（含まれていなければundefined）
+                    const str = '\*'.includes(inputValue.slice(0,1)) ? inputValue : undefined;
+
+                    if (str == undefined) {
+                        props.menuAnchorElSetter(null);
+                        return false;
+                    }
+
+                    if (str.length == 1) {
+                        return false;
+                    }
+
+                    return value.toLowerCase().includes(str.slice(1).toLowerCase())
+                })]
+                if (ary.length == 0) {
+                    return intervalRepeatPatterList.map(value => (
+                        <MenuItem onClick={() => selectRepeatPattern(value)} key={value}>{value}</MenuItem>
+                    ))
+                }
+            })()}
         </Menu>
     );
 }
