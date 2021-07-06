@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
             height: theme.spacing(8),
+            width: '100%'
         },
         rootHeightLong: {
             height: theme.spacing(10),
@@ -27,10 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
         infoTopHalf: {
             flex: 2,
             display: 'flex',
+            width: '100%',
         },
         infoBottomHalf: {
             flex: 1,
             display: 'flex',
+            width: '100%',
         },
         infoBottomHalfLongHeight: {
             flex: 2,
@@ -41,25 +44,27 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: 'auto',
             marginBottom: 'auto',
         },
-        todoNameSpan: {
+        todoNameDiv: {
             flex: 4,
             display: 'flex',
             alignItems: 'center',
             fontSize: theme.spacing(2.4),
             whiteSpace: 'nowrap',
-            overflow: 'auto',
+            width: '100%',
+            overflowX: 'scroll',
             msOverflowStyle: 'none',    /* IE, Edge 対応 */
             scrollbarWidth: 'none', /* Firefox 対応 */
             "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
                 display: 'none',
             },
         },
-        todoDescriptionSpan: {
+        todoDescriptionDiv: {
             flex: 0.5,
             display: 'flex',
             fontSize: theme.spacing(1.5),
             whiteSpace: 'nowrap',
-            overflow: 'auto',
+            width: '100%',
+            overflowX: 'scroll',
             msOverflowStyle: 'none',    /* IE, Edge 対応 */
             scrollbarWidth: 'none', /* Firefox 対応 */
             "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
@@ -70,7 +75,8 @@ const useStyles = makeStyles((theme: Theme) =>
             flex: 1,
             display: 'flex',
             whiteSpace: 'nowrap',
-            overflow: 'auto',
+            width: '100%',
+            overflowX: 'scroll',
             msOverflowStyle: 'none',    /* IE, Edge 対応 */
             scrollbarWidth: 'none', /* Firefox 対応 */
             "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
@@ -92,9 +98,6 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             whiteSpace: 'nowrap',
         },
-        sampleOverflow: {
-            overflow: 'auto',
-        }
     }),
 );
 
@@ -131,7 +134,7 @@ export default function ToDoListItem(props: Props) {
                 [classes.rootHeightLong]: props.todo.description != undefined && props.todo.description != ""
             })}
         >
-
+            {/* checkbox */}
             <div>
                 <div
                     className={classes.infoTopHalf}
@@ -148,14 +151,17 @@ export default function ToDoListItem(props: Props) {
                     })}
                 ></div>
             </div>
+            {/* info */}
             <div
                 className={classes.infoDiv}
             >
+                {/* top half */}
                 <div
                     className={classes.infoTopHalf}
                 >
+                    {/* name */}
                     <div
-                        className={classes.todoNameSpan}
+                        className={classes.todoNameDiv}
                     >
                         <InputBase
                             type="text"
@@ -165,6 +171,7 @@ export default function ToDoListItem(props: Props) {
                             onChange={nameChange}
                         />
                     </div>
+                    {/* time info */}
                     <div
                         className={classes.detailInfoDiv}
                     >
@@ -177,18 +184,17 @@ export default function ToDoListItem(props: Props) {
                         <span className={classes.detailInfoSpan}>{props.todo.startDatetimeScheduled != undefined ? props.todo.startDatetimeScheduled.getHours() + ":" + ('0' + props.todo.startDatetimeScheduled.getMinutes()).slice(-2) : ""}</span>
                     </div>
                 </div>
+                {/* bottom half */}
                 <div
                     className={clsx(classes.infoBottomHalf, {
                         [classes.infoBottomHalfLongHeight]: props.todo.description != undefined && props.todo.description != ""
                     })}
                 >
-                    <div
-                        className={classes.sampleOverflow}
-                    >
+                    <div>
                         {/* Description */}
                         {props.todo.description != undefined && props.todo.description != "" &&
                             <div
-                                className={classes.todoDescriptionSpan}
+                                className={classes.todoDescriptionDiv}
                             >
                                 <span>{props.todo.description}</span>
                             </div>
@@ -198,14 +204,12 @@ export default function ToDoListItem(props: Props) {
                         <div
                             className={classes.todoTargetList}
                         >
-                            <span>
-                                {props.todo.targetList?.map(value => (
-                                    // <Chip
-                                    //     label={"#" + value.name}
-                                    // />
-                                    <span>#{value.name}</span>
-                                ))}
-                            </span>
+                            {props.todo.targetList?.map(value => (
+                                // <Chip
+                                //     label={"#" + value.name}
+                                // />
+                                <span>#{value.name}</span>
+                            ))}
                         </div>
                     </div>
                     <div

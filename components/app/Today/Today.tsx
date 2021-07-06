@@ -6,7 +6,6 @@ import AddForm from "../lib/AddForm";
 import AppDataManager from '../../../lib/app/appDataManager';
 import ToDoListItem from '../lib/ToDoListItem';
 import ToDoDetail from '../lib/ToDoDetail';
-import { ToDo } from '../../../lib/interface';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
