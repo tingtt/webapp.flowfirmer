@@ -199,7 +199,7 @@ export default function AddForm(props: Props) {
             date != null && selectedRepeatPattern != null ? selectedRepeatPattern : undefined
         );
         clearAll();
-        console.log(appDataManager.todos);
+        // console.log(appDataManager.todos);
     };
 
     return (
