@@ -1,4 +1,4 @@
-import { createStyles, Theme, makeStyles, Checkbox, InputBase } from "@material-ui/core";
+import { createStyles, Theme, makeStyles, Checkbox, InputBase, Chip } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../lib/interface";
@@ -95,6 +95,9 @@ const useStyles = makeStyles((theme: Theme) =>
             marginLeft: theme.spacing(1),
             marginTop: 'auto',
             marginBottom: 'auto',
+        },
+        loopIcon: {
+            color: theme.palette.grey.A200
         },
         termSpan: {
             '&:hover': {
@@ -220,12 +223,22 @@ export default function ToDoListItem(props: Props) {
                         <div
                             className={classes.todoTargetList}
                         >
-                            {props.todo.targetList?.map(value => (
-                                // <Chip
-                                //     label={"#" + value.name}
-                                // />
-                                <span>#{value.name}</span>
-                            ))}
+                            {props.todo.targetList?.map(value => {
+                                const inScopeClasses = makeStyles((theme: Theme) =>
+                                    createStyles({
+                                        targetChip: {
+                                            backgroundColor: value.themeColor,
+                                            height: theme.spacing(2),
+                                        },
+                                    })
+                                )();
+                                return (
+                                    <Chip
+                                        className={inScopeClasses.targetChip}
+                                        label={value.name}
+                                    />
+                                )
+                            })}
                         </div>
                     </div>
                     <div
@@ -238,7 +251,11 @@ export default function ToDoListItem(props: Props) {
                         })()}
                         {(() => {
                             if (props.todo.repeatPattern != undefined) {
-                                return <span className={classes.detailInfoSpan}><Loop /></span>
+                                return (
+                                    <span className={clsx(classes.detailInfoSpan, classes.loopIcon)}>
+                                        <Loop/>
+                                    </span>
+                                );
                             }
                         })()}
                     </div>
