@@ -51,6 +51,69 @@ export default class AppDataManager {
     }
 
     /**
+     * registerTodo
+     * @param name string
+     * @param datetime {date: Date, timeSetted: boolean} | undefined
+     * @param processingTime number | undefined
+     * @param targetIds number[] | undefined
+     * @param termId number | undefined
+     * @param repeatPattern { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay?: number[] } | undefined
+     * @param completed boolean
+     * @returns ToDo
+     */
+    public registerTodo(
+        name: string,
+        datetime?: { date: Date, timeSetted: boolean},
+        processingTime?: number,
+        targetIds?: number[],
+        termId?: number,
+        repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
+        completed = false
+    ) {
+        // TODO: APIを叩いてToDoを登録し、IDを取得
+        const todoHasLastId = this.todos != undefined ? this.todos.sort((a, b) => {
+            // Idで昇順
+            if (a.id < b.id) {
+                return -1;
+            }
+            if (a.id > b.id) {
+                return 1;
+            }
+            return 0;
+        })[this.todos.length - 1] : undefined;
+        const id: number = this.todos != undefined && todoHasLastId != undefined ? todoHasLastId.id + 1 : 0;
+
+
+        const newTodo: ToDo = {
+            id: id,
+            user_id: this.user_id,
+
+            name: name,
+
+            startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
+
+            timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
+
+            processingTimeScheduled: processingTime,
+
+            repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
+
+            repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+
+            targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
+
+            term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
+
+            completed: completed,
+        }
+
+        // 新規Targetを追加
+        this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
+
+        return newTodo;
+    }
+
+    /**
      *
      * @param updatedValue ToDo
      * @returns ToDo[]
@@ -71,6 +134,16 @@ export default class AppDataManager {
             [updatedValue];
 
         return this.todos;
+    }
+
+    /**
+     * deleteTodo
+     * @param id number
+     */
+    public deleteTodo(id: number) {
+        if (this.todos != undefined) {
+            this.todos = this.todos.filter(value => value.id != id);
+        }
     }
 
     private getArchives() {
@@ -103,58 +176,6 @@ export default class AppDataManager {
         this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
 
         return newTarget;
-    }
-
-    /**
-     * registerTodo
-     * @param name string
-     * @param datetime {date: Date, timeSetted: boolean} | undefined
-     * @param processingTime number | undefined
-     * @param targetIds number[] | undefined
-     * @param termId number | undefined
-     * @param repeatPattern { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay?: number[] } | undefined
-     * @param completed boolean
-     * @returns ToDo
-     */
-    public registerTodo(
-        name: string,
-        datetime?: { date: Date, timeSetted: boolean},
-        processingTime?: number,
-        targetIds?: number[],
-        termId?: number,
-        repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
-        completed = false
-    ) {
-        // TODO: APIを叩いてToDoを登録し、IDを取得
-        const id: number = this.todos != undefined ? this.todos.length : 0;
-
-        const newTodo: ToDo = {
-            id: id,
-            user_id: this.user_id,
-
-            name: name,
-
-            startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
-
-            timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
-
-            processingTimeScheduled: processingTime,
-
-            repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
-
-            repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
-
-            targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
-
-            term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
-
-            completed: completed,
-        }
-
-        // 新規Targetを追加
-        this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
-
-        return newTodo;
     }
 
     private constructor(user_id: number) {

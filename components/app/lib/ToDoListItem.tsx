@@ -144,6 +144,13 @@ export default function ToDoListItem(props: Props) {
         props.setTodos(appDataManager.updateTodo(props.todo));
     };
 
+    const deleteTodo = () => {
+        // 削除
+        appDataManager.deleteTodo(props.todo.id);
+        // Stateを更新
+        props.setTodos(appDataManager.todos);
+    }
+
     return (
         <div
             className={clsx(classes.root, {
@@ -185,6 +192,12 @@ export default function ToDoListItem(props: Props) {
                             value={props.todo.name}
                             inputProps={{ 'aria-label': 'naked' }}
                             onChange={nameChange}
+                            onKeyDown={e => {
+                                if ((e.target as HTMLInputElement).value == "" && e.key == 'Backspace') {
+                                    // 値が空文字のときにBackspaceキーが押さたときにToDoを削除
+                                    deleteTodo();
+                                }
+                            }}
                         />
                     </div>
                     {/* time info */}
