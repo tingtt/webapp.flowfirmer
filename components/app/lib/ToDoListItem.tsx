@@ -144,7 +144,6 @@ export default function ToDoListItem(props: Props) {
         props.setTodos(appDataManager.updateTodo(props.todo));
     };
 
-    console.log(props.todo);
     return (
         <div
             className={clsx(classes.root, {
