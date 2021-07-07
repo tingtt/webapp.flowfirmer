@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 display: 'none',
             },
             paddingBottom: theme.spacing(8),
-            display: 'flex',
-            flexDirection: 'column',
             width: '100%',
         },
         accordionToggleButtonDiv: {
