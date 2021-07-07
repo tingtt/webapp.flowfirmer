@@ -9,6 +9,7 @@ import AppDataManager from '../../../lib/app/appDataManager';
 import DateTimeInfoSelectMenu from './DateTimeInfoSelectMenu';
 import TargetAutoCompleteListMenu from './TargetAutoCompleteListMenu';
 import RepeatPatternAutoCompleteListMenu from './RepeatPatternAutoCompleteListMenu';
+import { ToDo } from '../../../lib/interface';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -73,6 +74,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type Props = {
     defaultSelectTargetId?: number
+    setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
 };
 
 export default function AddForm(props: Props) {
@@ -190,6 +192,7 @@ export default function AddForm(props: Props) {
     }
 
     const registerTodo = () => {
+        // 登録
         appDataManager.registerTodo(
             inputText,
             date != null ? { date : date, timeSetted: timeSetted } : undefined,
@@ -198,6 +201,9 @@ export default function AddForm(props: Props) {
             undefined,
             date != null && selectedRepeatPattern != null ? selectedRepeatPattern : undefined
         );
+        // リストのStateを同期
+        props.setTodos(appDataManager.todos);
+        // 入力値をクリア
         clearAll();
         // console.log(appDataManager.todos);
     };

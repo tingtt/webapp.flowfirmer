@@ -86,7 +86,7 @@ export default function Today() {
             <div
                 className={classes.contentLeft}
             >
-                <AddForm />
+                <AddForm setTodos={setTodos} />
                 <Divider />
                 {todos != undefined && (
                     <div
