@@ -229,6 +229,7 @@ export default function ToDoListItem(props: Props) {
                                         targetChip: {
                                             backgroundColor: value.themeColor,
                                             height: theme.spacing(2),
+                                            marginRight: theme.spacing(0.8)
                                         },
                                     })
                                 )();
