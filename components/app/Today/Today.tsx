@@ -73,6 +73,7 @@ export default function Today() {
 
     // Collapse state
     const [noDateToDosShown, setNoDateToDosShown] = React.useState<boolean>(true);
+    const [delayedToDosShown, setDelayedToDosShown] = React.useState<boolean>(true);
     const [todayPendingToDosShown, setTodayPendingToDosShown] = React.useState<boolean>(true);
     const [todayCompletedToDosShown, setTodayCompletedToDosShown] = React.useState<boolean>(true);
 
@@ -107,6 +108,29 @@ export default function Today() {
                                 <Divider />
                                 {todos.filter(value => !value.completed && value.startDatetimeScheduled == undefined).map(value => (
                                     <div key={value.id} onClick={() => setSelectedToDoId(value.id)}>
+                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
+                                        <Divider />
+                                    </div>
+                                ))}
+                            </Collapse>
+                        )}
+                        {/* 遅延しているToDo */}
+                        {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))).length > 0 && (
+                            <Collapse in={delayedToDosShown} collapsedHeight="25px">
+                                <div
+                                    className={classes.accordionToggleButtonDiv}
+                                    onClick={() => setDelayedToDosShown(current => !current)}
+                                >
+                                    <ArrowDropDown
+                                        className={clsx(classes.accordionIcon, {
+                                            [classes.accordionIconRotate]: !delayedToDosShown
+                                        })}
+                                    />
+                                    <p>Delayed</p>
+                                </div>
+                                <Divider />
+                                {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))).map(value => (
+                                    <div>
                                         <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
                                         <Divider />
                                     </div>

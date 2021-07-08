@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             width: '100%',
         },
+        colorRed: {
+            color: 'red'
+        },
         infoTopHalf: {
             flex: 2,
             display: 'flex',
@@ -198,11 +201,19 @@ export default function ToDoListItem(props: Props) {
                                     deleteTodo();
                                 }
                             }}
+                            className={clsx({
+                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && !props.todo.completed && Math.trunc(props.todo.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
+                            })}
                         />
                     </div>
                     {/* time info */}
                     <div
-                        className={classes.detailInfoDiv}
+                        className={clsx(
+                            classes.detailInfoDiv,
+                            {
+                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && !props.todo.completed && Math.trunc(props.todo.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
+                            },
+                        )}
                     >
                         {/* 実行時間によって表示を切り替え（1時間以上かどうか） */}
                         {props.todo.processingTimeScheduled != undefined ? props.todo.processingTimeScheduled >= 60 ?
