@@ -250,7 +250,7 @@ export default function ToDoListItem(props: Props) {
                                 const inScopeClasses = makeStyles((theme: Theme) =>
                                     createStyles({
                                         targetChip: {
-                                            backgroundColor: value.themeColor,
+                                            backgroundColor: `rgba(${value.themeColor.r},${value.themeColor.g},${value.themeColor.b},0.5)`,
                                             height: theme.spacing(2),
                                             marginRight: theme.spacing(0.8)
                                         },

@@ -156,9 +156,14 @@ export default class AppDataManager {
      * @param themeColor string
      * @returns Target
      */
-    public registerTarget(name: string, themeColor?: string): Target {
+    public registerTarget(name: string, themeColor?: {
+        r: number
+        g: number
+        b: number
+    }): Target {
         // TODO: APIを叩いてTargetを登録し、IDを取得
         const id: number = this.targets != undefined ? this.targets.length : 0;
+        const a =  "00" + (Math.random() * 0xFF | 0).toString().slice(-2);
 
         const newTarget: Target = {
             id: id,
@@ -169,7 +174,11 @@ export default class AppDataManager {
                 themeColor
                 :
                 // テーマカラーが指定されていない場合にカラーコードを生成
-                "#" + ("000000" + (Math.random() * 0xFFFFFF | 0).toString(16)).slice(-6),
+                {
+                    r: (Math.random() * 0xFF | 0),
+                    g: (Math.random() * 0xFF | 0),
+                    b: (Math.random() * 0xFF | 0)
+                },
         };
 
         // 新規Targetを追加

@@ -3,7 +3,11 @@ export type Target = {
     user_id: number
 
     name: string
-    themeColor: string
+    themeColor: {
+        r: number
+        g: number
+        b: number
+    }
 
     outcomeSchemes?: OutcomeScheme[]
 
