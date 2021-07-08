@@ -90,7 +90,8 @@ export const useStyles = makeStyles(() =>
       transition: "opacity .3s ease",
     },
     todo: {
-      width: "60px", 
-    }
+      position: "relative",
+      left: "53px",
+    },
   })
 );

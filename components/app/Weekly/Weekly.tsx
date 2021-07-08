@@ -1,5 +1,7 @@
 import React from "react";
 import AppDataManager from "../../../lib/app/appDataManager";
+import ToDoBox from "./Todobox";
+import todobox from './Todobox';
 import { useStyles } from './Weekly.module';
 
 export default function Weekly() {
@@ -177,7 +179,7 @@ export default function Weekly() {
                 })()
               )
             )}
-            {/* todoの内容を表示 */}
+            {/* termの内容を表示 */}
             <g className={classes.bar}>
               {React.Children.toArray(appDataManager.terms?.map(value => (
                   startday = value.startDatetimeScheduled, //termの開始日
@@ -215,22 +217,26 @@ export default function Weekly() {
           </svg>
         </div>
       </div>
-      <select id="selectweek" defaultValue={"0"} onChange={selectweek}>
+      {/* <select id="selectweek" defaultValue={"0"} onChange={selectweek}>
         <option value="0">日曜はじめ</option>
         <option value="1">月曜はじめ</option>
-      </select>
-      <div className={classes.todo}>
-        1234567890
-      </div>
+      </select> */}
+       <div className={classes.todo}>
+         {/* TODO: 完了済to-do、記録済リマインドリスト実装 */}
+         {appDataManager.todos?.filter(value => value.completed).map(value => (
+          //  console.log(value.startDatetimeScheduled?.getDay()),
+           <div key={value.id} >
+             <ToDoBox todo={value}/>
+           </div>
+           ))}
+          {/* TODO: to-doリスト実装 */}
+          {appDataManager.todos?.filter(value => !value.completed).map(value => (
+            // console.log(value.startDatetimeScheduled?.getDay()),
+            <div key={value.id} >
+
+            </div>
+            ))}
+        </div> 
     </div>
   );
 }
-
-// export function todo() {
-//   const classes = useStyles()
-//   return (
-//   <div className={classes.todo}>
-//     1234567890
-//   </div>
-//   )
-// }
