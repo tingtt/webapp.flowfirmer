@@ -520,6 +520,17 @@ export const sampleArchives: Archive[] = [
 
         targets: [sampleTargets[0]],
 
+        outcomes: [
+            {
+                scheme: sampleOutcomeSchemes[0],
+                value: 30
+            },
+            {
+                scheme: sampleOutcomeSchemes[1],
+                value: 30
+            }
+        ],
+
         text: "水飲んで生き返った〜",
         feelingList: [
             {
