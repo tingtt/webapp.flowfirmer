@@ -1,5 +1,6 @@
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import React from "react";
+import clsx from 'clsx';
 import { ToDo } from "../../../lib/interface";
 import { Checkbox, Divider, InputBase } from "@material-ui/core";
 import AppDataManager from '../../../lib/app/appDataManager';
@@ -26,7 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         descDiv: {
             margin: theme.spacing(2.4),
-        }
+        },
+        colorRed: {
+            color: theme.palette.error.main
+        },
     })
 );
 
@@ -89,6 +93,7 @@ export default function ToDoDetail(props: Props) {
                         value={props.todo.name}
                         inputProps={{ 'aria-label': 'naked' }}
                         onChange={nameChange}
+                        className={clsx({[classes.colorRed] : props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()})}
                     />
                 </span>
                 {/* 日付情報 */}

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
         },
         colorRed: {
-            color: 'red'
+            color: theme.palette.error.main
         },
         infoTopHalf: {
             flex: 2,
@@ -223,7 +223,7 @@ export default function ToDoListItem(props: Props) {
                             :
                             undefined
                         }
-                        {props.todo.startDatetimeScheduled != undefined && <span className={classes.detailInfoSpan}>{props.todo.startDatetimeScheduled.getHours() + ":" + ('0' + props.todo.startDatetimeScheduled.getMinutes()).slice(-2)}</span>}
+                        {props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted && <span className={classes.detailInfoSpan}>{props.todo.startDatetimeScheduled.getHours() + ":" + ('0' + props.todo.startDatetimeScheduled.getMinutes()).slice(-2)}</span>}
                     </div>
                 </div>
                 {/* bottom half */}
