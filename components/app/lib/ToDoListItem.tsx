@@ -8,6 +8,7 @@ import AppDataManager from "../../../lib/app/appDataManager";
 type Props = {
     todo: ToDo,
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
+    snackbarStateSetter: React.Dispatch<React.SetStateAction<boolean>>
     showDate?: boolean
 }
 
@@ -149,6 +150,8 @@ export default function ToDoListItem(props: Props) {
     };
 
     const deleteTodo = () => {
+        // SnackBarを表示
+        props.snackbarStateSetter(true);
         // 削除
         appDataManager.deleteTodo(props.todo.id);
         // Stateを更新

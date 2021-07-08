@@ -136,13 +136,32 @@ export default class AppDataManager {
         return this.todos;
     }
 
+    private deletedToDos: ToDo[] = [];
+
     /**
      * deleteTodo
      * @param id number
      */
     public deleteTodo(id: number) {
         if (this.todos != undefined) {
+            const poppedTodo = this.todos.filter(value => value.id == id).pop();
+            if (poppedTodo != undefined) {
+                this.deletedToDos.push(poppedTodo);
+            }
             this.todos = this.todos.filter(value => value.id != id);
+        }
+    }
+
+    /**
+     * restoreTodo
+     */
+    public restoreTodo() {
+        if (this.todos != undefined) {
+            const poppedTodo = this.deletedToDos.pop();
+            console.log(poppedTodo);
+            if (poppedTodo != undefined) {
+                this.todos.push(poppedTodo);
+            }
         }
     }
 

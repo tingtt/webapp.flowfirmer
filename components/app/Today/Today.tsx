@@ -1,8 +1,8 @@
 import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Collapse, Divider } from "@material-ui/core";
-import { ArrowDropDown } from '@material-ui/icons';
+import { Button, Collapse, Divider, IconButton, Snackbar } from "@material-ui/core";
+import { ArrowDropDown, Close, Undo } from '@material-ui/icons';
 
 import AddForm from "../lib/AddForm";
 import AppDataManager from '../../../lib/app/appDataManager';
@@ -88,6 +88,9 @@ export default function Today() {
     const [todayPendingToDosShown, setTodayPendingToDosShown] = React.useState<boolean>(true);
     const [todayCompletedToDosShown, setTodayCompletedToDosShown] = React.useState<boolean>(true);
 
+    // snackbar state
+    const [snackBarState, setSnackBarState] = React.useState<boolean>(false);
+
     return (
         <div
             className={classes.root}
@@ -121,7 +124,7 @@ export default function Today() {
                                         key={value.id}
                                         onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
+                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -169,7 +172,7 @@ export default function Today() {
                                         key={value.id}
                                         onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} showDate={true} />
+                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} showDate={true} snackbarStateSetter={setSnackBarState} />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -225,7 +228,7 @@ export default function Today() {
                                         key={value.id}
                                         onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
+                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -265,7 +268,7 @@ export default function Today() {
                                         key={value.id}
                                         onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
+                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -288,6 +291,30 @@ export default function Today() {
                     </div>
                 ))}
             </div>
+            <Snackbar
+                open={snackBarState}
+                onClose={() => setSnackBarState(false)}
+                message="ToDo deleted."
+                autoHideDuration={6000}
+                action={
+                    <React.Fragment>
+                        <Button color="secondary" size="small" onClick={() => {
+                            appDataManager.restoreTodo();
+                            setSnackBarState(false);
+                        }}>
+                            <Undo />
+                        </Button>
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            // className={classes.close}
+                            onClick={() => setSnackBarState(false)}
+                        >
+                            <Close />
+                        </IconButton>
+                    </React.Fragment>
+                }
+            />
         </div>
     )
 }
