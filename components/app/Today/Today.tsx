@@ -149,13 +149,27 @@ export default function Today() {
                                 {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && (() => {
                                     const date = new Date();
                                     return value.startDatetimeScheduled.getFullYear() <= date.getFullYear() && value.startDatetimeScheduled.getMonth() <= date.getMonth() && value.startDatetimeScheduled.getDate() < date.getDate();
-                                })()).map(value => (
+                                })()).sort((a,b) => {
+                                    var comparison: number = 0;
+                                    if (a.startDatetimeScheduled == undefined) {
+                                        if (b.startDatetimeScheduled != undefined) {
+                                            comparison = -1;
+                                        }
+                                    } else {
+                                        if (b.startDatetimeScheduled == undefined) {
+                                            comparison = 1;
+                                        } else {
+                                            a.startDatetimeScheduled < b.startDatetimeScheduled ? comparison = -1 : comparison = 1;
+                                        }
+                                    }
+                                    return comparison;
+                                }).map(value => (
                                     <div
                                         className={classes.todoListItemDiv}
                                         key={value.id}
                                         onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
+                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} showDate={true} />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />

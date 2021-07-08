@@ -8,6 +8,7 @@ import AppDataManager from "../../../lib/app/appDataManager";
 type Props = {
     todo: ToDo,
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
+    showDate?: boolean
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -215,6 +216,12 @@ export default function ToDoListItem(props: Props) {
                             },
                         )}
                     >
+                        {/* 日付表示 */}
+                        {props.showDate && props.todo.startDatetimeScheduled != undefined && (
+                            <span className={classes.detailInfoSpan}>
+                                {props.todo.startDatetimeScheduled.getMonth()}/{props.todo.startDatetimeScheduled.getDate()}
+                            </span>
+                        )}
                         {/* 実行時間によって表示を切り替え（1時間以上かどうか） */}
                         {props.todo.processingTimeScheduled != undefined ? props.todo.processingTimeScheduled >= 60 ?
                             <span className={classes.detailInfoSpan}>{Math.trunc(props.todo.processingTimeScheduled / 60)}h{props.todo.processingTimeScheduled % 60}min</span>
