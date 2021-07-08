@@ -208,6 +208,7 @@ export default function ToDoListItem(props: Props) {
                             className={clsx({
                                 [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()
                             })}
+                            autoComplete="off"
                         />
                     </div>
                     {/* time info */}

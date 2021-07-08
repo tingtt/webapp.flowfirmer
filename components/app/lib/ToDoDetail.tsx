@@ -94,6 +94,7 @@ export default function ToDoDetail(props: Props) {
                         inputProps={{ 'aria-label': 'naked' }}
                         onChange={nameChange}
                         className={clsx({[classes.colorRed] : props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()})}
+                        autoComplete="off"
                     />
                 </span>
                 {/* 日付情報 */}
@@ -109,6 +110,7 @@ export default function ToDoDetail(props: Props) {
                         defaultValue={props.todo.description}
                         inputProps={{ 'aria-label': 'naked' }}
                         onChange={descChange}
+                        autoComplete="off"
                     />
                 </div>
                 <Divider />
