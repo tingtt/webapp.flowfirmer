@@ -224,7 +224,8 @@ export default function Today() {
                             if (value.startDatetimeScheduled == undefined || !value.completed) {
                                 return false;
                             }
-                            return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
+                            const date = new Date();
+                            return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
                         }).length > 0 && (
                             <Collapse in={todayCompletedToDosShown} collapsedHeight="33px">
                                 <div
@@ -242,7 +243,8 @@ export default function Today() {
                                     if (value.startDatetimeScheduled == undefined || !value.completed) {
                                         return false;
                                     }
-                                    return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
+                                    const date = new Date();
+                                    return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
                                 }).map(value => (
                                     <div
                                         className={classes.todoListItemDiv}
