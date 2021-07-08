@@ -163,7 +163,6 @@ export default class AppDataManager {
     }): Target {
         // TODO: APIを叩いてTargetを登録し、IDを取得
         const id: number = this.targets != undefined ? this.targets.length : 0;
-        const a =  "00" + (Math.random() * 0xFF | 0).toString().slice(-2);
 
         const newTarget: Target = {
             id: id,
