@@ -130,7 +130,10 @@ export default function Today() {
                             </Collapse>
                         )}
                         {/* 遅延しているToDo */}
-                        {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))).length > 0 && (
+                        {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && (() => {
+                            const date = new Date();
+                            return value.startDatetimeScheduled.getFullYear() <= date.getFullYear() && value.startDatetimeScheduled.getMonth() <= date.getMonth() && value.startDatetimeScheduled.getDate() < date.getDate();
+                        })()).length > 0 && (
                             <Collapse in={delayedToDosShown} collapsedHeight="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
@@ -143,7 +146,10 @@ export default function Today() {
                                     />
                                     <p>Delayed</p>
                                 </div>
-                                {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))).map(value => (
+                                {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && (() => {
+                                    const date = new Date();
+                                    return value.startDatetimeScheduled.getFullYear() <= date.getFullYear() && value.startDatetimeScheduled.getMonth() <= date.getMonth() && value.startDatetimeScheduled.getDate() < date.getDate();
+                                })()).map(value => (
                                     <div
                                         className={classes.todoListItemDiv}
                                         key={value.id}
@@ -162,7 +168,10 @@ export default function Today() {
                             if (value.startDatetimeScheduled == undefined || value.completed) {
                                 return false;
                             }
-                            return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
+
+                            const date = new Date();
+                            return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
+
                         }).length > 0 && (
                             <Collapse in={todayPendingToDosShown} collapsedHeight="33px">
                                 <div
@@ -180,7 +189,8 @@ export default function Today() {
                                     if (value.startDatetimeScheduled == undefined || value.completed) {
                                         return false;
                                     }
-                                    return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
+                                    const date = new Date();
+                                    return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
                                 }).sort((a,b) => {
                                     var comparison: number = 0;
                                     if (a.startDatetimeScheduled == undefined) {
