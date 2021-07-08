@@ -30,6 +30,13 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingBottom: theme.spacing(8),
             width: '100%',
         },
+        todoListItemDiv: {
+            marginLeft: theme.spacing(1),
+        },
+        todoListDivider: {
+            width: '94%',
+            marginLeft: 'auto',
+        },
         accordionToggleButtonDiv: {
             display: 'flex',
             width: '100%',
@@ -40,8 +47,12 @@ const useStyles = makeStyles((theme: Theme) =>
             "& :hover": {
                 cursor: 'pointer',
             },
+            opacity: 0.3,
+            height: theme.spacing(4),
         },
         accordionIcon: {
+            marginTop: 'auto',
+            marginBottom: 'auto',
             transition: 'transform 0.4s '
         },
         accordionIconRotate: {
@@ -86,14 +97,13 @@ export default function Today() {
                 className={classes.contentLeft}
             >
                 <AddForm setTodos={setTodos} />
-                <Divider />
                 {todos != undefined && (
                     <div
                         className={classes.list}
                     >
                         {/* 日時未指定のToDos */}
                         {todos.filter(value => !value.completed && value.startDatetimeScheduled == undefined).length > 0 && (
-                            <Collapse in={noDateToDosShown} collapsedHeight="25px">
+                            <Collapse in={noDateToDosShown} collapsedHeight="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setNoDateToDosShown(current => !current)}
@@ -105,18 +115,23 @@ export default function Today() {
                                     />
                                     <p>No date</p>
                                 </div>
-                                <Divider />
                                 {todos.filter(value => !value.completed && value.startDatetimeScheduled == undefined).map(value => (
-                                    <div key={value.id} onClick={() => setSelectedToDoId(value.id)}>
+                                    <div
+                                        className={classes.todoListItemDiv}
+                                        key={value.id}
+                                        onClick={() => setSelectedToDoId(value.id)}
+                                    >
                                         <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
-                                        <Divider />
+                                        <Divider
+                                            className={classes.todoListDivider}
+                                        />
                                     </div>
                                 ))}
                             </Collapse>
                         )}
                         {/* 遅延しているToDo */}
                         {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))).length > 0 && (
-                            <Collapse in={delayedToDosShown} collapsedHeight="25px">
+                            <Collapse in={delayedToDosShown} collapsedHeight="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setDelayedToDosShown(current => !current)}
@@ -128,11 +143,16 @@ export default function Today() {
                                     />
                                     <p>Delayed</p>
                                 </div>
-                                <Divider />
                                 {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) < Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))).map(value => (
-                                    <div>
+                                    <div
+                                        className={classes.todoListItemDiv}
+                                        key={value.id}
+                                        onClick={() => setSelectedToDoId(value.id)}
+                                    >
                                         <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
-                                        <Divider />
+                                        <Divider
+                                            className={classes.todoListDivider}
+                                        />
                                     </div>
                                 ))}
                             </Collapse>
@@ -144,7 +164,7 @@ export default function Today() {
                             }
                             return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
                         }).length > 0 && (
-                            <Collapse in={todayPendingToDosShown} collapsedHeight="25px">
+                            <Collapse in={todayPendingToDosShown} collapsedHeight="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setTodayPendingToDosShown(current => !current)}
@@ -156,7 +176,6 @@ export default function Today() {
                                     />
                                     <p>Pending</p>
                                 </div>
-                                <Divider />
                                 {todos.filter(value => {
                                     if (value.startDatetimeScheduled == undefined || value.completed) {
                                         return false;
@@ -177,9 +196,15 @@ export default function Today() {
                                     }
                                     return comparison;
                                 }).map(value => (
-                                    <div key={value.id} onClick={() => setSelectedToDoId(value.id)} >
+                                    <div
+                                        className={classes.todoListItemDiv}
+                                        key={value.id}
+                                        onClick={() => setSelectedToDoId(value.id)}
+                                    >
                                         <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
-                                        <Divider />
+                                        <Divider
+                                            className={classes.todoListDivider}
+                                        />
                                     </div>
                                 ))}
                             </Collapse>
@@ -191,7 +216,7 @@ export default function Today() {
                             }
                             return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
                         }).length > 0 && (
-                            <Collapse in={todayCompletedToDosShown} collapsedHeight="25px">
+                            <Collapse in={todayCompletedToDosShown} collapsedHeight="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setTodayCompletedToDosShown(current => !current)}
@@ -203,16 +228,21 @@ export default function Today() {
                                     />
                                     <p>Completed</p>
                                 </div>
-                                <Divider />
                                 {todos.filter(value => {
                                     if (value.startDatetimeScheduled == undefined || !value.completed) {
                                         return false;
                                     }
                                     return Math.trunc(value.startDatetimeScheduled.getTime() / ( 24 * 60 * 60 * 1000)) == Math.trunc((new Date()).getTime() / ( 24 * 60 * 60 * 1000))
                                 }).map(value => (
-                                    <div key={value.id} onClick={() => setSelectedToDoId(value.id)} >
+                                    <div
+                                        className={classes.todoListItemDiv}
+                                        key={value.id}
+                                        onClick={() => setSelectedToDoId(value.id)}
+                                    >
                                         <ToDoListItem key={value.id} todo={value} setTodos={setTodos} />
-                                        <Divider />
+                                        <Divider
+                                            className={classes.todoListDivider}
+                                        />
                                     </div>
                                 ))}
                             </Collapse>
