@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import React from "react";
 import { ToDo } from "../../../lib/interface";
 import { Checkbox, Paper } from "@material-ui/core";
@@ -7,8 +7,19 @@ type Props = {
     todo: ToDo
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: (props:Props) => ({
+            display: 'flex',
+            width:"130px",
+            position:'relative',
+            left: (props.todo.startDatetimeScheduled!.getDay()*130),
+            '& > *': {
+                margin: theme.spacing(0.5),
+                width: "130px",
+                height: "40px",
+              },
+        }),
         checkbox: {
             marginTop: 'auto',
             marginBottom: 'auto',
@@ -18,7 +29,7 @@ const useStyles = makeStyles(() =>
 
 export default function ToDoBox(props:Props){
     
-    const classes = useStyles();
+    const classes = useStyles(props);
   
     const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
 
@@ -27,8 +38,8 @@ export default function ToDoBox(props:Props){
     };
 
     return(
-        <div>
-            <Paper >
+        <div className={classes.root}>
+            <Paper variant="elevation" >
             <Checkbox
                 className={classes.checkbox}
                 checked={checked}

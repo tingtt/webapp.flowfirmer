@@ -222,20 +222,11 @@ export default function Weekly() {
         <option value="1">月曜はじめ</option>
       </select> */}
        <div className={classes.todo}>
-         {/* TODO: 完了済to-do、記録済リマインドリスト実装 */}
+         {console.log(getweek)}
+         {/* １週間を回す */}
          {appDataManager.todos?.filter(value => value.completed).map(value => (
-          //  console.log(value.startDatetimeScheduled?.getDay()),
-           <div key={value.id} >
-             <ToDoBox todo={value}/>
-           </div>
+             <ToDoBox todo={value} key={value.id}/>
            ))}
-          {/* TODO: to-doリスト実装 */}
-          {appDataManager.todos?.filter(value => !value.completed).map(value => (
-            // console.log(value.startDatetimeScheduled?.getDay()),
-            <div key={value.id} >
-
-            </div>
-            ))}
         </div> 
     </div>
   );

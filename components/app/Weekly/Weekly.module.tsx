@@ -91,7 +91,7 @@ export const useStyles = makeStyles(() =>
     },
     todo: {
       position: "relative",
-      left: "53px",
+      left: 53,
     },
   })
 );
