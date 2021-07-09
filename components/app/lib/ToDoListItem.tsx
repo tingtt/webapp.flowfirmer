@@ -135,7 +135,7 @@ export default function ToDoListItem(props: Props) {
         }
     })();
 
-    const completionStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const completionStateChange = () => {
         // SnackBarを表示
         props.snackbarStateSetter({open: true, msg: `${props.todo.name} completed.`, type: 'todoCompleted'});
         // 完了状態を更新
