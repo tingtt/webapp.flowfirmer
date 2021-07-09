@@ -136,6 +136,39 @@ export default class AppDataManager {
         return this.todos;
     }
 
+    private todoCompletionStateToggledTodoIds: number[] = [];
+
+    /**
+     * / toggleTodoCompletionState
+     */
+    public toggleTodoCompletionState(id: number) {
+        // TODO: API叩く処理?
+        // 更新
+        if (this.todos != undefined) {
+            this.todos = this.todos.map(value => {
+                if (value.id == id) {
+                    value.completed = !value.completed;
+                    // 完了状態更新ログ
+                    this.todoCompletionStateToggledTodoIds.push(value.id);
+                }
+                return value;
+            })
+        }
+    }
+
+    /**
+     * / undoToggleTodoCompletionState
+     */
+    public undoToggleTodoCompletionState() {
+        if (this.todos != undefined && this.todoCompletionStateToggledTodoIds.length > 0) {
+            const todo = this.todos.find(value => value.id == this.todoCompletionStateToggledTodoIds[this.todoCompletionStateToggledTodoIds.length - 1])
+            if (todo != undefined) {
+                todo.completed = !todo.completed;
+                this.updateTodo(todo);
+            }
+        }
+    }
+
     private deletedToDos: ToDo[] = [];
 
     /**

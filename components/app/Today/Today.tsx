@@ -89,7 +89,7 @@ export default function Today() {
     const [todayCompletedToDosShown, setTodayCompletedToDosShown] = React.useState<boolean>(true);
 
     // snackbar state
-    const [snackBarState, setSnackBarState] = React.useState<boolean>(false);
+    const [snackBarState, setSnackBarState] = React.useState<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>({open: false, msg: ""});
 
     return (
         <div
@@ -292,15 +292,24 @@ export default function Today() {
                 ))}
             </div>
             <Snackbar
-                open={snackBarState}
-                onClose={() => setSnackBarState(false)}
-                message="ToDo deleted."
+                open={snackBarState.open}
+                onClose={() => setSnackBarState({open: false, msg: ""})}
+                message={snackBarState.msg}
                 autoHideDuration={6000}
                 action={
                     <React.Fragment>
                         <Button color="secondary" size="small" onClick={() => {
-                            appDataManager.restoreTodo();
-                            setSnackBarState(false);
+                            switch (snackBarState.type) {
+                                case 'todoDeleted':
+                                    appDataManager.restoreTodo();
+                                    break;
+                                case 'todoCompleted':
+                                    appDataManager.undoToggleTodoCompletionState();
+                                    break;
+                                default:
+                                    break;
+                            }
+                            setSnackBarState({open: false, msg: ""});
                         }}>
                             <Undo />
                         </Button>
@@ -308,7 +317,7 @@ export default function Today() {
                             aria-label="close"
                             color="inherit"
                             // className={classes.close}
-                            onClick={() => setSnackBarState(false)}
+                            onClick={() => setSnackBarState({open: false, msg: ""})}
                         >
                             <Close />
                         </IconButton>

@@ -8,7 +8,7 @@ import AppDataManager from "../../../lib/app/appDataManager";
 type Props = {
     todo: ToDo,
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
-    snackbarStateSetter: React.Dispatch<React.SetStateAction<boolean>>
+    snackbarStateSetter: React.Dispatch<React.SetStateAction<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>>
     showDate?: boolean
 }
 
@@ -136,10 +136,12 @@ export default function ToDoListItem(props: Props) {
     })();
 
     const completionStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // to-do名を更新
-        props.todo.completed = event.target.checked;
+        // SnackBarを表示
+        props.snackbarStateSetter({open: true, msg: `${props.todo.name} completed.`, type: 'todoCompleted'});
+        // 完了状態を更新
+        appDataManager.toggleTodoCompletionState(props.todo.id);
         // APIを叩いて値を更新し、stateも更新
-        props.setTodos(appDataManager.updateTodo(props.todo));
+        props.setTodos(appDataManager.todos);
     };
 
     const nameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +153,7 @@ export default function ToDoListItem(props: Props) {
 
     const deleteTodo = () => {
         // SnackBarを表示
-        props.snackbarStateSetter(true);
+        props.snackbarStateSetter({open: true, msg: "ToDo deleted.", type: 'todoDeleted'});
         // 削除
         appDataManager.deleteTodo(props.todo.id);
         // Stateを更新
