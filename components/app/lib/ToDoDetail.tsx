@@ -79,7 +79,7 @@ export default function ToDoDetail(props: Props) {
             >
                 <Checkbox
                     className={classes.checkbox}
-                    defaultChecked={props.todo.completed}
+                    checked={props.todo.completed}
                     onChange={completionStateChange}
                 />
                 <Divider orientation='vertical' flexItem />
