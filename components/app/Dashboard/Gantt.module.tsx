@@ -2,10 +2,11 @@ import { createStyles, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles(() =>
   createStyles({
+    root: {
+      height:"100%",
+    },
     gantt_warp: {
       boxShadow: "0px 0px 4px #888",
-      height: "100%",
-      width: "100%",
     },
     gantt_container: {
       fontSize: 12,

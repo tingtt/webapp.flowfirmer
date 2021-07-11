@@ -23,7 +23,7 @@ const strmonth = ["January","February","March","April","May","June","July","Augu
 let startmonth:number
 let endmonth:number
 
-export default function Gantt() {
+export default function GanttChart() {
 
   const appDataManager: AppDataManager = (() => {
     try {
@@ -71,7 +71,7 @@ export default function Gantt() {
   const length = appDataManager.terms?.length!
   
   return (
-  <div>
+  <main className={classes.root}>
     <select id={calendarState.name} name="number" onChange={chengeCalendar}>
       {React.Children.toArray(calendarState.numSelecter.map(value => (
         <option value={value} >{value}</option>
@@ -160,7 +160,7 @@ export default function Gantt() {
 
         </div>
       </div>
-    </div>
+    </main>
   );
 
   function mousedown(event:React.MouseEvent<HTMLOrSVGElement>){  

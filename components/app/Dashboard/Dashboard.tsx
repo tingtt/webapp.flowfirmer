@@ -1,4 +1,4 @@
-import Gantt from "./Gantt";
+import GanttChart from "./Gantt";
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -130,8 +130,9 @@ export default function Dashboard() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
+        <div>
+            <GanttChart/>
         <div className={classes.root}>
-          <Gantt />
             <CssBaseline />
             {/*<AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>*/}
             {/*    <Toolbar className={classes.toolbar}>*/}
@@ -211,6 +212,7 @@ export default function Dashboard() {
                     </Box>
                 </Container>
             </main>
+        </div>
         </div>
     );
 }

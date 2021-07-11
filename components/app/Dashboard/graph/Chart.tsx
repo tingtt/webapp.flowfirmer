@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recha
 import Title from './Title';
 import AppDataManager from "../../../../lib/app/appDataManager";
 // Generate Sales Data
-function createData(time, amount) {
+function createData(time: Date, amount: string | number) {
     return { time, amount };
 }
 
