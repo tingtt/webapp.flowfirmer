@@ -216,10 +216,10 @@ export default function Weekly() {
           </svg>
         </div>
       </div>
-      {/* <select id="selectweek" defaultValue={"0"} onChange={selectweek}>
+      <select id="selectweek" defaultValue={"0"} onChange={selectweek}>
         <option value="0">日曜はじめ</option>
         <option value="1">月曜はじめ</option>
-      </select> */}
+      </select>
        <div className={classes.todo}>
          {console.log(getweek)}
          {/* １週間を回す */}
