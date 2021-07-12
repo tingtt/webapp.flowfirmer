@@ -1,7 +1,6 @@
 import React from "react";
 import AppDataManager from "../../../lib/app/appDataManager";
 import ToDoBox from "./Todobox";
-import todobox from './Todobox';
 import { useStyles } from './Weekly.module';
 
 export default function Weekly() {
@@ -68,7 +67,7 @@ export default function Weekly() {
       </button>
       <div className={classes.gantt_warp}>
         <div className={classes.gantt_container}>
-          <svg id="gantt" height={4 * 40 + 59} width={7 * 130}>
+          <svg className={classes.gantt} height={4 * 40 + 59} width={7 * 130}>
             <rect
               x="0"
               y="0"
