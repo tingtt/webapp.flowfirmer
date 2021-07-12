@@ -285,9 +285,9 @@ export default function Today() {
                 className={classes.contentRight}
             >
                 {/* TODO: to-do詳細画面 */}
-                {todos?.filter(value => value.id == selectedToDoId).map(value => (
+                {todos != undefined && todos.filter(value => value.id == selectedToDoId).map(value => (
                     <div key={value.id}>
-                        <ToDoDetail todo={value} setTodos={setTodos} />
+                        <ToDoDetail todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
                     </div>
                 ))}
             </div>
