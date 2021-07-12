@@ -122,9 +122,14 @@ export default function Today() {
                                     <div
                                         className={classes.todoListItemDiv}
                                         key={value.id}
-                                        onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
+                                        <ToDoListItem
+                                            key={value.id}
+                                            todo={value}
+                                            setTodos={setTodos}
+                                            snackbarStateSetter={setSnackBarState}
+                                            selectedToDoIdSetter={setSelectedToDoId}
+                                        />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -170,9 +175,15 @@ export default function Today() {
                                     <div
                                         className={classes.todoListItemDiv}
                                         key={value.id}
-                                        onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} showDate={true} snackbarStateSetter={setSnackBarState} />
+                                        <ToDoListItem
+                                            key={value.id}
+                                            todo={value}
+                                            setTodos={setTodos}
+                                            snackbarStateSetter={setSnackBarState}
+                                            selectedToDoIdSetter={setSelectedToDoId}
+                                            showDate={true}
+                                        />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -226,9 +237,14 @@ export default function Today() {
                                     <div
                                         className={classes.todoListItemDiv}
                                         key={value.id}
-                                        onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
+                                        <ToDoListItem
+                                            key={value.id}
+                                            todo={value}
+                                            setTodos={setTodos}
+                                            snackbarStateSetter={setSnackBarState}
+                                            selectedToDoIdSetter={setSelectedToDoId}
+                                        />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />
@@ -266,9 +282,14 @@ export default function Today() {
                                     <div
                                         className={classes.todoListItemDiv}
                                         key={value.id}
-                                        onClick={() => setSelectedToDoId(value.id)}
                                     >
-                                        <ToDoListItem key={value.id} todo={value} setTodos={setTodos} snackbarStateSetter={setSnackBarState} />
+                                        <ToDoListItem
+                                            key={value.id}
+                                            todo={value}
+                                            setTodos={setTodos}
+                                            snackbarStateSetter={setSnackBarState}
+                                            selectedToDoIdSetter={setSelectedToDoId}
+                                        />
                                         <Divider
                                             className={classes.todoListDivider}
                                         />

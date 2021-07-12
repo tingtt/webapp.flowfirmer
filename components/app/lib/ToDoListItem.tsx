@@ -8,6 +8,7 @@ import AppDataManager from "../../../lib/app/appDataManager";
 type Props = {
     todo: ToDo,
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
+    selectedToDoIdSetter: React.Dispatch<React.SetStateAction<number | undefined>>
     snackbarStateSetter: React.Dispatch<React.SetStateAction<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>>
     showDate?: boolean
 }
@@ -135,6 +136,11 @@ export default function ToDoListItem(props: Props) {
         }
     })();
 
+    const selectTodo = () => {
+        // 詳細表示コンポーネントに表示するToDoを更新
+        props.selectedToDoIdSetter(props.todo.id);
+    }
+
     const completionStateChange = () => {
         // SnackBarを表示
         props.snackbarStateSetter({open: true, msg: `${props.todo.name} completed.`, type: 'todoCompleted'});
@@ -181,11 +187,13 @@ export default function ToDoListItem(props: Props) {
                     className={clsx(classes.infoBottomHalf, {
                         [classes.infoBottomHalfLongHeight]: props.todo.description != undefined && props.todo.description != ""
                     })}
+                    onClick={selectTodo}
                 ></div>
             </div>
             {/* info */}
             <div
                 className={classes.infoDiv}
+                onClick={selectTodo}
             >
                 {/* top half */}
                 <div
