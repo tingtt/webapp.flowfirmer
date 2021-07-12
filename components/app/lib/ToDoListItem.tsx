@@ -271,6 +271,7 @@ export default function ToDoListItem(props: Props) {
                                 )();
                                 return (
                                     <Chip
+                                        key={value.id}
                                         className={inScopeClasses.targetChip}
                                         label={value.name}
                                     />
