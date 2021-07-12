@@ -259,7 +259,7 @@ export default function ToDoListItem(props: Props) {
                         <div
                             className={classes.todoTargetList}
                         >
-                            {props.todo.targetList?.map(value => {
+                            {props.todo.targetList != undefined && props.todo.targetList.map(value => {
                                 const inScopeClasses = makeStyles((theme: Theme) =>
                                     createStyles({
                                         targetChip: {
