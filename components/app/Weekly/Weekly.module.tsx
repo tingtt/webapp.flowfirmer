@@ -2,52 +2,58 @@ import { createStyles, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles(() =>
   createStyles({
-    button_left:{
+    //  左ボタン
+    button_left:{ 
       height: "60px",
       width: "40px",
       float: "left",
       fontSize: 35,
     },
+    // 右ボタン
     button_right:{
       height: "60px",
       width: "40px",
       float: "right",
       fontSize: 35,
     },
+    // ガントチャートの大枠
     gantt_warp: {
       float: "none",
       boxShadow: "0px 0px 4px #888",
-      margin: "auto",
-      width: "88.4%",
+      margin: "0px 60px",
     },
+    // ガントチャート描画の枠
     gantt_container: {
       fontSize: 12,
       overflow: "auto",
       width: "100%",
     },
-    gantt: {
-      position: "absolute",
-      top: 0,
-      left: 0,
+    // ガントチャート
+    gantt:{
       width: "100%",
-      height: "100%",
+      height: "219px"
     },
+    // ガントチャートの後ろの色
     grid_background: {
       background: "#888",
     },
+    // ガントチャートの横一列
     grid_row: {
       fill: "#ffffff",
       "&:nth-child(even)": {
         fill: "#f5f5f5",
       },
     },
+    // 横線の色
     row_line: {
       stroke: "#ebeff2",
     },
+    // 今日の日付
     today_highlight: {
       fill: "#f60",
       opacity: 0.5,
     },
+    // 
     grid_header: {
       fill: "#ffffff",
       stroke: "#e0e0e0",
@@ -56,8 +62,13 @@ export const useStyles = makeStyles(() =>
     tick_thick: {
       strokeWidth: 0.4,
     },
+    // 縦線の色
     tick: {
       stroke: "#000",
+      position: "relative",
+      left: "calc((100% - 408px) / 7)",
+      width: 1,
+      height: 200,
       strokeWidth: 0.2,
     },
     lower_text: {
