@@ -1,13 +1,15 @@
 import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Button, Collapse, Divider, IconButton, Snackbar } from "@material-ui/core";
+import { Button, Collapse, Dialog, DialogActions, DialogContent, Divider, IconButton, Snackbar } from "@material-ui/core";
 import { ArrowDropDown, Close, Undo } from '@material-ui/icons';
 
 import AddForm from "../lib/AddForm";
 import AppDataManager from '../../../lib/app/appDataManager';
 import ToDoListItem from '../lib/ToDoListItem';
 import ToDoDetail from '../lib/ToDoDetail';
+import ArchiveExpressiveDiary from '../lib/Today/ArchiveExpressiveDiary';
+import { ToDo } from '../../../lib/interface';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -63,6 +65,12 @@ const useStyles = makeStyles((theme: Theme) =>
             overflow: 'auto',
             paddingLeft: theme.spacing(2)
         },
+        dialogContent: {
+            padding: `${theme.spacing(1)}px ${theme.spacing(3)}px`,
+            [theme.breakpoints.up('md')]: {
+                padding: `${theme.spacing(1)}px 0`
+            },
+        },
     }),
 );
 
@@ -90,6 +98,9 @@ export default function Today() {
 
     // snackbar state
     const [snackBarState, setSnackBarState] = React.useState<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>({open: false, msg: ""});
+
+    // dialog state
+    const [exDiaryDialogState, setExDiaryDialogState] = React.useState<ToDo>();
 
     return (
         <div
@@ -129,6 +140,7 @@ export default function Today() {
                                             setTodos={setTodos}
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
+                                            exDiaryDialogStateSetter={setExDiaryDialogState}
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
@@ -183,6 +195,7 @@ export default function Today() {
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
                                             showDate={true}
+                                            exDiaryDialogStateSetter={setExDiaryDialogState}
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
@@ -244,6 +257,7 @@ export default function Today() {
                                             setTodos={setTodos}
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
+                                            exDiaryDialogStateSetter={setExDiaryDialogState}
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
@@ -254,6 +268,9 @@ export default function Today() {
                         )}
                         {/* 完了済ToDos, 記録済リマインド */}
                         {todos.filter(value => {
+                            if (value.completed) {
+                                return true;
+                            }
                             if (value.startDatetimeScheduled == undefined || !value.completed) {
                                 return false;
                             }
@@ -273,6 +290,9 @@ export default function Today() {
                                     <p>Completed</p>
                                 </div>
                                 {todos.filter(value => {
+                                    if (value.completed) {
+                                        return true;
+                                    }
                                     if (value.startDatetimeScheduled == undefined || !value.completed) {
                                         return false;
                                     }
@@ -289,6 +309,7 @@ export default function Today() {
                                             setTodos={setTodos}
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
+                                            exDiaryDialogStateSetter={setExDiaryDialogState}
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
@@ -345,6 +366,26 @@ export default function Today() {
                     </React.Fragment>
                 }
             />
+            <Dialog
+                open={Boolean(exDiaryDialogState)}
+                onClose={() => setExDiaryDialogState(undefined)}
+                maxWidth={'lg'}
+                fullWidth
+            >
+                <DialogContent className={classes.dialogContent}>
+                    <ArchiveExpressiveDiary
+                        todo={exDiaryDialogState}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={() => setExDiaryDialogState(undefined)} color="secondary">
+                        Cancel
+                    </Button>
+                    <Button onClick={() => setExDiaryDialogState(undefined)} color="primary">
+                        Archive
+                    </Button>
+                </DialogActions>
+                </Dialog>
         </div>
     )
 }

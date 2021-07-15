@@ -11,6 +11,7 @@ type Props = {
     selectedToDoIdSetter: React.Dispatch<React.SetStateAction<number | undefined>>
     snackbarStateSetter: React.Dispatch<React.SetStateAction<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>>
     showDate?: boolean
+    exDiaryDialogStateSetter: React.Dispatch<React.SetStateAction<ToDo | undefined>>
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -120,7 +121,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 cursor: 'pointer',
                 color: theme.palette.grey[600]
             },
-        }
+        },
     }),
 );
 
@@ -313,7 +314,10 @@ export default function ToDoListItem(props: Props) {
                     // 成果、感情日記をつける画面を開く
                 }}
             >
-                <Create className={classes.eDiaryIcon} />
+                <Create
+                    className={classes.eDiaryIcon}
+                    onClick={() => props.exDiaryDialogStateSetter(props.todo)}
+                />
             </div>}
         </div>
     );
