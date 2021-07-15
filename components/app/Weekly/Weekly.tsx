@@ -100,8 +100,8 @@ export default function Weekly() {
             <g>
               {/*今日の日付をオレンジ色にする  */}
               {chengeDate.getMonth() == today.getMonth() &&
-                <rect x={(today.getDate() - chengeDate.getDate() - 1) * 134.4}
-                y="0" width="134.4" height={containerHeight} className={classes.today_highlight} />
+                <rect x={(today.getDate() - chengeDate.getDate() - 1) * 14.3+"%"}
+                y="59" width="14.3%" height="219" className={classes.today_highlight} />
               }
               </g>
             {/* 日付を表示する土台 */}
@@ -119,8 +119,7 @@ export default function Weekly() {
             {/* ガントチャートの縦線を作る */}
             {React.Children.toArray(
               [...Array(6)].map((_: undefined, idx: number) => (
-                <path
-                  d={"M " + (idx + 1) * 134.4 + " 59 v" + 4 * 40}
+                <line x1={(idx+1)*14.3 +"%"} y1="59" x2={(idx+1)*14.3 +"%"} y2="300"
                   className={classes.tick}
                 />
               ))
@@ -135,7 +134,7 @@ export default function Weekly() {
                     return (
                       <text
                         key={idx}
-                        x={73 + idx * 134.4}
+                        x={(idx+1)*14.3/2 +"%"}
                         y="50"
                         className={classes.lower_text}
                       >
@@ -147,7 +146,7 @@ export default function Weekly() {
                     return (
                       <text
                         key={idx}
-                        x={73 + idx * 134.4}
+                        x={idx*14.3+7.15+"%"}
                         y="50"
                         className={classes.lower_text}
                       >
@@ -159,7 +158,7 @@ export default function Weekly() {
                     return (
                       <text
                         key={idx}
-                        x={73 + idx * 134.4}
+                        x={idx*14.3+7.15+"%"}
                         y="50"
                         className={classes.lower_text}
                       >
@@ -184,10 +183,10 @@ export default function Weekly() {
                       <g className={classes.bar_wrapper}>
                         <g className="bar_group">
                           {/* termの全体表示 */}
-                          <rect x={((startday - weekstart)/86400000) * 134.4} y={28 + (value.id) * 40}
-                            width={(termDay) * 134.4} height="25" rx="3" ry="3" className={classes.bar}/>
+                          <rect x={((startday - weekstart)/86400000) * 14.3+"%"} y={28 + (value.id) * 40}
+                            width={(termDay) * 14.3+"%"} height="25" rx="3" ry="3" className={classes.bar}/>
                           {/* termの名前表示 */}
-                          <text x={((startday - weekstart)/86400000) * 134.4 +(termDay * 65)}
+                          <text x={((startday - weekstart)/86400000) * 14.3*1.7+"%"}
                             y={41 + (value.id) * 40} className={classes.bar_label}>
                             {value.name}
                           </text>
@@ -213,7 +212,7 @@ export default function Weekly() {
         <option value="1">月曜はじめ</option>
       </select>
        <div className={classes.todo}>
-         {/* １週間を回す */}
+         {/* １週間分のtodoを回す */}
          {appDataManager.todos?.filter(value => value.completed).map(value => (
              <ToDoBox todo={value} key={value.id}/>
            ))}

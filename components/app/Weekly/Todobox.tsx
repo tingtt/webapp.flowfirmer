@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width:"130px",
             position:'relative',
             left: (props.todo.startDatetimeScheduled!.getDay()*130),
+            verticalAlign: "top",
             '& > *': {
                 margin: theme.spacing(0.5),
                 width: "130px",

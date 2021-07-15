@@ -73,7 +73,7 @@ export const useStyles = makeStyles(() =>
     },
     lower_text: {
       fill: "#333",
-      fontSize: 12,
+      fontSize: 16,
       textAnchor: "middle",
     },
     bar: {
