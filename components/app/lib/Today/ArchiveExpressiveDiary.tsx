@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import { ToDo } from "../../../../lib/interface";
 import { Add } from "@material-ui/icons";
 import { defaultFeeingTypes } from "../../../../utils/defaultFeelings";
+import { FeelingType, Percentage } from "../../../../lib/interface/archive";
+import { sampleFeelingTypes } from "../../../../utils/sample-data";
 
 type Props = {
     todo?: ToDo
@@ -145,6 +147,27 @@ export default function ArchiveExpressiveDiary(props: Props) {
 
     const classes = useStyles();
 
+    const feels = defaultFeeingTypes.map(value => {
+        const [selectedState, setSelectedState] = React.useState<boolean>(false);
+        const [positivePercent, setPositivePercent] = React.useState<Percentage>(value.defaultPositivePercent);
+        const [negativePercent, setNegativePercent] = React.useState<Percentage>(value.defaultNegativePercent);
+        return {
+            feel: value,
+            selectedState: {
+                value: selectedState,
+                toggle: () => setSelectedState(current => !current),
+            },
+            positivePercentState: {
+                value: positivePercent,
+                set: setPositivePercent
+            },
+            NegativePercentState: {
+                value: negativePercent,
+                set: setNegativePercent
+            }
+        }
+    })
+
     return (
         <div
             className={classes.root}
@@ -267,25 +290,25 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     <div
                         className={classes.feelingListDiv}
                     >
-                        {defaultFeeingTypes.sort((a,b) => {
-                            return ((100 - a.defaultPositivePercent) + a.defaultNegativePercent) > ((100 - b.defaultPositivePercent) + b.defaultNegativePercent) ? 1 : -1;
+                        {feels.sort((a,b) => {
+                            return ((100 - a.feel.defaultPositivePercent) + a.feel.defaultNegativePercent) > ((100 - b.feel.defaultPositivePercent) + b.feel.defaultNegativePercent) ? 1 : -1;
                         }).map(value => {
                             // RBG: (255, 255, 0) -> (0, 255, 0) -> (0, 255, 255) -> (0, 0, 255)
                             // Emotion: (100, 0) -> (0, 100)
                             var r = 255;
                             var g = 255;
                             var b = 0;
-                            if ((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) <= 33) {
-                                r = Math.round(255 * (1 - ((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2 / 33));
+                            if ((((100 - value.feel.defaultPositivePercent) + value.feel.defaultNegativePercent) / 2) <= 33) {
+                                r = Math.round(255 * (1 - ((100 - value.feel.defaultPositivePercent) + value.feel.defaultNegativePercent) / 2 / 33));
                                 g = 255;
                                 b = 0;
-                            } else if ((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) <= 67) {
+                            } else if ((((100 - value.feel.defaultPositivePercent) + value.feel.defaultNegativePercent) / 2) <= 67) {
                                 r = 0;
                                 g = 255;
-                                b = Math.round(255 * (((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) - 33) / 34));
+                                b = Math.round(255 * (((((100 - value.feel.defaultPositivePercent) + value.feel.defaultNegativePercent) / 2) - 33) / 34));
                             } else {
                                 r = 0;
-                                g = Math.round(255 * (1 - (((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) - 67) / 33)));
+                                g = Math.round(255 * (1 - (((((100 - value.feel.defaultPositivePercent) + value.feel.defaultNegativePercent) / 2) - 67) / 33)));
                                 b = 255;
                             }
                             // styleを生成
@@ -312,14 +335,29 @@ export default function ArchiveExpressiveDiary(props: Props) {
                                             marginTop: 'auto',
                                             marginLeft: 'auto'
                                         }
+                                    },
+                                    greyScale: {
+                                        filter: 'grayscale(0.9)',
                                     }
                                 })
                             ))();
                             return (
                                 <div
-                                    className={clsx(classes.feelingListItemDiv, emotionColorClasses.emotionColorDiv, {[emotionColorClasses.selectedEmotionItemDiv]: true})}
+                                    className={clsx(
+                                        classes.feelingListItemDiv,
+                                        emotionColorClasses.emotionColorDiv,
+                                        {[emotionColorClasses.selectedEmotionItemDiv]: value.selectedState.value},
+                                        {[emotionColorClasses.greyScale]: (feels.filter(value => value.selectedState.value).length == 3 && !value.selectedState.value)}
+                                    )}
+                                    onClick={() => {
+                                        if (value.selectedState.value) {
+                                            value.selectedState.toggle();
+                                        } else if (feels.filter(value => value.selectedState.value).length < 3) {
+                                            value.selectedState.toggle();
+                                        }
+                                    }}
                                 >
-                                    <div>{value.name}</div>
+                                    <div>{value.feel.name}</div>
                                 </div>
                             )
                         })}
