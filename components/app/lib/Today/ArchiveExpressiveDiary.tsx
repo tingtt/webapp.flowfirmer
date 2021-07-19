@@ -2,7 +2,7 @@ import { createStyles, Divider, Input, makeStyles, TextField, Theme } from "@mat
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../../lib/interface";
-import { Add } from "@material-ui/icons";
+import { Add, SettingsBackupRestore } from "@material-ui/icons";
 import { defaultFeeingTypes } from "../../../../utils/defaultFeelings";
 import { FeelingType, Percentage } from "../../../../lib/interface/archive";
 import { sampleFeelingTypes } from "../../../../utils/sample-data";
@@ -49,11 +49,25 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         shelfBlockTitleDiv: {
-            textAlign: 'left',
-            fontSize: theme.spacing(3),
+            position: 'relative',
+            display: 'flex',
+            justifyContent: 'unset',
             [theme.breakpoints.up('md')]: {
-                textAlign: 'center',
-            }
+                justifyContent: 'center',
+            },
+            "& div": {
+                textAlign: 'left',
+                fontSize: theme.spacing(3),
+                [theme.breakpoints.up('md')]: {
+                    textAlign: 'center',
+                },
+            },
+        },
+        shelfBlockClearButton: {
+            position: 'absolute',
+            right: '0',
+            height: '100%',
+            opacity: '0.6'
         },
         resultDatetimeInputDiv: {
             marginTop: theme.spacing(3),
@@ -191,7 +205,8 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     <div
                         className={classes.shelfBlockTitleDiv}
                     >
-                        Result
+                        <div>Result</div>
+                        <SettingsBackupRestore className={classes.shelfBlockClearButton} />
                     </div>
                     {/* 開始時間 */}
                     <TextField
@@ -290,7 +305,8 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     <div
                         className={classes.shelfBlockTitleDiv}
                     >
-                        Feelings
+                        <div>Feelings</div>
+                        <SettingsBackupRestore className={classes.shelfBlockClearButton} />
                     </div>
                     <div
                         className={classes.feelingListDiv}
@@ -374,7 +390,8 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     <div
                         className={classes.shelfBlockTitleDiv}
                     >
-                        Memo
+                        <div>Memo</div>
+                        <SettingsBackupRestore className={classes.shelfBlockClearButton} />
                     </div>
                     <TextField
                         className={classes.memoTextField}
