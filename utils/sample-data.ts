@@ -471,7 +471,7 @@ export const sampleHabitReminds: HabitRemind[] = [
 
 export const sampleFeelingTypes: FeelingType[] = [
     {
-        id: 0,
+        id: 24,
         user_id: 0,
 
         name: "スッキリ",

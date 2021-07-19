@@ -3,6 +3,7 @@ import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../../lib/interface";
 import { Add } from "@material-ui/icons";
+import { defaultFeeingTypes } from "../../../../utils/defaultFeelings";
 
 type Props = {
     todo?: ToDo
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
             [theme.breakpoints.up('md')]: {
                 display: 'flex',
                 flexDirection: 'row',
+                overflowY: 'unset'
             },
             "& > div": {
                 marginLeft: theme.spacing(3),
@@ -94,6 +96,27 @@ const useStyles = makeStyles((theme: Theme) =>
                 "& > svg": {
                     color: theme.palette.grey.A400,
                 },
+            }
+        },
+        feelingListDiv: {
+            display: "flex",
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            [theme.breakpoints.up('md')]: {
+                maxHeight: theme.spacing(52),
+                overflowY: "auto",
+            },
+        },
+        feelingListItemDiv: {
+            display: 'flex',
+            flexDirection: 'column',
+            width: theme.spacing(8),
+            height: theme.spacing(8),
+            borderRadius: '50%',
+            margin: theme.spacing(1.5),
+            "& > div": {
+                margin: 'auto',
+                whiteSpace: "nowrap",
             }
         },
         memoTextField: {
@@ -240,6 +263,66 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         Feelings
+                    </div>
+                    <div
+                        className={classes.feelingListDiv}
+                    >
+                        {defaultFeeingTypes.sort((a,b) => {
+                            return ((100 - a.defaultPositivePercent) + a.defaultNegativePercent) > ((100 - b.defaultPositivePercent) + b.defaultNegativePercent) ? 1 : -1;
+                        }).map(value => {
+                            // RBG: (255, 255, 0) -> (0, 255, 0) -> (0, 255, 255) -> (0, 0, 255)
+                            // Emotion: (100, 0) -> (0, 100)
+                            var r = 255;
+                            var g = 255;
+                            var b = 0;
+                            if ((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) <= 33) {
+                                r = Math.round(255 * (1 - ((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2 / 33));
+                                g = 255;
+                                b = 0;
+                            } else if ((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) <= 67) {
+                                r = 0;
+                                g = 255;
+                                b = Math.round(255 * (((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) - 33) / 34));
+                            } else {
+                                r = 0;
+                                g = Math.round(255 * (1 - (((((100 - value.defaultPositivePercent) + value.defaultNegativePercent) / 2) - 67) / 33)));
+                                b = 255;
+                            }
+                            // styleを生成
+                            const emotionColorClasses = (makeStyles((theme: Theme) =>
+                                createStyles({
+                                    emotionColorDiv: {
+                                        backgroundColor: `rgba(${r},${g},${b},0.8)`,
+                                    },
+                                    selectedEmotionItemDiv: {
+                                        "&:before, &:after": {
+                                            content: '""',
+                                            width: theme.spacing(2),
+                                            height: theme.spacing(3),
+                                            position: "relative",
+                                            display: "inline-block",
+                                        },
+                                        "&:before": {
+                                            borderLeft: "solid 1px #5767bf",
+                                            borderTop: "solid 1px #5767bf",
+                                        },
+                                        "&:after": {
+                                            borderRight: "solid 1px #5767bf",
+                                            borderBottom: "solid 1px #5767bf",
+                                            marginTop: 'auto',
+                                            marginLeft: 'auto'
+                                        }
+                                    }
+                                })
+                            ))();
+                            return (
+                                <div
+                                    className={clsx(classes.feelingListItemDiv, emotionColorClasses.emotionColorDiv, {[emotionColorClasses.selectedEmotionItemDiv]: true})}
+                                >
+                                    <div>{value.name}</div>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
                 <Divider orientation='vertical' flexItem/>
