@@ -108,6 +108,11 @@ const useStyles = makeStyles((theme: Theme) =>
                 maxHeight: theme.spacing(52),
                 overflowY: "auto",
             },
+            msOverflowStyle: 'none',    /* IE, Edge 対応 */
+            scrollbarWidth: 'none', /* Firefox 対応 */
+            "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
+                display: 'none',
+            },
         },
         feelingListItemDiv: {
             display: 'flex',
