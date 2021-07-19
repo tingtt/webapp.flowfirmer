@@ -187,6 +187,14 @@ export default function ArchiveExpressiveDiary(props: Props) {
         }
     })
 
+    const resetFeelSelectStates = () => {
+        feels.forEach(value => {
+            if (value.selectedState.value) {
+                value.selectedState.toggle();
+            }
+        })
+    }
+
     return (
         <div
             className={classes.root}
@@ -306,7 +314,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Feelings</div>
-                        <SettingsBackupRestore className={classes.shelfBlockClearButton} />
+                        <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetFeelSelectStates} />
                     </div>
                     <div
                         className={classes.feelingListDiv}
