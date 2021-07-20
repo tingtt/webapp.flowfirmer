@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
         targetListDiv: {
             position: 'absolute',
             display: 'flex',
-            right: 0,
+            right: theme.spacing(3),
             height: '100%',
             verticalAlign: 'middle',
             "& > .MuiChip-root": {
