@@ -225,17 +225,20 @@ export default function ArchiveExpressiveDiary(props: Props) {
 
     // 成果のスキーマリスト
     const defaultResultOutcomes = (() => {
-        if (props.todo.targetList != undefined) {
-            // outcomeSchemeをTargetごとに展開
-            return props.todo.targetList.filter(
-                target => target.outcomeSchemes != undefined
-            ).map(
+        if (props.todo.targetList == undefined) {
+            return [];
+        }
+        const filtered  = props.todo.targetList.filter(target => target.outcomeSchemes != undefined);
+        if (filtered.length == 0) {
+            return [];
+        }
+        return (
+            filtered.map(
                 target => target.outcomeSchemes!
             ).reduce(
                 (previous, current) => previous.concat(current)
-            );
-        }
-        return [];
+            )
+        );
     })().map(scheme => {
         return {
             scheme: scheme,
