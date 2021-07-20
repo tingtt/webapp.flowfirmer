@@ -166,6 +166,49 @@ export default function ArchiveExpressiveDiary(props: Props) {
 
     const classes = useStyles();
 
+
+    /**
+     * 時間
+     */
+
+    // デフォルト値
+    const defaultResultDatetime = {
+        start: (() => {
+            if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted) {
+                return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes()}`.slice(-2)}`
+            }
+            return "";
+        })(),
+        end: (() => {
+            if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted && props.todo.processingTimeScheduled != undefined) {
+                // 開始日時に実行時間を加算
+                if (props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled >= 60) {
+                    const endDatetime = new Date(props.todo.startDatetimeScheduled.getTime() + (props.todo.processingTimeScheduled * 60 * 1000));
+                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
+                } else {
+                    return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
+                }
+            }
+            return "";
+        })()
+    }
+
+    // 値
+    const [resultDatetimeStart, setResultDatetimeStart] = React.useState<string>(defaultResultDatetime.start);
+    const [resultDatetimeEnd, setResultDatetimeEnd] = React.useState<string>(defaultResultDatetime.end);
+
+    // リセット処理
+    const resetResultDatetimeAndOutcomes = () => {
+        setResultDatetimeStart(defaultResultDatetime.start);
+        setResultDatetimeEnd(defaultResultDatetime.end);
+    }
+
+
+    /**
+     * 感情
+     */
+
+    // リスト
     const feels = defaultFeeingTypes.map(value => {
         const [selectedState, setSelectedState] = React.useState<boolean>(false);
         const [positivePercent, setPositivePercent] = React.useState<Percentage>(value.defaultPositivePercent);
@@ -187,6 +230,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
         }
     })
 
+    // リセット処理
     const resetFeelSelectStates = () => {
         feels.forEach(value => {
             if (value.selectedState.value) {
@@ -214,14 +258,20 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Result</div>
-                        <SettingsBackupRestore className={classes.shelfBlockClearButton} />
+                        {(resultDatetimeStart != defaultResultDatetime.start || resultDatetimeEnd != defaultResultDatetime.end) &&
+                            <SettingsBackupRestore
+                                className={classes.shelfBlockClearButton}
+                                onClick={resetResultDatetimeAndOutcomes}
+                            />
+                        }
                     </div>
                     {/* 開始時間 */}
                     <TextField
                         className={classes.resultDatetimeInputDiv}
                         label="Start"
                         type="datetime-local"
-                        defaultValue={props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted ? `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes()}`.slice(-2)}` : ""}
+                        value={resultDatetimeStart}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setResultDatetimeStart(e.target.value) }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -234,18 +284,8 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.resultDatetimeInputDiv}
                         label="End"
                         type="datetime-local"
-                        defaultValue={(() => {
-                            if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted && props.todo.processingTimeScheduled != undefined) {
-                                // 開始日時に実行時間を加算
-                                if (props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled >= 60) {
-                                    const endDatetime = new Date(props.todo.startDatetimeScheduled.getTime() + (props.todo.processingTimeScheduled * 60 * 1000));
-                                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
-                                } else {
-                                    return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
-                                }
-                            }
-                            return "";
-                        })()}
+                        value={resultDatetimeEnd}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setResultDatetimeEnd(e.target.value) }}
                         InputLabelProps={{
                             shrink: true,
                         }}
