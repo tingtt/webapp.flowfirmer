@@ -1,8 +1,7 @@
 import React from "react";
 import AppDataManager from "../../../lib/app/appDataManager";
 import ToDoBox from "./Todobox";
-import { useStyles } from './Weekly.module';
-
+import { useStyles } from "./Weekly.module";
 
 export default function Weekly() {
   let today = new Date(); //今日の日付
@@ -11,7 +10,7 @@ export default function Weekly() {
 
   let startday: any; //termの開始日
   let endday: any; //termの終了日
-  let termDay: number //termの期間
+  let termDay: number; //termの期間
   let startmonth: number; //termの開始月
   let endmonth: number; //termの終了月
 
@@ -28,12 +27,14 @@ export default function Weekly() {
   };
 
   //今日が第何週かを出す
-  const [week, setweek] = React.useState(Math.floor((today.getDate() - today.getDay() + 12) / 7));
+  const [week, setweek] = React.useState(
+    Math.floor((today.getDate() - today.getDay() + 12) / 7)
+  );
 
   const getweek = getWeekOfMonth(year, month, week);
-  const weekstart:any = getweek.start;
+  const weekstart: any = getweek.start;
   const weekend = getweek.end;
-  let chengeDate = new Date(weekstart)
+  let chengeDate = new Date(weekstart);
   chengeDate.setDate(weekstart.getDate() - 1);
 
   //termの取得するための関数
@@ -58,14 +59,18 @@ export default function Weekly() {
     setstartnumber(Number(e.target.value));
   };
 
-  let [containerWidth ,setcontainerWidth] = React.useState<any>();
-  let containerHeight;
-  
-
   return (
     <div>
+      <select
+        className={classes.selectweek}
+        defaultValue={"0"}
+        onChange={selectweek}
+      >
+        <option value="0">日曜はじめ</option>
+        <option value="1">月曜はじめ</option>
+      </select>
       <button className={classes.button_left} onClick={weekchenge} value="-1">
-      {"<"}
+        {"<"}
       </button>
       <button className={classes.button_right} onClick={weekchenge} value="1">
         {">"}
@@ -78,7 +83,7 @@ export default function Weekly() {
               x="0"
               y="0"
               width="100%"
-              height={containerHeight}
+              height="100%"
               className={classes.grid_background}
             />
             <g>
@@ -99,16 +104,21 @@ export default function Weekly() {
             </g>
             <g>
               {/*今日の日付をオレンジ色にする  */}
-              {chengeDate.getMonth() == today.getMonth() &&
-                <rect x={(today.getDate() - chengeDate.getDate() - 1) * 14.3+"%"}
-                y="59" width="14.3%" height="219" className={classes.today_highlight} />
-              }
-              </g>
+              {chengeDate.getMonth() == today.getMonth() && (
+                <rect
+                  x={(today.getDate() - chengeDate.getDate() - 1) * 14.3 + "%"}
+                  y="59"
+                  width="14.3%"
+                  height="219"
+                  className={classes.today_highlight}
+                />
+              )}
+            </g>
             {/* 日付を表示する土台 */}
             <rect
               x="0"
               y="0"
-              width={containerWidth!}
+              width="100%"
               height="60"
               className={classes.grid_header}
             />
@@ -119,7 +129,11 @@ export default function Weekly() {
             {/* ガントチャートの縦線を作る */}
             {React.Children.toArray(
               [...Array(6)].map((_: undefined, idx: number) => (
-                <line x1={(idx+1)*14.3 +"%"} y1="59" x2={(idx+1)*14.3 +"%"} y2="300"
+                <line
+                  x1={(idx + 1) * 14.3 + "%"}
+                  y1="59"
+                  x2={(idx + 1) * 14.3 + "%"}
+                  y2="300"
                   className={classes.tick}
                 />
               ))
@@ -134,7 +148,7 @@ export default function Weekly() {
                     return (
                       <text
                         key={idx}
-                        x={(idx+1)*14.3/2 +"%"}
+                        x={((idx + 1) * 14.3) / 2 + "%"}
                         y="50"
                         className={classes.lower_text}
                       >
@@ -146,7 +160,7 @@ export default function Weekly() {
                     return (
                       <text
                         key={idx}
-                        x={idx*14.3+7.15+"%"}
+                        x={idx * 14.3 + 7.15 + "%"}
                         y="50"
                         className={classes.lower_text}
                       >
@@ -158,7 +172,7 @@ export default function Weekly() {
                     return (
                       <text
                         key={idx}
-                        x={idx*14.3+7.15+"%"}
+                        x={idx * 14.3 + 7.15 + "%"}
                         y="50"
                         className={classes.lower_text}
                       >
@@ -171,34 +185,72 @@ export default function Weekly() {
             )}
             {/* termの内容を表示 */}
             <g className={classes.bar}>
-              {React.Children.toArray(appDataManager.terms?.map(value => (
-                  startday = value.startDatetimeScheduled, //termの開始日
-                  endday = value.endDatetimeScheduled, //termの終了日
-                  termDay = (endday-startday)/86400000,
-                  startmonth = value.startDatetimeScheduled.getMonth(), //termの開始月
-                  endmonth = value.endDatetimeScheduled.getMonth(), //termの終了月
+              {React.Children.toArray(
+                appDataManager.terms?.map((value) =>
+                  ((startday = value.startDatetimeScheduled), //termの開始日
+                  (endday = value.endDatetimeScheduled), //termの終了日
+                  (termDay = (endday - startday) / 86400000),
+                  (startmonth = value.startDatetimeScheduled.getMonth()), //termの開始月
+                  (endmonth = value.endDatetimeScheduled.getMonth()), //termの終了月
                   () => {
-                    if ((startmonth == weekstart.getMonth() || endmonth == weekend.getMonth()) && termDay != 0) { 
+                    if (
+                      (startmonth == weekstart.getMonth() ||
+                        endmonth == weekend.getMonth()) &&
+                      termDay != 0
+                    ) {
                       return (
-                      <g className={classes.bar_wrapper}>
-                        <g className="bar_group">
-                          {/* termの全体表示 */}
-                          <rect x={((startday - weekstart)/86400000) * 14.3+"%"} y={28 + (value.id) * 40}
-                            width={(termDay) * 14.3+"%"} height="25" rx="3" ry="3" className={classes.bar}/>
-                          {/* termの名前表示 */}
-                          <text x={((startday - weekstart)/86400000) * 14.3*1.7+"%"}
-                            y={41 + (value.id) * 40} className={classes.bar_label}>
-                            {value.name}
-                          </text>
+                        <g className={classes.bar_wrapper}>
+                          <g className="bar_group">
+                            {/* termの全体表示 */}
+                            <rect
+                              x={
+                                ((startday - weekstart) / 86400000) * 14.3 + "%"
+                              }
+                              y={28 + value.id * 40}
+                              width={termDay * 14.3 + "%"}
+                              height="25"
+                              rx="3"
+                              ry="3"
+                              className={classes.bar}
+                            />
+                            {/* termの名前表示 */}
+                            <text
+                              x={
+                                ((startday - weekstart) / 86400000) *
+                                  14.3 *
+                                  1.7 +
+                                "%"
+                              }
+                              y={41 + value.id * 40}
+                              className={classes.bar_label}
+                            >
+                              {value.name}
+                            </text>
+                          </g>
+                          <g className="handle-group">
+                            <rect
+                              x={
+                                ((startday - weekstart) / 86400000) * 14.3 + "%"
+                              }
+                              y={28 + value.id * 40}
+                              width="8"
+                              height="25"
+                              rx="3"
+                              ry="3"
+                              className={classes.handle_right}
+                            />
+                            <rect
+                              x={((endday - weekstart) / 86400000) * 14.2 + "%"}
+                              y={28 + value.id * 40}
+                              width="8"
+                              height="25"
+                              rx="3"
+                              ry="3"
+                              className={classes.handle_left}
+                            />
+                          </g>
                         </g>
-                        <g className="handle-group">
-                          {/* <rect x={(startday - 1) * 40 +(endday - startday + 1) * 40 -9} y={28 + (value.id + 1) * 40} width="8"
-                            height="25" rx="3" ry="3" className={classes.handle_right}/>
-                          <rect x={(startday - 1) * 40 + 1} y={28 + (value.id + 1) * 40}width="8"
-                            height="25" rx="3" ry="3" className={classes.handle_left}/> */}
-                        </g>
-                      </g>
-                      )
+                      );
                     }
                   })()
                 )
@@ -207,17 +259,22 @@ export default function Weekly() {
           </svg>
         </div>
       </div>
-      <select id="selectweek" defaultValue={"0"} onChange={selectweek}>
-        <option value="0">日曜はじめ</option>
-        <option value="1">月曜はじめ</option>
-      </select>
-       <div className={classes.todo}>
-         {/* １週間分のtodoを回す */}
-         {appDataManager.todos?.filter(value => value.completed).map(value => (
-             <ToDoBox todo={value} key={value.id}/>
-           ))}
-        </div> 
+      <div className={classes.todo}>
+        {/* １週間分のtodoを回す */}
+        {React.Children.toArray(
+          [...Array(7)].map((_: undefined, idx: number) => (
+            <div className={classes.todobox}>
+              {appDataManager.todos
+                ?.filter(
+                  (value) => value.startDatetimeScheduled?.getDay() == idx
+                )
+                .map((value) => (
+                  <ToDoBox todo={value} key={value.id} />
+                ))}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 }
-
