@@ -314,7 +314,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Feelings</div>
-                        <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetFeelSelectStates} />
+                        {feels.some(value => value.selectedState.value) && <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetFeelSelectStates} />}
                     </div>
                     <div
                         className={classes.feelingListDiv}
