@@ -5,6 +5,14 @@ import Title from './Title';
 import AppDataManager from "../../../../lib/app/appDataManager";
 // Generate Sales Data
 function createData(time: Date, amount: string | number) {
+    //
+    // let year = time.getFullYear();
+    // let month = time.getMonth() + 1;
+    // let day = time.getDate();
+
+    // console.log( year + '年' + month + '月' + day + '日');
+    // let aaa = ("0" + month +":" + day + "0");
+    // console.log(aaa);
     return { time, amount };
 }
 
@@ -51,13 +59,13 @@ export default function Chart() {
     // }
 
     // const data0 = appDataManager.archives?.filter(value => value.outcomes != undefined);
-    const data = appDataManager.archives?.filter(value => value.outcomes != undefined).map(value =>
-        ({day: value.recordingDateTime, outcomeValue: value.outcomes})).map(value => createData(value.day,value.outcomeValue[0].value));
+    //outcomesが存在しているJsonを取得
+    const data = appDataManager.archives?.filter(value => value.outcomes != undefined).map(
+        value => ({day: value.recordingDateTime, outcomeValue: value.outcomes})
+    ).map(value => createData(value.day.toLocaleDateString(),value.outcomeValue[0].value));
 
     // const sample = appDataManager.archives?.filter(value => value.datetime.getDate() == (new Date()).getDate()).map(value => value);
-    console.log("確認 data0");
-    // console.log(data0);
-    console.log("data")
+    console.log("dataの中身");
     console.log(data);
     // const array = [...Array(30)].map(_ => "a")
 
