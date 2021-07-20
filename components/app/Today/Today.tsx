@@ -314,6 +314,10 @@ export default function Today() {
             </div>
             <Snackbar
                 open={snackBarState.open}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
                 onClose={() => setSnackBarState({open: false, msg: ""})}
                 message={snackBarState.msg}
                 autoHideDuration={6000}
