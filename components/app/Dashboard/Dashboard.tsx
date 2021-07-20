@@ -1,7 +1,7 @@
 import GanttChart from "./Gantt";
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
@@ -38,10 +38,39 @@ function Copyright() {
 }
 
 const drawerWidth = 240;
+// const useStyles = makeStyles((theme: Theme) =>
+//     createStyles({
+//         root: {
+//             display: 'flex',
+//             height: '100%'
+//         },
+//         contentLeft: {
+//             flex: 1,
+//             overflow: 'auto',
+//             paddingRight: theme.spacing(2)
+//         },
+//         contentRight: {
+//             flex: 1,
+//             overflow: 'auto',
+//             paddingLeft: theme.spacing(2)
+//         },
+//     }),
+// );
 
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+        height: '100%'
+    },
+    contentLeft: {
+        flex: 1,
+        overflow: 'auto',
+        paddingRight: theme.spacing(2)
+    },
+    contentRight: {
+        flex: 1,
+        overflow: 'auto',
+        paddingLeft: theme.spacing(2)
     },
     toolbar: {
         paddingRight: 24, // keep right padding when drawer closed
@@ -131,7 +160,7 @@ export default function Dashboard() {
 
     return (
         <div>
-            <GanttChart/>
+
         <div className={classes.root}>
             <CssBaseline />
             {/*<AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>*/}
@@ -173,9 +202,16 @@ export default function Dashboard() {
             {/*    <List>{secondaryListItems}</List>*/}
             {/*</Drawer>*/}
             <main className={classes.content}>
+
                 {/*<div className={classes.appBarSpacer} />*/}
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
+                        {/*GanttChart*/}
+                        {/*<Grid item xs={12} md={12} lg={12}>*/}
+                        {/*    <Paper className={fixedHeightPaper}>*/}
+                        {/*        <GanttChart/>*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
                         {/* Chart */}
                         <Grid item xs={12} md={6} lg={8}>
                             <Paper className={fixedHeightPaper}>
