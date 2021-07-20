@@ -198,9 +198,46 @@ export default function ArchiveExpressiveDiary(props: Props) {
     const [resultDatetimeEnd, setResultDatetimeEnd] = React.useState<string>(defaultResultDatetime.end);
 
     // リセット処理
-    const resetResultDatetimeAndOutcomes = () => {
+    const resetResultDatetime = () => {
         setResultDatetimeStart(defaultResultDatetime.start);
         setResultDatetimeEnd(defaultResultDatetime.end);
+    }
+
+
+    /**
+     * 成果
+     */
+
+    // 成果のスキーマリスト
+    const defaultResultOutcomes = (() => {
+        if (props.todo.targetList != undefined) {
+            // outcomeSchemeをTargetごとに展開
+            return props.todo.targetList.filter(
+                target => target.outcomeSchemes != undefined
+            ).map(
+                target => target.outcomeSchemes!
+            ).reduce(
+                (previous, current) => previous.concat(current)
+            );
+        }
+        return [];
+    })().map(scheme => {
+        return {
+            scheme: scheme,
+            value: (() => {
+                if (scheme.statisticsRule == 'String') {
+                    return scheme.defaultValue != undefined ? scheme.defaultValue as string : "";
+                }
+                return scheme.defaultValue != undefined ? scheme.defaultValue as number : 0;
+            })()
+        }
+    });
+
+    const [resultOutcomes, setResultOutcomes] = React.useState(defaultResultOutcomes);
+
+    // リセット処理
+    const resetResultOutcomes = () => {
+        setResultOutcomes(defaultResultOutcomes);
     }
 
 
@@ -258,10 +295,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Result</div>
-                        {(resultDatetimeStart != defaultResultDatetime.start || resultDatetimeEnd != defaultResultDatetime.end) &&
+                        {(resultDatetimeStart != defaultResultDatetime.start || resultDatetimeEnd != defaultResultDatetime.end || resultOutcomes.some(resultOutcome => resultOutcome.value != defaultResultOutcomes.find(value => value.scheme.id == resultOutcome.scheme.id)!.value)) &&
                             <SettingsBackupRestore
                                 className={classes.shelfBlockClearButton}
-                                onClick={resetResultDatetimeAndOutcomes}
+                                onClick={() => {
+                                    resetResultDatetime();
+                                    resetResultOutcomes();
+                                }}
                             />
                         }
                     </div>
@@ -297,44 +337,61 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     <div
                         className={classes.outcomeListDiv}
                     >
-                        {props.todo.targetList != undefined && props.todo.targetList.filter(value => value.outcomeSchemes != undefined).map(target => {
-                            if (target.outcomeSchemes == undefined) {
-                                return;
+                        {resultOutcomes.map(resultOutcome => {
+                            const scheme = resultOutcome.scheme;
+                            if (scheme.statisticsRule == 'String') {
+                                return (
+                                    <div
+                                        className={classes.outcomeItemDiv}
+                                        key={`${props.todo?.id}${scheme.id}`}
+                                    >
+                                        <div>
+                                            {scheme.name}
+                                        </div>
+                                        <Input
+                                            value={resultOutcome.value}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                setResultOutcomes(current => current.map(value => {
+                                                    if (scheme.id != value.scheme.id) {
+                                                        return value;
+                                                    }
+                                                    var newValue = value;
+                                                    newValue.value = e.target.value;
+                                                    return newValue;
+                                                }))
+                                            }}
+                                        />
+                                    </div>
+                                );
                             }
-                            return target.outcomeSchemes.map(scheme => {
-                                if (scheme.statisticsRule == 'String') {
-                                    return (
-                                        <div
-                                            className={classes.outcomeItemDiv}
-                                            key={`${props.todo?.id}${scheme.id}`}
-                                        >
-                                            <div>
-                                                {scheme.name}
-                                            </div>
-                                            <Input defaultValue={scheme.defaultValue} />
-                                        </div>
-                                    );
-                                } else {
-                                    return (
-                                        <div
-                                            className={classes.outcomeItemDiv}
-                                            key={`${props.todo?.id}${scheme.id}`}
-                                        >
-                                            <div>
-                                                {scheme.name}
-                                            </div>
-                                            <Input
-                                                type="number"
-                                                defaultValue={scheme.defaultValue}
-                                                className={clsx(classes.outcomeItemInputNumValue, classes.outcomeInput)}
-                                            />
-                                            <div>
-                                                {scheme.unitName != undefined ? scheme.unitName : ""}
-                                            </div>
-                                        </div>
-                                    );
-                                }
-                            })
+                            return (
+                                <div
+                                    className={classes.outcomeItemDiv}
+                                    key={`${props.todo?.id}${scheme.id}`}
+                                >
+                                    <div>
+                                        {scheme.name}
+                                    </div>
+                                    <Input
+                                        type="number"
+                                        value={resultOutcome.value}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            setResultOutcomes(current => current.map(value => {
+                                                if (scheme.id != value.scheme.id) {
+                                                    return value;
+                                                }
+                                                var newValue = value;
+                                                newValue.value = e.target.value;
+                                                return newValue;
+                                            }))
+                                        }}
+                                        className={clsx(classes.outcomeItemInputNumValue, classes.outcomeInput)}
+                                    />
+                                    <div>
+                                        {scheme.unitName != undefined ? scheme.unitName : ""}
+                                    </div>
+                                </div>
+                            );
                         })}
                         <div
                             className={clsx(classes.outcomeItemDiv, classes.addOutcomeSchemeDiv)}
