@@ -2,8 +2,12 @@ import { createStyles, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles(() =>
   createStyles({
+    selectweek:{
+      margin: "0px 20px",
+    },
     //  左ボタン
     button_left:{ 
+      marginTop: "25px",
       height: "60px",
       width: "40px",
       float: "left",
@@ -11,6 +15,7 @@ export const useStyles = makeStyles(() =>
     },
     // 右ボタン
     button_right:{
+      marginTop: "25px",
       height: "60px",
       width: "40px",
       float: "right",
@@ -20,7 +25,7 @@ export const useStyles = makeStyles(() =>
     gantt_warp: {
       float: "none",
       boxShadow: "0px 0px 4px #888",
-      margin: "0px 60px",
+      margin: "5px 60px",
     },
     // ガントチャート描画の枠
     gantt_container: {
@@ -95,22 +100,26 @@ export const useStyles = makeStyles(() =>
       fontWeight: "lighter",
     },
     handle_right: {
-      fill: "#ddd",
+      fill: "#000",
       cursor: "ew-resize",
       opacity: 0,
-      visibility: "hidden",
+      // visibility: "hidden",
       transition: "opacity .3s ease",
     },
     handle_left: {
-      fill: "#ddd",
+      fill: "#000",
       cursor: "ew-resize",
       opacity: 0,
-      visibility: "hidden",
+      // visibility: "hidden",
       transition: "opacity .3s ease",
     },
     todo: {
       position: "relative",
-      left: 53,
+      margin: "0px 55px",
+      display: 'flex',
     },
+    todobox: {
+      flexGrow: 1,
+    }
   })
 );

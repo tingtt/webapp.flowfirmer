@@ -1,72 +1,74 @@
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
 import { ToDo } from "../../../lib/interface";
 import { Checkbox, Paper } from "@material-ui/core";
+import FormDialog from "./Tododialog";
 
 type Props = {
-    todo: ToDo
-}
+  todo: ToDo;
+};
 
 const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: (props:Props) => ({
-            display: 'flex',
-            width:"130px",
-            position:'relative',
-            left: (props.todo.startDatetimeScheduled!.getDay()*130),
-            verticalAlign: "top",
-            '& > *': {
-                margin: theme.spacing(0.5),
-                width: "130px",
-                height: "40px",
-              },
-        }),
-        checkbox: {
-            marginTop: 'auto',
-            marginBottom: 'auto',
-        },
-    })
+  createStyles({
+    root: {
+      position: "relative",
+      width: "95%",
+      height: "40px",
+      "& > *": {
+        margin: theme.spacing(1),
+        width: "98%",
+        display: "flex",
+      },
+    },
+
+    checkbox: {
+      flexGrow: 1,
+      marginTop: "auto",
+      marginBottom: "auto",
+    },
+
+    text: {
+      flexGrow: 4,
+      marginTop: "auto",
+      marginBottom: "auto",
+      cursor: "alias",
+    },
+  })
 );
 
-export default function ToDoBox(props:Props){
-    
-    const classes = useStyles(props);
-  
-    const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
+export default function ToDoBox(props: Props) {
+  const classes = useStyles(props);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked(event.target.checked);
-    };
+  const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
 
-    return(
-        <div className={classes.root}>
-            <Paper variant="elevation" >
-            <Checkbox
-                className={classes.checkbox}
-                checked={checked}
-                onChange={handleChange}
-            />
-            {props.todo.name}
-            {console.log(props.todo.startDatetimeScheduled?.getDay())}
-             {/* ToDo名 */}
-            {/* <span
-                className={classes.nameSpan}
-            >
-                {props.todo.name}
-            </span> */}
-            {/* 日付情報 */}
-        {/* </div> */}
-        {/* {props.todo.description != undefined && props.todo.description != "" && <div>
-            <div
-                className={classes.descDiv}
-            >
-                {props.todo.description}
-            </div>
-            <Divider />
-        </div>} */}
-        {/* <div> */}
-            {/* サブToDoリスト */}
-        </Paper>
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(event.target.checked);
+  };
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Paper variant="elevation">
+        <Checkbox
+          className={classes.checkbox}
+          id="checkbox"
+          checked={checked}
+          onChange={handleChange}
+        />
+        <div className={classes.text} onClick={handleOpen}>
+          {props.todo.name}
+        </div>
+        {/* <FormDialog todo={props.todo} isOpen={open} doClose={() => handleClose()} /> */}
+      </Paper>
     </div>
-    )
+  );
 }
