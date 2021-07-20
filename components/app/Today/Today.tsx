@@ -341,7 +341,7 @@ export default function Today() {
                 }}
                 onClose={() => setSnackBarState({open: false, msg: ""})}
                 message={snackBarState.msg}
-                autoHideDuration={6000}
+                autoHideDuration={4000}
                 action={
                     <React.Fragment>
                         <Button color="secondary" size="small" onClick={() => {
