@@ -1,4 +1,4 @@
-import { createStyles, Divider, Input, makeStyles, TextField, Theme } from "@material-ui/core";
+import { Chip, createStyles, Divider, Input, makeStyles, TextField, Theme } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../../lib/interface";
@@ -17,9 +17,24 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%'
         },
         titleDiv: {
+            display: 'flex',
+            position: 'relative',
             "& > h1": {
-                textAlign: 'center',
+                marginTop: theme.spacing(2.5),
+                marginBottom: theme.spacing(2.5),
+                marginLeft: 'auto',
+                marginRight: 'auto',
             },
+        },
+        targetListDiv: {
+            position: 'absolute',
+            display: 'flex',
+            right: 0,
+            height: '100%',
+            verticalAlign: 'middle',
+            "& > .MuiChip-root": {
+                margin: `auto ${theme.spacing(0.5)}px`,
+            }
         },
         shelfDiv: {
             overflowY: 'auto',
@@ -298,7 +313,24 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 className={classes.titleDiv}
             >
                 <h1>{props.todo.name}</h1>
+                <div className={classes.targetListDiv}>
+                    {props.todo.targetList?.map(target => {
+                        const classChipColorClasses = (makeStyles((theme: Theme) =>
+                            createStyles({
+                                chipColor: {
+                                    backgroundColor: `rgba(${target.themeColor.r},${target.themeColor.g},${target.themeColor.b},0.5)`
+                                }
+                            })
+                        ))();
+                        return <Chip
+                            className={classChipColorClasses.chipColor}
+                            key={target.id}
+                            label={target.name}
+                        />
+                    })}
+                </div>
             </div>
+            {/* 成果、感情、メモ */}
             <div
                 className={classes.shelfDiv}
             >
