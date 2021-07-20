@@ -276,6 +276,19 @@ export default function ArchiveExpressiveDiary(props: Props) {
         })
     }
 
+
+    /**
+     * メモ（日記）
+     */
+
+    // 値
+    const [memo, setMemo] = React.useState<string>("");
+
+    // リセット処理
+    const resetMemo = () => {
+        setMemo("");
+    }
+
     return (
         <div
             className={classes.root}
@@ -496,12 +509,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Memo</div>
-                        <SettingsBackupRestore className={classes.shelfBlockClearButton} />
+                        {memo != "" && <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetMemo} />}
                     </div>
                     <TextField
                         className={classes.memoTextField}
+                        value={memo}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {setMemo(e.target.value)}}
                         multiline
-                        // rows={10}
                         variant="outlined"
                     />
                 </div>
