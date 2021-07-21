@@ -288,7 +288,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 value: positivePercent,
                 set: setPositivePercent
             },
-            NegativePercentState: {
+            negativePercentState: {
                 value: negativePercent,
                 set: setNegativePercent
             }
