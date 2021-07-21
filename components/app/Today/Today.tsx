@@ -339,7 +339,12 @@ export default function Today() {
                     vertical: 'bottom',
                     horizontal: 'right',
                 }}
-                onClose={() => setSnackBarState({open: false, msg: ""})}
+                onClose={(_, reason?: string) => {
+                    if (reason === 'clickaway') {
+                        return;
+                    }
+                    setSnackBarState({open: false, msg: ""});
+                }}
                 message={snackBarState.msg}
                 autoHideDuration={4000}
                 action={
