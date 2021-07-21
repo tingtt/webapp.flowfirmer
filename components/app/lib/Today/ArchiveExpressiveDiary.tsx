@@ -321,7 +321,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
         <div
             className={classes.root}
         >
-            {/* タイトル（ToDo名） */}
+            {/* タイトル（ToDo名）, Targetリスト */}
             <div
                 className={classes.titleDiv}
             >
@@ -569,11 +569,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
             <div
                 className={classes.bottomDiv}
             >
+                {/* キャンセル */}
                 <Button
                     color="secondary"
                 >
                     Cancel
                 </Button>
+                {/* 記録 */}
                 <Button
                     color="primary"
                 >
