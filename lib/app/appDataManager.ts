@@ -1,5 +1,6 @@
 import { sampleArchives, sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
-import { Archive, HabitRemind, Target, Term, ToDo } from "../interface/index";
+import { Percentage } from "../interface/archive";
+import { Archive, FeelingType, HabitRemind, OutcomeScheme, Target, Term, ToDo } from "../interface/index";
 
 export default class AppDataManager {
 
@@ -236,6 +237,62 @@ export default class AppDataManager {
         this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
 
         return newTarget;
+    }
+
+    /**
+     * registerArchive
+     */
+    public registerArchive(
+        targets?: Target[],
+        outcomes?: {
+            scheme: OutcomeScheme,
+            value: string | number
+        }[],
+        text?: String,
+        feelingList?: {
+            feeling: FeelingType,
+            positivePercent: Percentage,
+            negativePercent: Percentage,
+        }[],
+        refInfo: {
+            refType: 'ToDo';
+            ref: ToDo;
+            startDateTime: Date;
+            processingTime: number;
+        } | {
+            refType: 'HabitRemind';
+            ref: HabitRemind;
+        } | {
+            refType: 'undefined';
+        } = { refType: 'undefined' }
+    ) {
+        // TODO: APIを叩いてArchiveを登録し、IDを取得
+        const id: number = this.archives != undefined ? this.archives.length : 0;
+
+        // Archiveデータを作成
+        const newArchive: Archive = {
+            id: id,
+            user_id: this.user_id,
+
+            refInfo: refInfo,
+
+            checkInDateTime: new Date(),
+
+            targets: targets,
+
+            outcomes: outcomes,
+
+            text: text,
+
+            feelingList: feelingList,
+
+            recordingDateTime: new Date()
+        }
+
+        console.log(newArchive);
+
+        // データを追加
+        this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
     }
 
     private constructor(user_id: number) {

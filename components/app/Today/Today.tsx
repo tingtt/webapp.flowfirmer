@@ -375,18 +375,25 @@ export default function Today() {
                     </React.Fragment>
                 }
             />
+            {/* TODO: Daialogを閉じる挙動を修正する */}
             <Dialog
                 open={Boolean(exDiaryDialogState)}
-                onClose={() => setExDiaryDialogState(undefined)}
+                onClose={(_, reason?: string) => {
+                    if (reason === 'backdropClick') {
+                        return;
+                    }
+                    setExDiaryDialogState(undefined)
+                }}
                 maxWidth={'lg'}
                 fullWidth
             >
                 <DialogContent className={classes.dialogContent}>
                     <ArchiveExpressiveDiary
                         todo={exDiaryDialogState}
+                        close={() => setExDiaryDialogState(undefined)}
                     />
                 </DialogContent>
-                </Dialog>
+            </Dialog>
         </div>
     )
 }

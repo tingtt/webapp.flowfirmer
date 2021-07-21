@@ -4,11 +4,12 @@ import clsx from 'clsx';
 import { ToDo } from "../../../../lib/interface";
 import { Add, SettingsBackupRestore } from "@material-ui/icons";
 import { defaultFeeingTypes } from "../../../../utils/defaultFeelings";
-import { FeelingType, Percentage } from "../../../../lib/interface/archive";
-import { sampleFeelingTypes } from "../../../../utils/sample-data";
+import { Percentage } from "../../../../lib/interface/archive";
+import AppDataManager from "../../../../lib/app/appDataManager";
 
 type Props = {
-    todo?: ToDo
+    todo?: ToDo,
+    close: () => void
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -572,12 +573,44 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 {/* キャンセル */}
                 <Button
                     color="secondary"
+                    onClick={() => props.close()}
                 >
                     Cancel
                 </Button>
                 {/* 記録 */}
                 <Button
                     color="primary"
+                    onClick={() => {
+                        (() => {
+                            try {
+                                return  AppDataManager.generateInstance(0)
+                            } catch (e) {
+                                return  AppDataManager.getInstance();
+                            }
+                        })().registerArchive(
+                            props.todo?.targetList,
+                            resultOutcomes,
+                            memo,
+                            feels.filter(feel => feel.selectedState.value).length > 0 ?
+                                feels.filter(feel => feel.selectedState.value).map(feel => {
+                                    return {
+                                        feeling: feel.feel,
+                                        positivePercent: feel.positivePercentState.value,
+                                        negativePercent: feel.negativePercentState.value
+                                    }
+                                })
+                                :
+                                undefined
+                            ,
+                            {
+                                refType: 'ToDo',
+                                ref: props.todo!,
+                                startDateTime: new Date(resultDatetimeStart),
+                                processingTime: (new Date(resultDatetimeEnd).getTime() - new Date(resultDatetimeStart).getTime()) / 1000 / 60
+                            }
+                        );
+                        props.close();
+                    }}
                 >
                     Archive
                 </Button>
