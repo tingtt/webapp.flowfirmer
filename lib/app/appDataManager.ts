@@ -1,5 +1,6 @@
 import { sampleArchives, sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
-import { Archive, HabitRemind, Target, Term, ToDo } from "../interface/index";
+import { Percentage } from "../interface/archive";
+import { Archive, FeelingType, HabitRemind, OutcomeScheme, Target, Term, ToDo } from "../interface/index";
 
 export default class AppDataManager {
 
@@ -50,38 +51,6 @@ export default class AppDataManager {
         return sampleHabitReminds.filter(value => value.user_id == this.user_id);
     }
 
-    private getArchives() {
-        return sampleArchives.filter(value => value.user_id == this.user_id);
-    }
-
-    /**
-     *
-     * @param name string
-     * @param themeColor string
-     * @returns Target
-     */
-    public registerTarget(name: string, themeColor?: string): Target {
-        // TODO: APIを叩いてTargetを登録し、IDを取得
-        const id: number = this.targets != undefined ? this.targets.length : 0;
-
-        const newTarget: Target = {
-            id: id,
-            user_id: this.user_id,
-
-            name: name,
-            themeColor: themeColor != undefined ?
-                themeColor
-                :
-                // テーマカラーが指定されていない場合にカラーコードを生成
-                "#" + ("000000" + (Math.random() * 0xFFFFFF | 0).toString(16)).slice(-6),
-        };
-
-        // 新規Targetを追加
-        this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
-
-        return newTarget;
-    }
-
     /**
      * registerTodo
      * @param name string
@@ -103,7 +72,18 @@ export default class AppDataManager {
         completed = false
     ) {
         // TODO: APIを叩いてToDoを登録し、IDを取得
-        const id: number = this.todos != undefined ? this.todos.length : 0;
+        const todoHasLastId = this.todos != undefined ? this.todos.sort((a, b) => {
+            // Idで昇順
+            if (a.id < b.id) {
+                return -1;
+            }
+            if (a.id > b.id) {
+                return 1;
+            }
+            return 0;
+        })[this.todos.length - 1] : undefined;
+        const id: number = this.todos != undefined && todoHasLastId != undefined ? todoHasLastId.id + 1 : 0;
+
 
         const newTodo: ToDo = {
             id: id,
@@ -132,6 +112,187 @@ export default class AppDataManager {
         this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
 
         return newTodo;
+    }
+
+    /**
+     *
+     * @param updatedValue ToDo
+     * @returns ToDo[]
+     */
+    public updateTodo(updatedValue: ToDo) {
+        // TODO: API叩く処理?
+        // 更新
+        this.todos = this.todos != undefined ?
+            // 値の更新(IDが一致するものを更新する)
+            this.todos.map(value => {
+                if (value.id == updatedValue.id) {
+                    return updatedValue
+                }
+                return value
+            })
+            :
+            // 値の追加
+            [updatedValue];
+
+        return this.todos;
+    }
+
+    private todoCompletionStateToggledTodoIds: number[] = [];
+
+    /**
+     * / toggleTodoCompletionState
+     */
+    public toggleTodoCompletionState(id: number) {
+        // TODO: API叩く処理?
+        // 更新
+        if (this.todos != undefined) {
+            this.todos = this.todos.map(value => {
+                if (value.id == id) {
+                    value.completed = !value.completed;
+                    // 完了状態更新ログ
+                    this.todoCompletionStateToggledTodoIds.push(value.id);
+                }
+                return value;
+            })
+        }
+    }
+
+    /**
+     * / undoToggleTodoCompletionState
+     */
+    public undoToggleTodoCompletionState() {
+        if (this.todos != undefined && this.todoCompletionStateToggledTodoIds.length > 0) {
+            const todo = this.todos.find(value => value.id == this.todoCompletionStateToggledTodoIds[this.todoCompletionStateToggledTodoIds.length - 1])
+            if (todo != undefined) {
+                todo.completed = !todo.completed;
+                this.updateTodo(todo);
+            }
+        }
+    }
+
+    private deletedToDos: ToDo[] = [];
+
+    /**
+     * deleteTodo
+     * @param id number
+     */
+    public deleteTodo(id: number) {
+        if (this.todos != undefined) {
+            const poppedTodo = this.todos.filter(value => value.id == id).pop();
+            if (poppedTodo != undefined) {
+                this.deletedToDos.push(poppedTodo);
+            }
+            this.todos = this.todos.filter(value => value.id != id);
+        }
+    }
+
+    /**
+     * restoreTodo
+     */
+    public restoreTodo() {
+        if (this.todos != undefined) {
+            const poppedTodo = this.deletedToDos.pop();
+            console.log(poppedTodo);
+            if (poppedTodo != undefined) {
+                this.todos.push(poppedTodo);
+            }
+        }
+    }
+
+    private getArchives() {
+        return sampleArchives.filter(value => value.user_id == this.user_id);
+    }
+
+    /**
+     *
+     * @param name string
+     * @param themeColor string
+     * @returns Target
+     */
+    public registerTarget(name: string, themeColor?: {
+        r: number
+        g: number
+        b: number
+    }): Target {
+        // TODO: APIを叩いてTargetを登録し、IDを取得
+        const id: number = this.targets != undefined ? this.targets.length : 0;
+
+        const newTarget: Target = {
+            id: id,
+            user_id: this.user_id,
+
+            name: name,
+            themeColor: themeColor != undefined ?
+                themeColor
+                :
+                // テーマカラーが指定されていない場合にカラーコードを生成
+                {
+                    r: (Math.random() * 0xFF | 0),
+                    g: (Math.random() * 0xFF | 0),
+                    b: (Math.random() * 0xFF | 0)
+                },
+        };
+
+        // 新規Targetを追加
+        this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
+
+        return newTarget;
+    }
+
+    /**
+     * registerArchive
+     */
+    public registerArchive(
+        targets?: Target[],
+        outcomes?: {
+            scheme: OutcomeScheme,
+            value: string | number
+        }[],
+        text?: String,
+        feelingList?: {
+            feeling: FeelingType,
+            positivePercent: Percentage,
+            negativePercent: Percentage,
+        }[],
+        refInfo: {
+            refType: 'ToDo';
+            ref: ToDo;
+            startDateTime: Date;
+            processingTime: number;
+        } | {
+            refType: 'HabitRemind';
+            ref: HabitRemind;
+        } | {
+            refType: 'undefined';
+        } = { refType: 'undefined' }
+    ) {
+        // TODO: APIを叩いてArchiveを登録し、IDを取得
+        const id: number = this.archives != undefined ? this.archives.length : 0;
+
+        // Archiveデータを作成
+        const newArchive: Archive = {
+            id: id,
+            user_id: this.user_id,
+
+            refInfo: refInfo,
+
+            checkInDateTime: new Date(),
+
+            targets: targets,
+
+            outcomes: outcomes,
+
+            text: text,
+
+            feelingList: feelingList,
+
+            recordingDateTime: new Date()
+        }
+
+        console.log(newArchive);
+
+        // データを追加
+        this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
     }
 
     private constructor(user_id: number) {

@@ -48,7 +48,11 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "トレーニング",
-        themeColor: "#1abc9c",
+        themeColor: {
+            r: 26,
+            g: 188,
+            b: 156,
+        },
 
         outcomeSchemes: [sampleOutcomeSchemes[0], sampleOutcomeSchemes[1]],
 
@@ -60,7 +64,11 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "Flowfirmer",
-        themeColor: "#7ed6df",
+        themeColor: {
+            r: 126,
+            g: 214,
+            b: 223,
+        },
 
         pinnedAtNavigationList: true
     },
@@ -69,7 +77,11 @@ export const sampleTargets: Target[] = [
         user_id: 0,
 
         name: "IntelliBase",
-        themeColor: "#f6e58d",
+        themeColor: {
+            r: 246,
+            g: 229,
+            b: 141,
+        },
 
         hiddenAtNavigationList: true
     }
@@ -459,7 +471,7 @@ export const sampleHabitReminds: HabitRemind[] = [
 
 export const sampleFeelingTypes: FeelingType[] = [
     {
-        id: 0,
+        id: 24,
         user_id: 0,
 
         name: "スッキリ",

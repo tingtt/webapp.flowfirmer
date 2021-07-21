@@ -50,6 +50,7 @@ export default function Layout() {
                     duration: theme.transitions.duration.leavingScreen,
                 }),
                 marginLeft: -drawerWidth,
+                overflow: 'hidden',
             },
             contentShift: {
                 transition: theme.transitions.create('margin', {
