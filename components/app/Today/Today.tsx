@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Button, Collapse, Dialog, DialogActions, DialogContent, Divider, IconButton, Snackbar } from "@material-ui/core";
+import { Button, Collapse, Dialog, DialogContent, Divider, IconButton, Snackbar } from "@material-ui/core";
 import { ArrowDropDown, Close, Undo } from '@material-ui/icons';
 
 import AddForm from "../lib/AddForm";
