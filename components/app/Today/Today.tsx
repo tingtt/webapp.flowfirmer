@@ -386,14 +386,6 @@ export default function Today() {
                         todo={exDiaryDialogState}
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button autoFocus onClick={() => setExDiaryDialogState(undefined)} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button onClick={() => setExDiaryDialogState(undefined)} color="primary">
-                        Archive
-                    </Button>
-                </DialogActions>
                 </Dialog>
         </div>
     )

@@ -1,4 +1,4 @@
-import { Chip, createStyles, Divider, Input, makeStyles, TextField, Theme } from "@material-ui/core";
+import { Button, Chip, createStyles, Divider, Input, makeStyles, TextField, Theme } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../../lib/interface";
@@ -167,6 +167,16 @@ const useStyles = makeStyles((theme: Theme) =>
                 minHeight: theme.spacing(32),
                 "& > textarea": {
                     marginBottom: 'auto',
+                },
+            },
+        },
+        bottomDiv: {
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: `${theme.spacing(1)}px ${theme.spacing(1)}px 0 ${theme.spacing(1)}px`,
+            "& .MuiButton-root": {
+                "&:not(:first-child)": {
+                    marginLeft: theme.spacing(1),
                 },
             },
         }
@@ -554,6 +564,21 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         variant="outlined"
                     />
                 </div>
+            </div>
+            {/* アクション */}
+            <div
+                className={classes.bottomDiv}
+            >
+                <Button
+                    color="secondary"
+                >
+                    Cancel
+                </Button>
+                <Button
+                    color="primary"
+                >
+                    Archive
+                </Button>
             </div>
         </div>
     );
