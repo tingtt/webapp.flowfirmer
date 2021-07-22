@@ -2,7 +2,6 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import React from "react";
 import { ToDo } from "../../../lib/interface";
 import { Checkbox, Paper } from "@material-ui/core";
-import FormDialog from "./Tododialog";
 
 type Props = {
   todo: ToDo;
@@ -45,16 +44,6 @@ export default function ToDoBox(props: Props) {
     setChecked(event.target.checked);
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
     <div className={classes.root}>
       <Paper variant="elevation">
@@ -64,10 +53,10 @@ export default function ToDoBox(props: Props) {
           checked={checked}
           onChange={handleChange}
         />
-        <div className={classes.text} onClick={handleOpen}>
+        <div className={classes.text} >
           {props.todo.name}
         </div>
-        {/* <FormDialog todo={props.todo} isOpen={open} doClose={() => handleClose()} /> */}
+        {/* <ToDoDetail todo={props.todo} */}
       </Paper>
     </div>
   );

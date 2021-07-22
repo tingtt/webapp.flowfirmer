@@ -2,11 +2,11 @@ import { createStyles, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles(() =>
   createStyles({
-    selectweek:{
+    selectweek: {
       margin: "0px 20px",
     },
     //  左ボタン
-    button_left:{ 
+    button_left: {
       marginTop: "25px",
       height: "60px",
       width: "40px",
@@ -14,7 +14,7 @@ export const useStyles = makeStyles(() =>
       fontSize: 35,
     },
     // 右ボタン
-    button_right:{
+    button_right: {
       marginTop: "25px",
       height: "60px",
       width: "40px",
@@ -34,9 +34,9 @@ export const useStyles = makeStyles(() =>
       width: "100%",
     },
     // ガントチャート
-    gantt:{
+    gantt: {
       width: "100%",
-      height: "219px"
+      height: "219px",
     },
     // ガントチャートの後ろの色
     grid_background: {
@@ -44,10 +44,7 @@ export const useStyles = makeStyles(() =>
     },
     // ガントチャートの横一列
     grid_row: {
-      fill: "#ffffff",
-      "&:nth-child(even)": {
-        fill: "#f5f5f5",
-      },
+      fill: "#f9f9f9",
     },
     // 横線の色
     row_line: {
@@ -58,7 +55,7 @@ export const useStyles = makeStyles(() =>
       fill: "#f60",
       opacity: 0.5,
     },
-    // 
+    //
     grid_header: {
       fill: "#ffffff",
       stroke: "#e0e0e0",
@@ -82,10 +79,9 @@ export const useStyles = makeStyles(() =>
       textAnchor: "middle",
     },
     bar: {
-      fill: "#b8c2cc",
-      stroke: "#8D99A6",
-      strokeWidth: 0,
-      msTransition: "strokeWidth .3e ease",
+      fill: "#FFF",
+      stroke: "#000",
+      strokeWidth: 0.3,
       userSelect: "none",
     },
     bar_wrapper: {
@@ -116,10 +112,11 @@ export const useStyles = makeStyles(() =>
     todo: {
       position: "relative",
       margin: "0px 55px",
-      display: 'flex',
+      display: "flex",
     },
     todobox: {
+      width: "calc(100% / 7)",
       flexGrow: 1,
-    }
+    },
   })
 );

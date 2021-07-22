@@ -184,7 +184,7 @@ export default function Weekly() {
               )
             )}
             {/* termの内容を表示 */}
-            <g className={classes.bar}>
+            <g>
               {React.Children.toArray(
                 appDataManager.terms?.map((value) =>
                   ((startday = value.startDatetimeScheduled), //termの開始日
@@ -214,11 +214,12 @@ export default function Weekly() {
                               className={classes.bar}
                             />
                             {/* termの名前表示 */}
+                            {console.log((endday-startday)/86400000)}
                             <text
                               x={
                                 ((startday - weekstart) / 86400000) *
-                                  14.3 *
-                                  1.7 +
+                                  14.3 
+                                  + (termDay * 14.3)/2 + 
                                 "%"
                               }
                               y={41 + value.id * 40}
@@ -266,7 +267,9 @@ export default function Weekly() {
             <div className={classes.todobox}>
               {appDataManager.todos
                 ?.filter(
-                  (value) => value.startDatetimeScheduled?.getDay() == idx
+                  (value) => 
+                  value.startDatetimeScheduled!!.getDate() - weekstart.getDate() == (idx) &&
+                  value.startDatetimeScheduled!!.getMonth() == weekstart.getMonth()
                 )
                 .map((value) => (
                   <ToDoBox todo={value} key={value.id} />
