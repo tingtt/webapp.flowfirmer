@@ -28,8 +28,8 @@ function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
+            <Link color="inherit" href="/">{/*https://material-ui.com/*/}
+                Flow firmer
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
@@ -225,23 +225,23 @@ export default function Dashboard() {
                             </Paper>
                         </Grid>
                         {/*Test Add*/}
-                        <Grid item xs={12} md={6} lg={6}>
-                            <Paper className={fixedHeightPaper}>
-                                <Chart />
-                            </Paper>
-                        </Grid>
-                        {/*Test Add*/}
-                        <Grid item xs={12} md={6} lg={6}>
-                            <Paper className={fixedHeightPaper}>
-                                <Chart />
-                            </Paper>
-                        </Grid>
-                        {/* Recent Orders */}
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Orders />
-                            </Paper>
-                        </Grid>
+                        {/*<Grid item xs={12} md={6} lg={6}>*/}
+                        {/*    <Paper className={fixedHeightPaper}>*/}
+                        {/*        <Chart />*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
+                        {/*/!*Test Add*!/*/}
+                        {/*<Grid item xs={12} md={6} lg={6}>*/}
+                        {/*    <Paper className={fixedHeightPaper}>*/}
+                        {/*        <Chart />*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
+                        {/*/!* Recent Orders *!/*/}
+                        {/*<Grid item xs={12}>*/}
+                        {/*    <Paper className={classes.paper}>*/}
+                        {/*        <Orders />*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
                     </Grid>
                     <Box pt={4}>
                         <Copyright />
