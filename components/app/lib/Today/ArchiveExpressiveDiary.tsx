@@ -79,11 +79,14 @@ const useStyles = makeStyles((theme: Theme) =>
                 },
             },
         },
-        shelfBlockClearButton: {
+        shelfBlockClearButtonDiv: {
             position: 'absolute',
             right: '0',
             height: '100%',
-            opacity: '0.6'
+            opacity: '0.6',
+            "&:hover": {
+                opacity: '0.8'
+            },
         },
         resultDatetimeInputDiv: {
             marginTop: theme.spacing(3),
@@ -355,13 +358,16 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     >
                         <div>Result</div>
                         {(resultDatetimeStart != defaultResultDatetime.start || resultDatetimeEnd != defaultResultDatetime.end || resultOutcomes.some(resultOutcome => resultOutcome.value != defaultResultOutcomes.find(value => value.scheme.id == resultOutcome.scheme.id)!.value)) &&
-                            <SettingsBackupRestore
-                                className={classes.shelfBlockClearButton}
-                                onClick={() => {
-                                    resetResultDatetime();
-                                    resetResultOutcomes();
-                                }}
-                            />
+                            <div
+                                className={classes.shelfBlockClearButtonDiv}
+                            >
+                                <SettingsBackupRestore
+                                    onClick={() => {
+                                        resetResultDatetime();
+                                        resetResultOutcomes();
+                                    }}
+                                />
+                            </div>
                         }
                     </div>
                     {/* 開始時間 */}
@@ -470,7 +476,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Feelings</div>
-                        {feels.some(value => value.selectedState.value) && <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetFeelSelectStates} />}
+                        {feels.some(value => value.selectedState.value) &&
+                            <div
+                                className={classes.shelfBlockClearButtonDiv}
+                            >
+                                <SettingsBackupRestore onClick={resetFeelSelectStates} />
+                            </div>
+                        }
                     </div>
                     <div
                         className={classes.feelingListDiv}
@@ -556,7 +568,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Memo</div>
-                        {memo != "" && <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetMemo} />}
+                        {memo != "" &&
+                            <div
+                                className={classes.shelfBlockClearButtonDiv}
+                            >
+                                <SettingsBackupRestore onClick={resetMemo} />
+                            </div>
+                        }
                     </div>
                     <TextField
                         className={classes.memoTextField}
