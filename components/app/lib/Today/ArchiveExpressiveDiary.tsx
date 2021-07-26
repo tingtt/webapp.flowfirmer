@@ -528,6 +528,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                             ))();
                             return (
                                 <div
+                                    key={value.feel.id}
                                     className={clsx(
                                         classes.feelingListItemDiv,
                                         emotionColorClasses.emotionColorDiv,
