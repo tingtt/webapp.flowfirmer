@@ -195,6 +195,14 @@ export default function ArchiveExpressiveDiary(props: Props) {
 
     const classes = useStyles();
 
+    const appDataManager = (() => {
+        try {
+            return  AppDataManager.generateInstance(0)
+        } catch (e) {
+            return  AppDataManager.getInstance();
+        }
+    })();
+
 
     /**
      * 時間
@@ -277,11 +285,28 @@ export default function ArchiveExpressiveDiary(props: Props) {
      * 感情
      */
 
+    const defaultFeels = (() => {
+        if (props.todo.archived && appDataManager.archives != undefined) {
+            const feels = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.feelingList;
+            return feels != undefined ? feels : [];
+        }
+        return [];
+    })();
+
     // リスト
     const feels = defaultFeeingTypes.map(value => {
-        const [selectedState, setSelectedState] = React.useState<boolean>(false);
-        const [positivePercent, setPositivePercent] = React.useState<Percentage>(value.defaultPositivePercent);
-        const [negativePercent, setNegativePercent] = React.useState<Percentage>(value.defaultNegativePercent);
+        var defaultSelected = false;
+        var defaultPositivePercent = value.defaultPositivePercent;
+        var defaultNegativePercent = value.defaultNegativePercent;
+        const selected = defaultFeels.find(feel => feel.feeling.id == value.id);
+        if (selected != undefined) {
+            defaultSelected = true;
+            defaultPositivePercent = selected.positivePercent;
+            defaultNegativePercent = selected.negativePercent;
+        }
+        const [selectedState, setSelectedState] = React.useState<boolean>(defaultSelected);
+        const [positivePercent, setPositivePercent] = React.useState<Percentage>(defaultPositivePercent);
+        const [negativePercent, setNegativePercent] = React.useState<Percentage>(defaultNegativePercent);
         return {
             feel: value,
             selectedState: {
@@ -302,8 +327,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
     // リセット処理
     const resetFeelSelectStates = () => {
         feels.forEach(value => {
-            if (value.selectedState.value) {
+            if (value.selectedState.value != defaultFeels.some(feel => feel.feeling.id == value.feel.id)) {
                 value.selectedState.toggle();
+                const defaultFeel = defaultFeels.find(feel => feel.feeling.id == value.feel.id);
+                if (defaultFeel != undefined) {
+                    value.positivePercentState.set(defaultFeel.positivePercent);
+                    value.negativePercentState.set(defaultFeel.negativePercent);
+                }
             }
         })
     }
@@ -313,12 +343,21 @@ export default function ArchiveExpressiveDiary(props: Props) {
      * メモ（日記）
      */
 
+
+    const defaultMemoValue = (() => {
+        var text: string | undefined
+        if (props.todo.archived && appDataManager.archives != undefined) {
+            text = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.text;
+        }
+        return text != undefined ? text : "";
+    })();
+
     // 値
-    const [memo, setMemo] = React.useState<string>("");
+    const [memo, setMemo] = React.useState<string>(defaultMemoValue);
 
     // リセット処理
     const resetMemo = () => {
-        setMemo("");
+        setMemo(defaultMemoValue);
     }
 
     return (
@@ -488,7 +527,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Feelings</div>
-                        {feels.some(value => value.selectedState.value) &&
+                        {feels.some(value => value.selectedState.value != defaultFeels.some(feel => feel.feeling.id == value.feel.id)) &&
                             <div
                                 className={classes.shelfBlockClearButtonDiv}
                             >
@@ -580,7 +619,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Memo</div>
-                        {memo != "" &&
+                        {memo != defaultMemoValue &&
                             <div
                                 className={classes.shelfBlockClearButtonDiv}
                             >
@@ -612,13 +651,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 <Button
                     color="primary"
                     onClick={() => {
-                        (() => {
-                            try {
-                                return  AppDataManager.generateInstance(0)
-                            } catch (e) {
-                                return  AppDataManager.getInstance();
-                            }
-                        })().registerArchive(
+                        appDataManager.registerArchive(
                             props.todo?.targetList,
                             resultOutcomes,
                             memo,

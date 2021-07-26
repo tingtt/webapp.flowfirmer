@@ -34,7 +34,7 @@ export type Archive = {
     }[]
 
     // 日記
-    text?: String
+    text?: string
     feelingList?: {
             feeling: FeelingType
             // 実際のポジティブ度・ネガティブ度（変更がない場合はFeelingTypeに登録したデフォルト値をコピー）
