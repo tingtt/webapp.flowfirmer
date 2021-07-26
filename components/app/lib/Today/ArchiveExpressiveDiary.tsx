@@ -376,7 +376,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         label="Start"
                         type="datetime-local"
                         value={resultDatetimeStart}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setResultDatetimeStart(e.target.value) }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setResultDatetimeStart(e.target.value);
+                            // 日時情報の齟齬を修正
+                            if (e.target.value > resultDatetimeEnd) {
+                                setResultDatetimeEnd(e.target.value);
+                            }
+                        }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -390,7 +396,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         label="End"
                         type="datetime-local"
                         value={resultDatetimeEnd}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setResultDatetimeEnd(e.target.value) }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setResultDatetimeEnd(e.target.value);
+                            // 日時情報の齟齬を修正
+                            if (resultDatetimeStart > e.target.value) {
+                                setResultDatetimeStart(e.target.value);
+                            }
+                        }}
                         InputLabelProps={{
                             shrink: true,
                         }}
