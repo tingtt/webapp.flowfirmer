@@ -211,12 +211,25 @@ export default function ArchiveExpressiveDiary(props: Props) {
     // デフォルト値
     const defaultResultDatetime = {
         start: (() => {
+            if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                const archived = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)
+                if (archived != undefined && archived.refInfo.refType == 'ToDo') {
+                    return `${archived.refInfo.startDateTime.getFullYear()}-${`0${archived.refInfo.startDateTime.getMonth() + 1}`.slice(-2)}-${`0${archived.refInfo.startDateTime.getDate()}`.slice(-2)}T${`0${archived.refInfo.startDateTime.getHours()}`.slice(-2)}:${`0${archived.refInfo.startDateTime.getMinutes()}`.slice(-2)}`;
+                }
+            }
             if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted) {
-                return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes()}`.slice(-2)}`
+                return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes()}`.slice(-2)}`;
             }
             return "";
         })(),
         end: (() => {
+            if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                const archived = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)
+                if (archived != undefined && archived.refInfo.refType == 'ToDo') {
+                    const endDatetime = new Date(archived.refInfo.startDateTime.getTime() + ( archived.refInfo.processingTime * 60 * 1000 ));
+                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes()}`.slice(-2)}`;
+                }
+            }
             if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted && props.todo.processingTimeScheduled != undefined) {
                 // 開始日時に実行時間を加算
                 if (props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled >= 60) {
