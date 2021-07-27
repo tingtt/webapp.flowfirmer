@@ -221,7 +221,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 // 開始日時に実行時間を加算
                 if (props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled >= 60) {
                     const endDatetime = new Date(props.todo.startDatetimeScheduled.getTime() + (props.todo.processingTimeScheduled * 60 * 1000));
-                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
+                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes()}`.slice(-2)}`;
                 } else {
                     return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
                 }
