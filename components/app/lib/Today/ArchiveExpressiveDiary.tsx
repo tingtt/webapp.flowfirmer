@@ -265,10 +265,20 @@ export default function ArchiveExpressiveDiary(props: Props) {
         return {
             scheme: scheme,
             value: (() => {
-                if (scheme.statisticsRule == 'String') {
-                    return scheme.defaultValue != undefined ? scheme.defaultValue as string : "";
+                var defaultValue = scheme.defaultValue;
+                if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                    const archivedOutcomes = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.outcomes;
+                    if (archivedOutcomes != undefined) {
+                        const archivedOutcome = archivedOutcomes.find(outcome => outcome.scheme.id == scheme.id);
+                        if (archivedOutcome != undefined) {
+                            defaultValue = archivedOutcome.value;
+                        }
+                    }
                 }
-                return scheme.defaultValue != undefined ? scheme.defaultValue as number : 0;
+                if (scheme.statisticsRule == 'String') {
+                    return defaultValue != undefined ? defaultValue as string : "";
+                }
+                return defaultValue != undefined ? defaultValue as number : 0;
             })()
         }
     });
