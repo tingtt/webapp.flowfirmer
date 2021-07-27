@@ -8,6 +8,15 @@ export default function Weekly() {
   let year = today.getFullYear(); //今年
   let month = today.getMonth() + 1; //今月
 
+  //termの取得するための関数
+  const appDataManager: AppDataManager = (() => {
+    try {
+      return AppDataManager.generateInstance(0);
+    } catch (e) {
+      return AppDataManager.getInstance();
+    }
+  })();
+
   let startday: any; //termの開始日
   let endday: any; //termの終了日
   let termDay: number; //termの期間
@@ -36,15 +45,7 @@ export default function Weekly() {
   const weekend = getweek.end;
   let chengeDate = new Date(weekstart);
   chengeDate.setDate(weekstart.getDate() - 1);
-
-  //termの取得するための関数
-  const appDataManager: AppDataManager = (() => {
-    try {
-      return AppDataManager.generateInstance(0);
-    } catch (e) {
-      return AppDataManager.getInstance();
-    }
-  })();
+  let i: number = 0;
 
   const classes = useStyles(); //css呼び出し
 
@@ -59,8 +60,27 @@ export default function Weekly() {
     setstartnumber(Number(e.target.value));
   };
 
+  //termのドラッグ＆ドロップ処理
+  const drag = (e: React.MouseEvent<SVGRectElement>) => {
+    let bar = document.getElementById(e.currentTarget.id);
+
+    let x = bar?.getBoundingClientRect().x;
+    let width = bar?.getBoundingClientRect().width;
+
+    console.log("x:" +e,"x"+ x);
+  };
+
+  //termの数
+  const termlength = appDataManager.terms?.filter(
+    (value) =>
+      (value.startDatetimeScheduled.getTime() -
+        value.endDatetimeScheduled.getTime()) /
+        86400000 != 0
+  ).length;
+
   return (
     <div>
+      {/* 何曜日始めかを選ぶ */}
       <select
         className={classes.selectweek}
         defaultValue={"0"}
@@ -69,37 +89,48 @@ export default function Weekly() {
         <option value="0">日曜はじめ</option>
         <option value="1">月曜はじめ</option>
       </select>
+      {/* 移動ボタン */}
       <button className={classes.button_left} onClick={weekchenge} value="-1">
         {"<"}
       </button>
       <button className={classes.button_right} onClick={weekchenge} value="1">
         {">"}
       </button>
+      {/* １週間のガントチャートの記述 */}
       <div className={classes.gantt_warp}>
         <div id="container" className={classes.gantt_container}>
-          <svg className={classes.gantt} height="219">
-            {/* height={containerHeight} width={containerWidth!} */}
-            <rect
-              x="0"
-              y="0"
-              width="100%"
-              height="100%"
-              className={classes.grid_background}
-            />
+          <svg
+            className={classes.gantt}
+            height={termlength!! * 40 + 60}
+          >
+            {/* ガントチャートの後ろ作成 */}
             <g>
               {/* ガントチャートの表を作成 */}
               {React.Children.toArray(
-                appDataManager.terms
-                  ?.slice(0, 4)
-                  .map((value) => (
-                    <rect
-                      x="0"
-                      y={value.id * 40 + 59}
-                      width="100%"
-                      height="40"
-                      className={classes.grid_row}
-                    />
-                  ))
+                appDataManager.terms?.map((value) =>
+                  ((startday = value.startDatetimeScheduled), //termの開始日
+                  (endday = value.endDatetimeScheduled), //termの終了日
+                  (termDay = (endday - startday) / 86400000),
+                  (startmonth = value.startDatetimeScheduled.getMonth()), //termの開始月
+                  (endmonth = value.endDatetimeScheduled.getMonth()), //termの終了月
+                  () => {
+                    if (
+                      (startmonth == weekstart.getMonth() ||
+                        endmonth == weekend.getMonth()) &&
+                      termDay != 0
+                    ) {
+                      return (
+                        <rect
+                          x="0"
+                          y={i++ * 40 + 59}
+                          width="100%"
+                          height="40"
+                          className={classes.grid_row}
+                        />
+                      );
+                    }
+                  })()
+                )
               )}
             </g>
             <g>
@@ -109,7 +140,7 @@ export default function Weekly() {
                   x={(today.getDate() - chengeDate.getDate() - 1) * 14.3 + "%"}
                   y="59"
                   width="14.3%"
-                  height="219"
+                  height={termlength!! * 40 + 59}
                   className={classes.today_highlight}
                 />
               )}
@@ -207,19 +238,18 @@ export default function Weekly() {
                                 ((startday - weekstart) / 86400000) * 14.3 + "%"
                               }
                               y={28 + value.id * 40}
-                              width={termDay * 14.3 + "%"}
+                              width={termDay * 14.285 + "%"}
                               height="25"
                               rx="3"
                               ry="3"
+                              id={value.id.toString()}
                               className={classes.bar}
                             />
                             {/* termの名前表示 */}
-                            {console.log((endday-startday)/86400000)}
                             <text
                               x={
-                                ((startday - weekstart) / 86400000) *
-                                  14.3 
-                                  + (termDay * 14.3)/2 + 
+                                ((startday - weekstart) / 86400000) * 14.3 +
+                                (termDay * 14.3) / 2 +
                                 "%"
                               }
                               y={41 + value.id * 40}
@@ -228,26 +258,31 @@ export default function Weekly() {
                               {value.name}
                             </text>
                           </g>
+                          {/* termの範囲移動させる */}
                           <g className="handle-group">
                             <rect
                               x={
                                 ((startday - weekstart) / 86400000) * 14.3 + "%"
                               }
                               y={28 + value.id * 40}
-                              width="8"
+                              width="10"
                               height="25"
                               rx="3"
                               ry="3"
-                              className={classes.handle_right}
+                              id={value.id.toString()}
+                              className={classes.handle_left}
+                              onMouseDown={drag}
                             />
                             <rect
                               x={((endday - weekstart) / 86400000) * 14.2 + "%"}
                               y={28 + value.id * 40}
-                              width="8"
+                              width="10"
                               height="25"
                               rx="3"
                               ry="3"
-                              className={classes.handle_left}
+                              id={value.id.toString()}
+                              className={classes.handle_right}
+                              onMouseDown={drag}
                             />
                           </g>
                         </g>
@@ -267,9 +302,12 @@ export default function Weekly() {
             <div className={classes.todobox}>
               {appDataManager.todos
                 ?.filter(
-                  (value) => 
-                  value.startDatetimeScheduled!!.getDate() - weekstart.getDate() == (idx) &&
-                  value.startDatetimeScheduled!!.getMonth() == weekstart.getMonth()
+                  (value) =>
+                    value.startDatetimeScheduled!!.getDate() -
+                      weekstart.getDate() ==
+                      idx &&
+                    value.startDatetimeScheduled!!.getMonth() ==
+                      weekstart.getMonth()
                 )
                 .map((value) => (
                   <ToDoBox todo={value} key={value.id} />

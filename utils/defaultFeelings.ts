@@ -176,7 +176,7 @@ export const defaultFeeingTypes: FeelingType[] = [
         id: 19,
         user_id: -1,
 
-        name: "後悔",
+        name: "後悔",
 
         defaultPositivePercent: 0,
         defaultNegativePercent: 60

@@ -30,21 +30,19 @@ export const useStyles = makeStyles(() =>
     // ガントチャート描画の枠
     gantt_container: {
       fontSize: 12,
-      overflow: "auto",
+      overflowY: "auto",
       width: "100%",
+      height: 219,
     },
     // ガントチャート
     gantt: {
       width: "100%",
-      height: "219px",
-    },
-    // ガントチャートの後ろの色
-    grid_background: {
-      background: "#888",
     },
     // ガントチャートの横一列
     grid_row: {
+      position: "relative",
       fill: "#f9f9f9",
+      // stroke: "#cccccc"
     },
     // 横線の色
     row_line: {
@@ -55,7 +53,7 @@ export const useStyles = makeStyles(() =>
       fill: "#f60",
       opacity: 0.5,
     },
-    //
+    //日付表示
     grid_header: {
       fill: "#ffffff",
       stroke: "#e0e0e0",
@@ -87,6 +85,16 @@ export const useStyles = makeStyles(() =>
     bar_wrapper: {
       cursor: "pointer",
       outline: "none",
+      "&:hover": {
+        "& $handle_right": {
+          visibility: "visible",
+          opacity: 1,
+        },
+        "& $handle_left": {
+          visibility: "visible",
+          opacity: 1,
+        },
+      },
     },
     bar_label: {
       fill: "#000",
@@ -99,14 +107,14 @@ export const useStyles = makeStyles(() =>
       fill: "#000",
       cursor: "ew-resize",
       opacity: 0,
-      // visibility: "hidden",
+      visibility: "hidden",
       transition: "opacity .3s ease",
     },
     handle_left: {
       fill: "#000",
       cursor: "ew-resize",
       opacity: 0,
-      // visibility: "hidden",
+      visibility: "hidden",
       transition: "opacity .3s ease",
     },
     todo: {
