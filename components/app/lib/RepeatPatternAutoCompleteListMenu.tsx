@@ -42,6 +42,10 @@ export default function RepeatPatternAutoCompleteListMenu(props: Props) {
             if (key == 'Weekly') {
                 const date = props.date != null ? props.date : new Date();
                 props.repeatPatternSetter({ interval: 'Weekly', repeatDay: [date.getDay()]})
+                // 日付指定
+                props.dateSetter(date);
+                // フォームの値を同期
+                props.dateStrSetter(`${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + date.getDate()).slice(-2)}`);
             } else {
                 // 指定する曜日番号を取得
                 var dayNum = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].findIndex(value => value == key);
