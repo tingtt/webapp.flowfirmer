@@ -106,6 +106,8 @@ export default class AppDataManager {
             term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
 
             completed: completed,
+
+            archived: false,
         }
 
         // 新規Targetを追加
@@ -248,7 +250,7 @@ export default class AppDataManager {
             scheme: OutcomeScheme,
             value: string | number
         }[],
-        text?: String,
+        text?: string,
         feelingList?: {
             feeling: FeelingType,
             positivePercent: Percentage,
@@ -266,33 +268,56 @@ export default class AppDataManager {
             refType: 'undefined';
         } = { refType: 'undefined' }
     ) {
-        // TODO: APIを叩いてArchiveを登録し、IDを取得
-        const id: number = this.archives != undefined ? this.archives.length : 0;
+        // 既にArchiveされているToDoの場合
+        if (refInfo.refType == 'ToDo' && this.archives?.some(value => value.refInfo.refType == 'ToDo' && value.refInfo.ref.id == refInfo.ref.id)) {
+            // update
+            this.archives = this.archives.map(value => {
+                if (value.refInfo.refType == 'ToDo' && value.refInfo.ref.id == refInfo.ref.id) {
+                    var newArchive = value;
+                    newArchive.refInfo = refInfo;
+                    newArchive.checkInDateTime = new Date();
+                    newArchive.targets = targets;
+                    newArchive.outcomes = outcomes;
+                    newArchive.text = text;
+                    newArchive.feelingList = feelingList;
+                    newArchive.recordingDateTime = new Date();
+                    console.log(newArchive);
+                    return newArchive;
+                }
+                return value;
+            })
+        } else {
+            // register
+            // TODO: APIを叩いてArchiveを登録し、IDを取得
+            const id: number = this.archives != undefined ? this.archives.length : 0;
 
-        // Archiveデータを作成
-        const newArchive: Archive = {
-            id: id,
-            user_id: this.user_id,
+            // Archiveデータを作成
+            const newArchive: Archive = {
+                id: id,
+                user_id: this.user_id,
+                refInfo: refInfo,
+                checkInDateTime: new Date(),
+                targets: targets,
+                outcomes: outcomes,
+                text: text,
+                feelingList: feelingList,
+                recordingDateTime: new Date()
+            }
 
-            refInfo: refInfo,
+            console.log(newArchive);
 
-            checkInDateTime: new Date(),
+            // データを追加
+            this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
 
-            targets: targets,
-
-            outcomes: outcomes,
-
-            text: text,
-
-            feelingList: feelingList,
-
-            recordingDateTime: new Date()
+            //
+            if (refInfo.refType == 'ToDo') {
+                var todo = this.todos?.find(value => value.id == refInfo.ref.id);
+                if (todo != undefined) {
+                    todo.archived = true;
+                    this.updateTodo(todo);
+                }
+            }
         }
-
-        console.log(newArchive);
-
-        // データを追加
-        this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
     }
 
     private constructor(user_id: number) {

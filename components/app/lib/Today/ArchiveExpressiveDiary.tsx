@@ -79,11 +79,14 @@ const useStyles = makeStyles((theme: Theme) =>
                 },
             },
         },
-        shelfBlockClearButton: {
+        shelfBlockClearButtonDiv: {
             position: 'absolute',
             right: '0',
             height: '100%',
-            opacity: '0.6'
+            opacity: '0.6',
+            "&:hover": {
+                opacity: '0.8'
+            },
         },
         resultDatetimeInputDiv: {
             marginTop: theme.spacing(3),
@@ -192,6 +195,14 @@ export default function ArchiveExpressiveDiary(props: Props) {
 
     const classes = useStyles();
 
+    const appDataManager = (() => {
+        try {
+            return  AppDataManager.generateInstance(0)
+        } catch (e) {
+            return  AppDataManager.getInstance();
+        }
+    })();
+
 
     /**
      * 時間
@@ -200,17 +211,30 @@ export default function ArchiveExpressiveDiary(props: Props) {
     // デフォルト値
     const defaultResultDatetime = {
         start: (() => {
+            if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                const archived = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)
+                if (archived != undefined && archived.refInfo.refType == 'ToDo') {
+                    return `${archived.refInfo.startDateTime.getFullYear()}-${`0${archived.refInfo.startDateTime.getMonth() + 1}`.slice(-2)}-${`0${archived.refInfo.startDateTime.getDate()}`.slice(-2)}T${`0${archived.refInfo.startDateTime.getHours()}`.slice(-2)}:${`0${archived.refInfo.startDateTime.getMinutes()}`.slice(-2)}`;
+                }
+            }
             if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted) {
-                return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes()}`.slice(-2)}`
+                return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes()}`.slice(-2)}`;
             }
             return "";
         })(),
         end: (() => {
+            if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                const archived = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)
+                if (archived != undefined && archived.refInfo.refType == 'ToDo') {
+                    const endDatetime = new Date(archived.refInfo.startDateTime.getTime() + ( archived.refInfo.processingTime * 60 * 1000 ));
+                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes()}`.slice(-2)}`;
+                }
+            }
             if (props.todo.startDatetimeScheduled != undefined && props.todo.timeInfoExisted && props.todo.processingTimeScheduled != undefined) {
                 // 開始日時に実行時間を加算
                 if (props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled >= 60) {
                     const endDatetime = new Date(props.todo.startDatetimeScheduled.getTime() + (props.todo.processingTimeScheduled * 60 * 1000));
-                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
+                    return `${endDatetime.getFullYear()}-${`0${endDatetime.getMonth() + 1}`.slice(-2)}-${`0${endDatetime.getDate()}`.slice(-2)}T${`0${endDatetime.getHours()}`.slice(-2)}:${`0${endDatetime.getMinutes()}`.slice(-2)}`;
                 } else {
                     return `${props.todo.startDatetimeScheduled.getFullYear()}-${`0${props.todo.startDatetimeScheduled.getMonth() + 1}`.slice(-2)}-${`0${props.todo.startDatetimeScheduled.getDate()}`.slice(-2)}T${`0${props.todo.startDatetimeScheduled.getHours()}`.slice(-2)}:${`0${props.todo.startDatetimeScheduled.getMinutes() + props.todo.processingTimeScheduled}`.slice(-2)}`;
                 }
@@ -254,10 +278,20 @@ export default function ArchiveExpressiveDiary(props: Props) {
         return {
             scheme: scheme,
             value: (() => {
-                if (scheme.statisticsRule == 'String') {
-                    return scheme.defaultValue != undefined ? scheme.defaultValue as string : "";
+                var defaultValue = scheme.defaultValue;
+                if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                    const archivedOutcomes = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.outcomes;
+                    if (archivedOutcomes != undefined) {
+                        const archivedOutcome = archivedOutcomes.find(outcome => outcome.scheme.id == scheme.id);
+                        if (archivedOutcome != undefined) {
+                            defaultValue = archivedOutcome.value;
+                        }
+                    }
                 }
-                return scheme.defaultValue != undefined ? scheme.defaultValue as number : 0;
+                if (scheme.statisticsRule == 'String') {
+                    return defaultValue != undefined ? defaultValue as string : "";
+                }
+                return defaultValue != undefined ? defaultValue as number : 0;
             })()
         }
     });
@@ -274,11 +308,28 @@ export default function ArchiveExpressiveDiary(props: Props) {
      * 感情
      */
 
+    const defaultFeels = (() => {
+        if (props.todo.archived && appDataManager.archives != undefined) {
+            const feels = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.feelingList;
+            return feels != undefined ? feels : [];
+        }
+        return [];
+    })();
+
     // リスト
     const feels = defaultFeeingTypes.map(value => {
-        const [selectedState, setSelectedState] = React.useState<boolean>(false);
-        const [positivePercent, setPositivePercent] = React.useState<Percentage>(value.defaultPositivePercent);
-        const [negativePercent, setNegativePercent] = React.useState<Percentage>(value.defaultNegativePercent);
+        var defaultSelected = false;
+        var defaultPositivePercent = value.defaultPositivePercent;
+        var defaultNegativePercent = value.defaultNegativePercent;
+        const selected = defaultFeels.find(feel => feel.feeling.id == value.id);
+        if (selected != undefined) {
+            defaultSelected = true;
+            defaultPositivePercent = selected.positivePercent;
+            defaultNegativePercent = selected.negativePercent;
+        }
+        const [selectedState, setSelectedState] = React.useState<boolean>(defaultSelected);
+        const [positivePercent, setPositivePercent] = React.useState<Percentage>(defaultPositivePercent);
+        const [negativePercent, setNegativePercent] = React.useState<Percentage>(defaultNegativePercent);
         return {
             feel: value,
             selectedState: {
@@ -299,8 +350,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
     // リセット処理
     const resetFeelSelectStates = () => {
         feels.forEach(value => {
-            if (value.selectedState.value) {
+            if (value.selectedState.value != defaultFeels.some(feel => feel.feeling.id == value.feel.id)) {
                 value.selectedState.toggle();
+                const defaultFeel = defaultFeels.find(feel => feel.feeling.id == value.feel.id);
+                if (defaultFeel != undefined) {
+                    value.positivePercentState.set(defaultFeel.positivePercent);
+                    value.negativePercentState.set(defaultFeel.negativePercent);
+                }
             }
         })
     }
@@ -310,12 +366,21 @@ export default function ArchiveExpressiveDiary(props: Props) {
      * メモ（日記）
      */
 
+
+    const defaultMemoValue = (() => {
+        var text: string | undefined
+        if (props.todo.archived && appDataManager.archives != undefined) {
+            text = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.text;
+        }
+        return text != undefined ? text : "";
+    })();
+
     // 値
-    const [memo, setMemo] = React.useState<string>("");
+    const [memo, setMemo] = React.useState<string>(defaultMemoValue);
 
     // リセット処理
     const resetMemo = () => {
-        setMemo("");
+        setMemo(defaultMemoValue);
     }
 
     return (
@@ -355,13 +420,16 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     >
                         <div>Result</div>
                         {(resultDatetimeStart != defaultResultDatetime.start || resultDatetimeEnd != defaultResultDatetime.end || resultOutcomes.some(resultOutcome => resultOutcome.value != defaultResultOutcomes.find(value => value.scheme.id == resultOutcome.scheme.id)!.value)) &&
-                            <SettingsBackupRestore
-                                className={classes.shelfBlockClearButton}
-                                onClick={() => {
-                                    resetResultDatetime();
-                                    resetResultOutcomes();
-                                }}
-                            />
+                            <div
+                                className={classes.shelfBlockClearButtonDiv}
+                            >
+                                <SettingsBackupRestore
+                                    onClick={() => {
+                                        resetResultDatetime();
+                                        resetResultOutcomes();
+                                    }}
+                                />
+                            </div>
                         }
                     </div>
                     {/* 開始時間 */}
@@ -370,7 +438,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         label="Start"
                         type="datetime-local"
                         value={resultDatetimeStart}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setResultDatetimeStart(e.target.value) }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setResultDatetimeStart(e.target.value);
+                            // 日時情報の齟齬を修正
+                            if (e.target.value > resultDatetimeEnd) {
+                                setResultDatetimeEnd(e.target.value);
+                            }
+                        }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -384,7 +458,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         label="End"
                         type="datetime-local"
                         value={resultDatetimeEnd}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setResultDatetimeEnd(e.target.value) }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            setResultDatetimeEnd(e.target.value);
+                            // 日時情報の齟齬を修正
+                            if (resultDatetimeStart > e.target.value) {
+                                setResultDatetimeStart(e.target.value);
+                            }
+                        }}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -470,7 +550,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Feelings</div>
-                        {feels.some(value => value.selectedState.value) && <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetFeelSelectStates} />}
+                        {feels.some(value => value.selectedState.value != defaultFeels.some(feel => feel.feeling.id == value.feel.id)) &&
+                            <div
+                                className={classes.shelfBlockClearButtonDiv}
+                            >
+                                <SettingsBackupRestore onClick={resetFeelSelectStates} />
+                            </div>
+                        }
                     </div>
                     <div
                         className={classes.feelingListDiv}
@@ -528,6 +614,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                             ))();
                             return (
                                 <div
+                                    key={value.feel.id}
                                     className={clsx(
                                         classes.feelingListItemDiv,
                                         emotionColorClasses.emotionColorDiv,
@@ -555,7 +642,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         className={classes.shelfBlockTitleDiv}
                     >
                         <div>Memo</div>
-                        {memo != "" && <SettingsBackupRestore className={classes.shelfBlockClearButton} onClick={resetMemo} />}
+                        {memo != defaultMemoValue &&
+                            <div
+                                className={classes.shelfBlockClearButtonDiv}
+                            >
+                                <SettingsBackupRestore onClick={resetMemo} />
+                            </div>
+                        }
                     </div>
                     <TextField
                         className={classes.memoTextField}
@@ -581,13 +674,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 <Button
                     color="primary"
                     onClick={() => {
-                        (() => {
-                            try {
-                                return  AppDataManager.generateInstance(0)
-                            } catch (e) {
-                                return  AppDataManager.getInstance();
-                            }
-                        })().registerArchive(
+                        appDataManager.registerArchive(
                             props.todo?.targetList,
                             resultOutcomes,
                             memo,

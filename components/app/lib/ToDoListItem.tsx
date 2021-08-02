@@ -2,7 +2,7 @@ import { createStyles, Theme, makeStyles, Checkbox, InputBase, Chip } from "@mat
 import React from "react";
 import clsx from 'clsx';
 import { ToDo } from "../../../lib/interface";
-import { Create, Loop } from "@material-ui/icons";
+import { BorderColorRounded, Create, Loop } from "@material-ui/icons";
 import AppDataManager from "../../../lib/app/appDataManager";
 
 type Props = {
@@ -316,10 +316,17 @@ export default function ToDoListItem(props: Props) {
                     // 成果、感情日記をつける画面を開く
                 }}
             >
-                <Create
-                    className={classes.eDiaryIcon}
-                    onClick={() => props.exDiaryDialogStateSetter(props.todo)}
-                />
+                {props.todo.archived ?
+                    <BorderColorRounded
+                        className={classes.eDiaryIcon}
+                        onClick={() => props.exDiaryDialogStateSetter(props.todo)}
+                    />
+                    :
+                    <Create
+                        className={classes.eDiaryIcon}
+                        onClick={() => props.exDiaryDialogStateSetter(props.todo)}
+                    />
+                }
             </div>}
         </div>
     );
