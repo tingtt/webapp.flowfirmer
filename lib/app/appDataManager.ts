@@ -69,6 +69,7 @@ export default class AppDataManager {
         targetIds?: number[],
         termId?: number,
         repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
+        description = "",
         completed = false
     ) {
         // TODO: APIを叩いてToDoを登録し、IDを取得
@@ -90,6 +91,8 @@ export default class AppDataManager {
             user_id: this.user_id,
 
             name: name,
+
+            description: description,
 
             startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
 
@@ -150,6 +153,7 @@ export default class AppDataManager {
         if (this.todos != undefined) {
             // 新規ToDo用の値を保持するフィールド
             var newName = "";
+            var description: string | undefined;
             var date = new Date();
             var timeSetted = false;
             var processingTime: number | undefined;
@@ -157,6 +161,8 @@ export default class AppDataManager {
             var repeatDay: number[] = [];
             var targetList: number[] = [];
             var termId: number | undefined;
+            // 新規ToDoを追加するかどうかのフラグ
+            var flg = false;
 
             this.todos = this.todos.map(value => {
                 if (value.id == id) {
@@ -211,12 +217,14 @@ export default class AppDataManager {
                         // console.log(date);
                         // 新規ToDoの情報
                         newName = value.name;
+                        description = value.description;
                         timeSetted = value.timeInfoExisted;
                         processingTime = value.processingTimeScheduled;
                         targetList = value.targetList != undefined ? value.targetList?.map(target => target.id) : [];
                         termId = value.term?.id;
                         interval = value.repeatPattern;
                         repeatDay = value.repeatDayForWeekly != undefined ? value.repeatDayForWeekly : [];
+                        flg = true;
 
                         // このToDoの繰り返し情報の削除
                         value.repeatPattern = undefined;
@@ -227,15 +235,18 @@ export default class AppDataManager {
             })
 
             // 新規ToDoの追加
-            this.registerTodo(
-                newName,
-                {date, timeSetted},
-                processingTime,
-                targetList,
-                termId,
-                interval == 'Weekly' ? {interval, repeatDay} : {interval},
-                false
-            );
+            if (flg) {
+                this.registerTodo(
+                    newName,
+                    {date, timeSetted},
+                    processingTime,
+                    targetList,
+                    termId,
+                    interval == 'Weekly' ? {interval, repeatDay} : {interval},
+                    description,
+                    false
+                );
+            }
         }
     }
 
