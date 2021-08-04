@@ -108,14 +108,12 @@ export const useStyles = makeStyles(() =>
       cursor: "ew-resize",
       opacity: 0,
       visibility: "hidden",
-      transition: "opacity .3s ease",
     },
     handle_left: {
       fill: "#000",
       cursor: "ew-resize",
       opacity: 0,
       visibility: "hidden",
-      transition: "opacity .3s ease",
     },
     todo: {
       position: "relative",

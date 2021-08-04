@@ -62,12 +62,43 @@ export default function Weekly() {
 
   //termのドラッグ＆ドロップ処理
   const drag = (e: React.MouseEvent<SVGRectElement>) => {
-    let bar = document.getElementById(e.currentTarget.id);
+    let bar = (document.getElementById(e.currentTarget.id) as any)
+    let bbox = bar.getBBox();
+    bar!.style.position = 'absolute';
 
-    let x = bar?.getBoundingClientRect().x;
-    let width = bar?.getBoundingClientRect().width;
+    let shiftX = e.clientX - bbox.x;
 
-    console.log("x:" +e,"x"+ x);
+    console.log("x:" + shiftX,"Bbox x:"+bbox.x);
+    
+    //   ball.style.position = 'absolute';
+    //   ball.style.zIndex = 1000;
+    //   document.body.append(ball);
+    
+    //   moveAt(event.pageX, event.pageY);
+    
+    //   // ボールを（pageX、pageY）座標の中心に置く
+    //   function moveAt(pageX, pageY) {
+    //     ball.style.left = pageX - shiftX + 'px';
+    //     ball.style.top = pageY - shiftY + 'px';
+    //   }
+    
+    //   function onMouseMove(event) {
+    //     moveAt(event.pageX, event.pageY);
+    //   }
+    
+    //   // (3) mousemove でボールを移動する
+    //   document.addEventListener('mousemove', onMouseMove);
+    
+    //   // (4) ボールをドロップする。不要なハンドラを削除する
+    //   ball.onmouseup = function() {
+    //     document.removeEventListener('mousemove', onMouseMove);
+    //     ball.onmouseup = null;
+    //   };
+    
+    // ball.ondragstart = function() {
+    //   return false;
+    // };
+
   };
 
   //termの数
