@@ -255,7 +255,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: sampleTerms[0],
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 1,
@@ -273,7 +275,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: false
+        completed: false,
+
+        archived: false
     },
     {
         id: 2,
@@ -292,7 +296,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: false
+        completed: false,
+
+        archived: false
     },
     {
         id: 3,
@@ -310,7 +316,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 4,
@@ -328,7 +336,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 5,
@@ -346,7 +356,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 6,
@@ -364,7 +376,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 7,
@@ -382,7 +396,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 8,
@@ -400,7 +416,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 9,
@@ -418,7 +436,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 10,
@@ -436,7 +456,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: true
+        completed: true,
+
+        archived: true
     },
     {
         id: 11,
@@ -454,7 +476,9 @@ export const sampleToDos: ToDo[] = [
         targetList: [sampleTargets[0]],
         term: undefined,
 
-        completed: false
+        completed: false,
+
+        archived: false
     },
 ]
 

@@ -27,4 +27,6 @@ export type ToDo = {
     documentList?: Document[]
 
     completed: boolean
+
+    archived: boolean
 }
