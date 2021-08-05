@@ -29,9 +29,11 @@ export default function Weekly() {
   const getWeekOfMonth = (year: number, month: number, weekNumber: number) => {
     let start = new Date(year, month - 1, (weekNumber - 1) * 7 + 1);
     let day = start.getDay();
-    start.setDate(start.getDate() + (day ? startnumber - day : -6));
+    start.setDate(start.getDate() + (day ? 0 - day : startnumber));
     let end = new Date(start);
     end.setDate(end.getDate() + 6);
+    console.log(start)
+    console.log(end)
     return { start: start, end: end };
   };
 
@@ -44,7 +46,7 @@ export default function Weekly() {
   const weekstart: any = getweek.start;
   const weekend = getweek.end;
   let chengeDate = new Date(weekstart);
-  chengeDate.setDate(weekstart.getDate() - 1);
+  chengeDate.setDate(weekstart.getDate());
   let i: number = 0;
 
   const classes = useStyles(); //css呼び出し
@@ -109,6 +111,7 @@ export default function Weekly() {
         86400000 != 0
   ).length;
 
+
   return (
     <div>
       {/* 何曜日始めかを選ぶ */}
@@ -168,7 +171,7 @@ export default function Weekly() {
               {/*今日の日付をオレンジ色にする  */}
               {chengeDate.getMonth() == today.getMonth() && (
                 <rect
-                  x={(today.getDate() - chengeDate.getDate() - 1) * 14.3 + "%"}
+                  x={(today.getDate() - chengeDate.getDate()) * 14.3 + "%"}
                   y="59"
                   width="14.3%"
                   height={termlength!! * 40 + 59}
@@ -203,7 +206,7 @@ export default function Weekly() {
 
             {React.Children.toArray(
               [...Array(7)].map((_: undefined, idx: number) =>
-                (chengeDate.setDate(chengeDate.getDate() + 1),
+                (
                 () => {
                   if (idx == 0) {
                     //今月の表示
@@ -219,6 +222,7 @@ export default function Weekly() {
                     );
                   } else if (chengeDate.getDate() == 1) {
                     // １週間の表示中に月が変わった場合
+                    chengeDate.setDate(chengeDate.getDate() + 1)
                     return (
                       <text
                         key={idx}
@@ -231,6 +235,7 @@ export default function Weekly() {
                     );
                   } else {
                     //それ以外
+                    chengeDate.setDate(chengeDate.getDate() + 1)
                     return (
                       <text
                         key={idx}
