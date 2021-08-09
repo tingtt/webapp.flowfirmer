@@ -1,8 +1,10 @@
 import Link from 'next/link'
+import LoginComponent from '../components/app/Login/login'
 
 const loginPage = () => (
   <div>
-    <h1>Login 👋</h1>
+    <LoginComponent />
+    {/* <h1>Login 👋</h1>
     <p>
       <Link href="/">
         <a>Index</a>
@@ -12,7 +14,7 @@ const loginPage = () => (
       <Link href="/app">
         <a>Open web app.</a>
       </Link>
-    </p>
+    </p> */}
   </div>
 )
 
