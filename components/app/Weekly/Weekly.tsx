@@ -32,8 +32,6 @@ export default function Weekly() {
     start.setDate(start.getDate() + (day ? 0 - day : startnumber));
     let end = new Date(start);
     end.setDate(end.getDate() + 6);
-    console.log(start)
-    console.log(end)
     return { start: start, end: end };
   };
 
@@ -66,40 +64,11 @@ export default function Weekly() {
   const drag = (e: React.MouseEvent<SVGRectElement>) => {
     let bar = (document.getElementById(e.currentTarget.id) as any)
     let bbox = bar.getBBox();
-    bar!.style.position = 'absolute';
 
     let shiftX = e.clientX - bbox.x;
+    e.clientX = 100
 
-    console.log("x:" + shiftX,"Bbox x:"+bbox.x);
-    
-    //   ball.style.position = 'absolute';
-    //   ball.style.zIndex = 1000;
-    //   document.body.append(ball);
-    
-    //   moveAt(event.pageX, event.pageY);
-    
-    //   // ボールを（pageX、pageY）座標の中心に置く
-    //   function moveAt(pageX, pageY) {
-    //     ball.style.left = pageX - shiftX + 'px';
-    //     ball.style.top = pageY - shiftY + 'px';
-    //   }
-    
-    //   function onMouseMove(event) {
-    //     moveAt(event.pageX, event.pageY);
-    //   }
-    
-    //   // (3) mousemove でボールを移動する
-    //   document.addEventListener('mousemove', onMouseMove);
-    
-    //   // (4) ボールをドロップする。不要なハンドラを削除する
-    //   ball.onmouseup = function() {
-    //     document.removeEventListener('mousemove', onMouseMove);
-    //     ball.onmouseup = null;
-    //   };
-    
-    // ball.ondragstart = function() {
-    //   return false;
-    // };
+    console.log("x:" + shiftX,"clientX:"+e.clientX,"Bbox x:"+bbox.x);
 
   };
 
@@ -110,7 +79,6 @@ export default function Weekly() {
         value.endDatetimeScheduled.getTime()) /
         86400000 != 0
   ).length;
-
 
   return (
     <div>
@@ -137,7 +105,6 @@ export default function Weekly() {
             className={classes.gantt}
             height={termlength!! * 40 + 60}
           >
-            {/* ガントチャートの後ろ作成 */}
             <g>
               {/* ガントチャートの表を作成 */}
               {React.Children.toArray(
@@ -167,7 +134,7 @@ export default function Weekly() {
                 )
               )}
             </g>
-            <g>
+
               {/*今日の日付をオレンジ色にする  */}
               {chengeDate.getMonth() == today.getMonth() && (
                 <rect
@@ -178,7 +145,7 @@ export default function Weekly() {
                   className={classes.today_highlight}
                 />
               )}
-            </g>
+
             {/* 日付を表示する土台 */}
             <rect
               x="0"
@@ -204,6 +171,7 @@ export default function Weekly() {
               ))
             )}
 
+            {/* 日付の表示 */}
             {React.Children.toArray(
               [...Array(7)].map((_: undefined, idx: number) =>
                 (
@@ -250,6 +218,7 @@ export default function Weekly() {
                 })()
               )
             )}
+
             {/* termの内容を表示 */}
             <g>
               {React.Children.toArray(
@@ -280,6 +249,7 @@ export default function Weekly() {
                               ry="3"
                               id={value.id.toString()}
                               className={classes.bar}
+                              onMouseDown={drag}
                             />
                             {/* termの名前表示 */}
                             <text
@@ -294,6 +264,7 @@ export default function Weekly() {
                               {value.name}
                             </text>
                           </g>
+
                           {/* termの範囲移動させる */}
                           <g className="handle-group">
                             <rect
@@ -307,7 +278,6 @@ export default function Weekly() {
                               ry="3"
                               id={value.id.toString()}
                               className={classes.handle_left}
-                              onMouseDown={drag}
                             />
                             <rect
                               x={((endday - weekstart) / 86400000) * 14.2 + "%"}
@@ -318,7 +288,6 @@ export default function Weekly() {
                               ry="3"
                               id={value.id.toString()}
                               className={classes.handle_right}
-                              onMouseDown={drag}
                             />
                           </g>
                         </g>

@@ -81,6 +81,9 @@ export const useStyles = makeStyles(() =>
       stroke: "#000",
       strokeWidth: 0.3,
       userSelect: "none",
+      zIndex: 1,
+      position: "absolute",
+      resize: "horizontal",
     },
     bar_wrapper: {
       cursor: "pointer",

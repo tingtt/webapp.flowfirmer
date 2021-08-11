@@ -1,4 +1,4 @@
-import GanttChart from "./Gantt";
+import GanttChart from "../Target/Gantt";
 import React from 'react';
 import clsx from 'clsx';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
