@@ -236,7 +236,7 @@ export default function ToDoListItem(props: Props) {
                         {/* 日付表示 */}
                         {props.showDate && props.todo.startDatetimeScheduled != undefined && (
                             <span className={classes.detailInfoSpan}>
-                                {props.todo.startDatetimeScheduled.getMonth()}/{props.todo.startDatetimeScheduled.getDate()}
+                                {props.todo.startDatetimeScheduled.getMonth() + 1}/{props.todo.startDatetimeScheduled.getDate()}
                             </span>
                         )}
                         {/* 実行時間によって表示を切り替え（1時間以上かどうか） */}

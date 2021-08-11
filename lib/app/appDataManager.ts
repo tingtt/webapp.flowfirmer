@@ -69,6 +69,7 @@ export default class AppDataManager {
         targetIds?: number[],
         termId?: number,
         repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
+        description = "",
         completed = false
     ) {
         // TODO: APIを叩いてToDoを登録し、IDを取得
@@ -90,6 +91,8 @@ export default class AppDataManager {
             user_id: this.user_id,
 
             name: name,
+
+            description: description,
 
             startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
 
@@ -148,14 +151,102 @@ export default class AppDataManager {
         // TODO: API叩く処理?
         // 更新
         if (this.todos != undefined) {
+            // 新規ToDo用の値を保持するフィールド
+            var newName = "";
+            var description: string | undefined;
+            var date = new Date();
+            var timeSetted = false;
+            var processingTime: number | undefined;
+            var interval: "Daily" | "Weekly" | "Monthly" = "Daily";
+            var repeatDay: number[] = [];
+            var targetList: number[] = [];
+            var termId: number | undefined;
+            // 新規ToDoを追加するかどうかのフラグ
+            var flg = false;
+
             this.todos = this.todos.map(value => {
                 if (value.id == id) {
                     value.completed = !value.completed;
                     // 完了状態更新ログ
                     this.todoCompletionStateToggledTodoIds.push(value.id);
+                    // リピート設定をしているToDoを完了にしたときに次のToDoを登録する
+                    if (value.completed && value.startDatetimeScheduled != undefined && value.repeatPattern != undefined) {
+                        date = new Date(value.startDatetimeScheduled);
+                        // console.log(value.repeatPattern);
+                        // console.log(value.repeatDayForWeekly);
+                        // console.log(date);
+                        // console.log("↓");
+                        // 繰り返しパターンごとに処理
+                        switch (value.repeatPattern) {
+                            case 'Daily':
+                                // 次の日に新規ToDo
+                                // 1日加算
+                                date.setDate( date.getDate() + 1 );
+                                // 月の繰り上がり
+                                if (date < value.startDatetimeScheduled) {
+                                    date.setMonth( date.getMonth() + 2 );
+                                }
+                                break;
+                            case 'Monthly':
+                                // 翌月の同じ日に新規ToDo
+                                // 1ヶ月加算
+                                // TODO: 月末時の日付のズレを修正（繰り返し情報に日付を追加する）
+                                date.setMonth( date.getMonth() + 1 );
+                                break;
+                            case 'Weekly':
+                                if (value.repeatDayForWeekly != undefined && value.repeatDayForWeekly.filter(dayNum => dayNum <= 6 && dayNum >= 0).length != 0) {
+                                    // 次の指定曜日に新規ToDo
+                                    do {
+                                        // 指定している曜日になるまで日付を加算
+                                        date.setDate(date.getDate() + 1);
+                                        // 月の繰り上がり
+                                        if (date < value.startDatetimeScheduled) {
+                                            date.setMonth( date.getMonth() + 2 );
+                                        }
+                                    } while (!value.repeatDayForWeekly.includes(date.getDay()));
+                                    break
+                                }
+                                // 翌週の同じ曜日に新規ToDo
+                                date.setDate( date.getDate() + 7 );
+                                // 月の繰り上がり
+                                if (date < value.startDatetimeScheduled) {
+                                    date.setMonth( date.getMonth() + 2 );
+                                }
+                                break;
+                        }
+                        // console.log(date);
+                        // 新規ToDoの情報
+                        newName = value.name;
+                        description = value.description;
+                        timeSetted = value.timeInfoExisted;
+                        processingTime = value.processingTimeScheduled;
+                        targetList = value.targetList != undefined ? value.targetList?.map(target => target.id) : [];
+                        termId = value.term?.id;
+                        interval = value.repeatPattern;
+                        repeatDay = value.repeatDayForWeekly != undefined ? value.repeatDayForWeekly : [];
+                        flg = true;
+
+                        // このToDoの繰り返し情報の削除
+                        value.repeatPattern = undefined;
+                        value.repeatDayForWeekly = undefined;
+                    }
                 }
                 return value;
             })
+
+            // 新規ToDoの追加
+            if (flg) {
+                this.registerTodo(
+                    newName,
+                    {date, timeSetted},
+                    processingTime,
+                    targetList,
+                    termId,
+                    interval == 'Weekly' ? {interval, repeatDay} : {interval},
+                    description,
+                    false
+                );
+            }
         }
     }
 
