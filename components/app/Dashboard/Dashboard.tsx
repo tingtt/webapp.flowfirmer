@@ -23,6 +23,7 @@ import { mainListItems, secondaryListItems } from './graph/listItems';
 import Chart from './graph/Chart';
 import Deposits from './graph/Deposits';
 import Orders from './graph/Orders';
+import {element, func, number} from "prop-types";
 
 function Copyright() {
     return (
@@ -147,6 +148,82 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+export type Patients = {
+    date: string,
+    data: Array<any>
+};
+const JsonData = {
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
+    "data": {
+        "todoId": "6108dec3999f8d48ab580a19",
+        "checkInDateTime": "2021-12-01T03:24:00",
+        "targets": ["60ef8fc17540ec361fa9a3df"],
+        "statistics":{
+            "6108de34999f8dd93b580a17":[
+                {
+                    "targetId": "1",
+                    "name": "testsample1",
+                    "unitname": "tete",
+                    "statisticsRule": "test",
+                    "defaultValue": 10,
+                    "value": 5,
+                    "feelingText": "testtext",
+                    "feelingName": "testName",
+                    "positivePercent": 10,
+                    "negativePercent": 5,
+                    "recordingDateTime": "2021-12-01T03:24:00"
+                },
+                {
+                    "targetId": "2",
+                    "name": "testsample1",
+                    "unitname": "tete2",
+                    "statisticsRule": "test2",
+                    "defaultValue": 10,
+                    "value": 7,
+                    "feelingText": "testtext2",
+                    "feelingName": "testName2",
+                    "positivePercent": 10,
+                    "negativePercent": 5,
+                    "recordingDateTime": "2021-12-01T03:24:00"
+                }
+            ],
+            "6108de34999f8d83918f580a":[
+                {
+                    "targetId": "11",
+                    "name": "testsample2",
+                    "unitname": "tete3",
+                    "statisticsRule": "test3",
+                    "defaultValue": 10,
+                    "value": 2,
+                    "feelingText": "testtext3",
+                    "feelingName": "testName3",
+                    "positivePercent": 10,
+                    "negativePercent": 5,
+                    "recordingDateTime": "2021-12-01T03:24:00"
+                },
+                {
+                    "targetId": "12",
+                    "name": "testsample2",
+                    "unitname": "tete4",
+                    "statisticsRule": "test4",
+                    "defaultValue": 10,
+                    "value": 5,
+                    "feelingText": "testtext4",
+                    "feelingName": "testName4",
+                    "positivePercent": 10,
+                    "negativePercent": 5,
+                    "recordingDateTime": "2021-12-01T03:24:00"
+                }
+            ]
+        }
+    }
+}
+
+function createData(time: Date, amount: string | number) {
+    return { time, amount };
+}
+
+
 export default function Dashboard() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
@@ -158,49 +235,46 @@ export default function Dashboard() {
     // };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    //追加
+    console.log("sampleGraph")
+    var nameArray = []
+    var name = ""
+    var allData = []
+    var data = []
+    var tempData = {}
+    // console.log("受けとるJson")
+    // console.log(JsonData)
+    // console.log("空の配列宣言")
+    // console.log(data)
+
+    //["key", "key"]
+    Object.keys(JsonData.data.statistics).forEach(key =>{
+        JsonData.data.statistics[key].forEach(element =>{
+            //tempData["date"] = element.recordingDateTime
+            // tempData["date"] = element.recordingDateTime
+            // tempData["value"] = element.value
+            data.push(createData(element.recordingDateTime,element.value))
+            tempData = {}
+            name = element.name
+        })
+        nameArray.push(name)
+        allData.push(data)
+        data = []
+        name = ""
+    })
+    console.log(data)
+    console.log(allData)
+
+    function graph(index){
+        return <Grid item xs={12} md={6} lg={6}><Paper className={fixedHeightPaper}><Chart title={nameArray[index]} graphData={allData[index]}/></Paper></Grid>
+    }
+
+
     return (
         <div>
 
         <div className={classes.root}>
             <CssBaseline />
-            {/*<AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>*/}
-            {/*    <Toolbar className={classes.toolbar}>*/}
-            {/*        <IconButton*/}
-            {/*            edge="start"*/}
-            {/*            color="inherit"*/}
-            {/*            aria-label="open drawer"*/}
-            {/*            onClick={handleDrawerOpen}*/}
-            {/*            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}*/}
-            {/*        >*/}
-            {/*            <MenuIcon />*/}
-            {/*        </IconButton>*/}
-            {/*        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>*/}
-            {/*            Dashboard?*/}
-            {/*        </Typography>*/}
-            {/*        <IconButton color="inherit">*/}
-            {/*            <Badge badgeContent={4} color="secondary">*/}
-            {/*                <NotificationsIcon />*/}
-            {/*            </Badge>*/}
-            {/*        </IconButton>*/}
-            {/*    </Toolbar>*/}
-            {/*</AppBar>*/}
-            {/*<Drawer*/}
-            {/*    variant="permanent"*/}
-            {/*    classes={{*/}
-            {/*        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),*/}
-            {/*    }}*/}
-            {/*    open={open}*/}
-            {/*>*/}
-            {/*    <div className={classes.toolbarIcon}>*/}
-            {/*        <IconButton onClick={handleDrawerClose}>*/}
-            {/*            <ChevronLeftIcon />*/}
-            {/*        </IconButton>*/}
-            {/*    </div>*/}
-            {/*    <Divider />*/}
-            {/*    <List>{mainListItems}</List>*/}
-            {/*    <Divider />*/}
-            {/*    <List>{secondaryListItems}</List>*/}
-            {/*</Drawer>*/}
             <main className={classes.content}>
 
                 {/*<div className={classes.appBarSpacer} />*/}
@@ -212,18 +286,31 @@ export default function Dashboard() {
                         {/*        <GanttChart/>*/}
                         {/*    </Paper>*/}
                         {/*</Grid>*/}
+                        {
+                            graph(0)
+                        }
+                        {
+                            graph(1)
+                        }
+
                         {/* Chart */}
-                        <Grid item xs={12} md={6} lg={8}>
-                            <Paper className={fixedHeightPaper}>
-                                <Chart />
-                            </Paper>
-                        </Grid>
+                        {/*<Grid item xs={12} md={12} lg={6}>*/}
+                        {/*    <Paper className={fixedHeightPaper}>*/}
+                        {/*        /!* 子に渡す値を設定 *!/*/}
+                        {/*        <Chart title={nameArray[0]} graphData={allData[0]}/>*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
+                        {/*<Grid item xs={12} md={6} lg={6}>*/}
+                        {/*    <Paper className={fixedHeightPaper}>*/}
+                        {/*        <Chart title={nameArray[1]} graphData={allData[1]}/>*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
                         {/* Recent Deposits */}
-                        <Grid item xs={12} md={6} lg={4}>
-                            <Paper className={fixedHeightPaper}>
-                                <Deposits />
-                            </Paper>
-                        </Grid>
+                        {/*<Grid item xs={12} md={6} lg={4}>*/}
+                        {/*    <Paper className={fixedHeightPaper}>*/}
+                        {/*        <Deposits />*/}
+                        {/*    </Paper>*/}
+                        {/*</Grid>*/}
                         {/*Test Add*/}
                         {/*<Grid item xs={12} md={6} lg={6}>*/}
                         {/*    <Paper className={fixedHeightPaper}>*/}
