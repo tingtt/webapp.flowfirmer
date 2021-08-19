@@ -80,6 +80,8 @@ export default function registerComponent() {
     /**
      * entryValidation
      *
+     * 入力値を検証し、メッセージの更新とフォーカス移動を行う。
+     *
      * @returns boolean
      */
     const entryValidation = () => {
@@ -129,6 +131,11 @@ export default function registerComponent() {
         return true;
     }
 
+    /**
+     * register
+     *
+     * 入力値を検証後、APIを叩き、emailの値を保持して'/login'に遷移
+     */
     const register = () => {
         if (!entryValidation()) {
             return;
