@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
+import { useRouter } from 'next/dist/client/router';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,9 +26,16 @@ const useStyles = makeStyles((theme: Theme) =>
         passwordTextField: {
             marginTop: theme.spacing(2),
         },
+        msgField: {
+            height: theme.spacing(6),
+            display: 'flex',
+            "& > span": {
+                marginTop: 'auto',
+                color: theme.palette.error.main
+            }
+        },
         signInButton: {
             height: theme.spacing(6),
-            marginTop: theme.spacing(6),
             marginBottom: theme.spacing(2),
         }
     })
@@ -41,6 +49,60 @@ export default function registerComponent() {
     const [email, setEmail] = React.useState("");
     const [pass, setPass] = React.useState("");
     const [confirmPass, setConfirmPass] = React.useState("");
+
+    const [message, setMessage] = React.useState("");
+
+    const router = useRouter();
+
+    /**
+     * comparePass
+     *
+     * パスの一致確認
+     * パラメータがない場合はstateの値を確認する
+     *
+     * @param pair { a: string, b: string }
+     * @returns boolean
+     */
+    const comparePass = (pair?: { a: string, b: string }) => {
+        if (pair != undefined) {
+            return pair.a == pair.b;
+        } else {
+            return pass != "" && pass == confirmPass;
+        }
+    }
+
+    /**
+     * entryValidation
+     *
+     * @returns boolean
+     */
+    const entryValidation = () => {
+        if (name == "") {
+            setMessage("Please enter your name.");
+            return false;
+        }
+        if (email == "") {
+            setMessage("Please enter your email address.");
+            return false;
+        }
+        if (!/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}.[A-Za-z0-9]{1,}$/.test(email)) {
+            setMessage("Please enter a valid email address.");
+            return false;
+        }
+        if (pass == "") {
+            setMessage("The password field is required.");
+            return false;
+        }
+        if (pass.length < 8) {
+            setMessage("Password must be at least 8 characters");
+            return false;
+        }
+        if (!comparePass()) {
+            setMessage("The password and confirmation password do not match.");
+            return false;
+        }
+        return true;
+    }
 
     return (
         <div
@@ -58,6 +120,7 @@ export default function registerComponent() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setName(e.target.value);
                 }}
+                autoFocus
             />
             <TextField
                 className={classes.mailField}
@@ -71,7 +134,7 @@ export default function registerComponent() {
             <TextField
                 className={classes.passwordTextField}
                 variant='outlined'
-                placeholder='Password'
+                placeholder='Password (more than 8 chars)'
                 type='password'
                 value={pass}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,10 +151,17 @@ export default function registerComponent() {
                     setConfirmPass(e.target.value);
                 }}
             />
+            <div className={classes.msgField}>
+                <span>{message}</span>
+            </div>
             <Button
                 className={classes.signInButton}
                 variant="contained"
                 color="primary"
+                onClick={() => {
+                    if (entryValidation()) {
+                    }
+                }}
             >
                 Sign up
             </Button>
