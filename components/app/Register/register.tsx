@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
 import { useRouter } from 'next/dist/client/router';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -104,6 +105,40 @@ export default function registerComponent() {
         return true;
     }
 
+    const register = () => {
+        if (!entryValidation()) {
+            return;
+        }
+
+        var args = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+            name: name,
+            password: pass,
+            email: email
+        };
+
+        axios.post("http://localhost/api/new_user_reg", args)
+            .then(function (response) {
+                // if (response.data.status == 200 && typeof response.data.token === "string") {
+                if (response.data.status == 200) {
+                    router.push(
+                        {
+                            pathname: "/login",
+                            query: { email: email },
+                        },
+                        "/login"
+                    );
+                } else {
+                    setMessage(response.data["message"]);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
     return (
         <div
             className={classes.root}
@@ -158,10 +193,7 @@ export default function registerComponent() {
                 className={classes.signInButton}
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                    if (entryValidation()) {
-                    }
-                }}
+                onClick={register}
             >
                 Sign up
             </Button>
