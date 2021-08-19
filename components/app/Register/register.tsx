@@ -1,7 +1,7 @@
+import React from 'react';
 import Link from 'next/link'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,6 +37,11 @@ export default function registerComponent() {
 
     const classes = useStyles();
 
+    const [name, setName] = React.useState("");
+    const [email, setEmail] = React.useState("");
+    const [pass, setPass] = React.useState("");
+    const [confirmPass, setConfirmPass] = React.useState("");
+
     return (
         <div
             className={classes.root}
@@ -49,23 +54,39 @@ export default function registerComponent() {
                 className={classes.nameField}
                 variant='outlined'
                 placeholder='Name'
+                value={name}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setName(e.target.value);
+                }}
             />
             <TextField
                 className={classes.mailField}
                 variant='outlined'
                 placeholder='Email'
+                value={email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setEmail(e.target.value);
+                }}
             />
             <TextField
                 className={classes.passwordTextField}
                 variant='outlined'
                 placeholder='Password'
                 type='password'
+                value={pass}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setPass(e.target.value);
+                }}
             />
             <TextField
                 className={classes.passwordTextField}
                 variant='outlined'
                 placeholder='Comfirm Password'
                 type='password'
+                value={confirmPass}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setConfirmPass(e.target.value);
+                }}
             />
             <Button
                 className={classes.signInButton}
