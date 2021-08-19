@@ -18,6 +18,14 @@ const useStyles = makeStyles((theme: Theme) =>
         titleDiv: {
             marginBottom: 'unset',
         },
+        loginLinkSpan: {
+            color: theme.palette.info.dark,
+            textDecoration: 'underline',
+            cursor: 'pointer',
+            "&:active": {
+                color: theme.palette.error.main,
+            }
+        },
         nameField: {
             marginTop: theme.spacing(5),
         },
@@ -181,7 +189,21 @@ export default function registerComponent() {
         >
             <h2 className={classes.titleDiv} >Create an account</h2>
             <div>
-                <span>or </span><Link href="/login">sign in</Link>
+                <span>or </span>
+                <span
+                    className={classes.loginLinkSpan}
+                    onClick={() => {
+                        router.push(
+                            {
+                                pathname: "/login",
+                                query: { email: message == "メールアドレスがすでに登録されています" ? email : "" },
+                            },
+                            "/login"
+                        );
+                    }}
+                >
+                    sign in
+                </span>
             </div>
             <TextField
                 className={classes.nameField}

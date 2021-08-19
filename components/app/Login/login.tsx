@@ -43,10 +43,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function loginComponent() {
 
     const router = useRouter();
+    const {query} = router;
 
     const classes = useStyles();
 
-    const [email, setEmail] = React.useState("");
+    const [email, setEmail] = React.useState(typeof query.email == "string" ? query.email : "");
     const [pass, setPass] = React.useState("");
 
     const [message, setMessage] = React.useState("");
