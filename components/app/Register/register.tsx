@@ -53,6 +53,11 @@ export default function registerComponent() {
 
     const [message, setMessage] = React.useState("");
 
+    const nameInputRef = React.useRef<HTMLInputElement>();
+    const emailInputRef = React.useRef<HTMLInputElement>();
+    const passInputRef = React.useRef<HTMLInputElement>();
+    const confirmPassInputRef = React.useRef<HTMLInputElement>();
+
     const router = useRouter();
 
     /**
@@ -80,28 +85,47 @@ export default function registerComponent() {
     const entryValidation = () => {
         if (name == "") {
             setMessage("Please enter your name.");
+            if (nameInputRef.current != undefined) {
+                nameInputRef.current.focus();
+            }
             return false;
         }
         if (email == "") {
             setMessage("Please enter your email address.");
+            if (emailInputRef.current != undefined) {
+                emailInputRef.current.focus();
+            }
             return false;
         }
         if (!/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}.[A-Za-z0-9]{1,}$/.test(email)) {
             setMessage("Please enter a valid email address.");
+            if (emailInputRef.current != undefined) {
+                emailInputRef.current.focus();
+            }
             return false;
         }
         if (pass == "") {
             setMessage("The password field is required.");
+            if (passInputRef.current != undefined) {
+                passInputRef.current.focus();
+            }
             return false;
         }
         if (pass.length < 8) {
             setMessage("Password must be at least 8 characters");
+            if (passInputRef.current != undefined) {
+                passInputRef.current.focus();
+            }
             return false;
         }
         if (!comparePass()) {
             setMessage("The password and confirmation password do not match.");
+            if (confirmPassInputRef.current != undefined) {
+                confirmPassInputRef.current.focus();
+            }
             return false;
         }
+        setMessage("");
         return true;
     }
 
@@ -132,6 +156,11 @@ export default function registerComponent() {
                     );
                 } else {
                     setMessage(response.data["message"]);
+                    if (response.data["message"] == "メールアドレスがすでに登録されています") {
+                        if (emailInputRef.current != undefined) {
+                            emailInputRef.current.focus();
+                        }
+                    }
                 }
             })
             .catch(function (error) {
@@ -156,6 +185,7 @@ export default function registerComponent() {
                     setName(e.target.value);
                 }}
                 autoFocus
+                inputRef={nameInputRef}
             />
             <TextField
                 className={classes.mailField}
@@ -165,6 +195,7 @@ export default function registerComponent() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setEmail(e.target.value);
                 }}
+                inputRef={emailInputRef}
             />
             <TextField
                 className={classes.passwordTextField}
@@ -175,6 +206,7 @@ export default function registerComponent() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setPass(e.target.value);
                 }}
+                inputRef={passInputRef}
             />
             <TextField
                 className={classes.passwordTextField}
@@ -185,6 +217,7 @@ export default function registerComponent() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setConfirmPass(e.target.value);
                 }}
+                inputRef={confirmPassInputRef}
             />
             <div className={classes.msgField}>
                 <span>{message}</span>
