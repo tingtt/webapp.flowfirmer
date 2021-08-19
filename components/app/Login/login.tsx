@@ -51,24 +51,55 @@ export default function loginComponent() {
 
     const [message, setMessage] = React.useState("");
 
-    // SignInボタンの切り替え
-    const [buttonDisabled, setButtonDisabled] = React.useState(true);
+    const emailInputRef = React.useRef<HTMLInputElement>();
+    const passInputRef = React.useRef<HTMLInputElement>();
 
-    const checkEntries = (entryEmail?: string, entryPass?: string) => {
-        if (entryEmail == undefined) {
-            entryEmail = email;
+    /**
+     * entryValidation
+     *
+     * 入力値を検証し、メッセージの更新とフォーカス移動を行う。
+     *
+     * @returns boolean
+     */
+    const entryValidation = () => {
+        if (email == "") {
+            setMessage("Please enter your email address.");
+            if (emailInputRef.current != undefined) {
+                emailInputRef.current.focus();
+            }
+            return false;
         }
-        if (entryPass == undefined) {
-            entryPass = pass;
+        if (!/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}.[A-Za-z0-9]{1,}$/.test(email)) {
+            setMessage("Please enter a valid email address.");
+            if (emailInputRef.current != undefined) {
+                emailInputRef.current.focus();
+            }
+            return false;
         }
-        if (entryEmail == "" || entryPass == "" || !/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]{1,}.[A-Za-z0-9]{1,}$/.test(entryEmail)) {
-            setButtonDisabled(true);
-        } else {
-            setButtonDisabled(false);
+        if (pass == "") {
+            setMessage("Please enter your password.");
+            if (passInputRef.current != undefined) {
+                passInputRef.current.focus();
+            }
+            return false;
         }
+        setMessage("");
+        return true;
     }
 
+    /**
+     * verify
+     *
+     * 入力値を検証後、APIを叩き、tokenを取得して'/app'に遷移
+     *
+     * @param email string
+     * @param pass string
+     */
     const verify = (email: string, pass: string) => {
+        if (!entryValidation()) {
+            return;
+        }
+
         var args = {
             headers: {
                 "Content-Type": "application/json",
@@ -111,8 +142,8 @@ export default function loginComponent() {
                 value={email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setEmail(e.target.value);
-                    checkEntries(e.target.value, pass);
                 }}
+                inputRef={emailInputRef}
             />
             <TextField
                 className={classes.passwordTextField}
@@ -122,13 +153,13 @@ export default function loginComponent() {
                 value={pass}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setPass(e.target.value);
-                    checkEntries(email, e.target.value);
                 }}
                 onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                    if (e.key === 'Enter' && !buttonDisabled) {
+                    if (e.key === 'Enter') {
                         verify(email, pass);
                     }
                 }}
+                inputRef={passInputRef}
             />
             <div className={classes.msgField}>
                 <span>{message}</span>
@@ -138,7 +169,6 @@ export default function loginComponent() {
                 variant="contained"
                 color="primary"
                 onClick={() => verify(email, pass)}
-                disabled={buttonDisabled}
             >
                 Sign in
             </Button>
