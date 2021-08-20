@@ -13,8 +13,14 @@ import TodayView from './Today/Today';
 import WeeklyView from './Weekly/Weekly';
 import TargetView from './Target/Target';
 import DashboardView from './Dashboard/Dashboard';
+import { useRouter } from 'next/dist/client/router';
 
 export default function Layout() {
+
+    const router = useRouter();
+    const {query} = router;
+
+    console.log(query.token);
 
     const [navigationDrawerOpen, setNavigationDrawerOpen] = React.useState(true);
     const [navigationState, setNavigationState] = React.useState<NavigationState>({name: 'All'})
