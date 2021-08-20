@@ -158,7 +158,7 @@ export default function registerComponent() {
             email: email
         };
 
-        axios.post("http://localhost/api/new_user_reg", args)
+        axios.post(`/api/new_user_reg`, args)
             .then(function (response) {
                 // if (response.data.status == 200 && typeof response.data.token === "string") {
                 if (response.data.status == 200) {
@@ -180,6 +180,7 @@ export default function registerComponent() {
             })
             .catch(function (error) {
                 console.log(error);
+                setMessage("Failed to access api.");
             });
     }
 

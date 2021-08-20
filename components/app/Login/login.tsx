@@ -109,7 +109,7 @@ export default function loginComponent() {
             password: pass,
         };
 
-        axios.post("http://localhost/api/login", args)
+        axios.post(`/api/login`, args)
             .then(function (response) {
                 if (response.data.status == 200 && typeof response.data.token === "string") {
                     router.push(
@@ -125,6 +125,7 @@ export default function loginComponent() {
             })
             .catch(function (error) {
                 console.log(error);
+                setMessage("Failed to access api.");
             });
     }
 
