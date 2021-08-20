@@ -593,6 +593,17 @@ export const sampleArchives: Archive[] = [
 
         targets: [sampleTargets[0]],
 
+        outcomes: [
+            {
+                scheme: sampleOutcomeSchemes[0],
+                value: 100
+            },
+            {
+                scheme: sampleOutcomeSchemes[1],
+                value: 150
+            }
+        ],
+
         feelingList: [
             {
                 feeling: sampleFeelingTypes[0],
