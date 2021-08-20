@@ -61,16 +61,16 @@ export default function Weekly() {
   };
 
   //termのドラッグ＆ドロップ処理
-  const drag = (e: React.MouseEvent<SVGRectElement>) => {
-    let bar = (document.getElementById(e.currentTarget.id) as any)
-    let bbox = bar.getBBox();
+  // const drag = (e: React.MouseEvent<SVGRectElement>) => {
+  //   let bar = (document.getElementById(e.currentTarget.id) as any)
+  //   let bbox = bar.getBBox();
 
-    let shiftX = e.clientX - bbox.x;
-    e.clientX = 100
+  //   let shiftX = e.clientX - bbox.x;
+  //   e.clientX = 100
 
-    console.log("x:" + shiftX,"clientX:"+e.clientX,"Bbox x:"+bbox.x);
+  //   console.log("x:" + shiftX,"clientX:"+e.clientX,"Bbox x:"+bbox.x);
 
-  };
+  // };
 
   //termの数
   const termlength = appDataManager.terms?.filter(
@@ -249,7 +249,7 @@ export default function Weekly() {
                               ry="3"
                               id={value.id.toString()}
                               className={classes.bar}
-                              onMouseDown={drag}
+                              // onMouseDown={drag}
                             />
                             {/* termの名前表示 */}
                             <text

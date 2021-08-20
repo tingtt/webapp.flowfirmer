@@ -2,38 +2,32 @@ import { createStyles, makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles(() =>
   createStyles({
-    root: {
-      height:"100%",
-    },
     gantt_warp: {
       boxShadow: "0px 0px 4px #888",
     },
+    // ガントチャート描画の枠
     gantt_container: {
       fontSize: 12,
-      width: "100%",
       overflow: "auto",
-      msOverflowStyle: 'none',    /* IE, Edge 対応 */
-      scrollbarWidth: 'none', /* Firefox 対応 */
-      "&::-webkit-scrollbar": {  /* Chrome, Safari 対応 */
-          display: 'none',
-      },
+      width: "100%",
+      height: 219,
     },
-    grid_background: {
-      background: "#888",
+    // ガントチャート
+    gantt: {
+      width: "100%",
     },
+    // ガントチャートの横一列
     grid_row: {
-      fill: "#ffffff",
-      "&:nth-child(even)": {
-        fill: "#f5f5f5",
-      },
+      position: "relative",
+      fill: "#f9f9f9",
+      // stroke: "#cccccc"
     },
-    row_line: {
-      stroke: "#ebeff2",
-    },
+    // 今日の日付
     today_highlight: {
       fill: "#f60",
       opacity: 0.5,
     },
+    //日付表示
     grid_header: {
       fill: "#ffffff",
       stroke: "#e0e0e0",
@@ -42,8 +36,10 @@ export const useStyles = makeStyles(() =>
     tick_thick: {
       strokeWidth: 0.4,
     },
+    // 縦線の色
     tick: {
       stroke: "#000",
+      position: "relative",
       strokeWidth: 0.2,
     },
     lower_text: {
@@ -52,11 +48,13 @@ export const useStyles = makeStyles(() =>
       textAnchor: "middle",
     },
     bar: {
-      fill: "#b8c2cc",
-      stroke: "#8D99A6",
-      strokeWidth: 0,
-      msTransition: "strokeWidth .3e ease",
+      fill: "#FFF",
+      stroke: "#000",
+      strokeWidth: 0.3,
       userSelect: "none",
+      zIndex: 1,
+      position: "absolute",
+      resize: "horizontal",
     },
     bar_wrapper: {
       cursor: "pointer",
@@ -83,15 +81,6 @@ export const useStyles = makeStyles(() =>
       visibility: "hidden",
       transition: "opacity .3s ease",
     },
-    popup_wrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    background: 'rgba(0,0,0,0.8)',
-    padding: 0,
-    color: '#959da5',
-    borderRadius: '3px',
-  },
   })
 );
 
