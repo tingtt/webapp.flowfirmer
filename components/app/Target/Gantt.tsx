@@ -74,6 +74,7 @@ export default function GanttChart() {
       let day = start.getDay();
       start.setDate(start.getDate() + (day ? 0 - day : 0));
       setDatelen({index: [7*(changeNum+2)]})
+      setendall(7*(changeNum+2))
       console.log(Datelen,start.getDate());
     }
   };
@@ -223,7 +224,7 @@ export default function GanttChart() {
                           // 日付を書く場所
                           <text
                             key={idx}
-                            x={19 + ++endate * 40}
+                            x={19+ (endate++) * 40}
                             y="50"
                             className={classes.lower_text}
                           >
@@ -243,7 +244,7 @@ export default function GanttChart() {
                         return (
                           <text
                             key={idx}
-                            x={19 + ++endate * 40}
+                            x={19+ (endate++) * 40}
                             y="50"
                             className={classes.lower_text}
                           >
