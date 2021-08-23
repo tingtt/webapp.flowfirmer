@@ -7,16 +7,16 @@ const appIndex: NextPage = () => {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-    if (context.res) {
-        // Without token makes page redirection.
-        if (context.query.token == undefined || context.query.token == "") {
-            context.res.statusCode = 302;
-            context.res.setHeader('location', '/login');
-            context.res.end();
-        }
-    }
-    return { props: {} };
-}
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     if (context.res) {
+//         // Without token makes page redirection.
+//         if (context.query.token == undefined || context.query.token == "") {
+//             context.res.statusCode = 302;
+//             context.res.setHeader('location', '/login');
+//             context.res.end();
+//         }
+//     }
+//     return { props: {} };
+// }
 
 export default appIndex
