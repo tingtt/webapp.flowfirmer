@@ -48,19 +48,73 @@ export default class AppDataManager {
     // TODO: ユーザーの登録データを取得
 
     private getTargets() {
+        axios.post(`/api/getTarget`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleTargets.filter(value => value.user_id == this.user_id);
     }
 
     private getToDos() {
+        axios.post(`/api/getTodoByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleToDos.filter(value => value.user_id == this.user_id);
     }
 
     private getTerms() {
+        axios.post(`/api/getTermByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleTerms.filter(value => value.user_id == this.user_id);
     }
 
     private getHabitReminds() {
+        axios.post(`/api/getHabitByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleHabitReminds.filter(value => value.user_id == this.user_id);
+    }
+
+    private getArchives() {
+        axios.post(`/api/getTodoArchiveByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        return sampleArchives.filter(value => value.user_id == this.user_id);
     }
 
     /**
@@ -302,10 +356,6 @@ export default class AppDataManager {
                 this.todos.push(poppedTodo);
             }
         }
-    }
-
-    private getArchives() {
-        return sampleArchives.filter(value => value.user_id == this.user_id);
     }
 
     /**
