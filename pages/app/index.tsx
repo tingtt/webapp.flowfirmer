@@ -7,14 +7,11 @@ interface ServerSideIndexProps{
 }
 
 const appIndex = ({ token }: ServerSideIndexProps) => {
-    console.log(`appIndex: ${token}`);
-    const appDataManager: AppDataManager = (() => {
-        try {
-            return  AppDataManager.generateInstance(token);
-        } catch (e) {
-            return  AppDataManager.getInstance();
-        }
-    })();
+    try {
+        AppDataManager.generateInstance(token);
+    } catch (e) {
+        AppDataManager.getInstance();
+    }
     AppDataManager.validateToken(token);
     return (
         <Layout />
