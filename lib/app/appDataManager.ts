@@ -1,3 +1,4 @@
+import axios from "axios";
 import { sampleArchives, sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
 import { Percentage } from "../interface/archive";
 import { Archive, FeelingType, HabitRemind, OutcomeScheme, Target, Term, ToDo } from "../interface/index";
@@ -6,14 +7,14 @@ export default class AppDataManager {
 
     private static _instance: AppDataManager
 
-    public static generateInstance(user_id: number): AppDataManager {
+    public static generateInstance(token: string): AppDataManager {
         // インスタンスが既に生成されている場合にエラー
         if (this._instance) {
             throw new Error("AppDataManager instance already exists.");
         }
 
         console.log("Generating 'AppDataManager' instance.");
-        this._instance = new AppDataManager(user_id);
+        this._instance = new AppDataManager(token);
 
         return this._instance;
     }
@@ -26,6 +27,17 @@ export default class AppDataManager {
     }
 
     private user_id: number;
+
+    private token: string;
+
+    public static async validateToken(token: string) {
+        try {
+            await axios.post(`/api/toOngoingData`, { token });
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
 
     public targets?: Target[];
     public todos?: ToDo[];
@@ -411,8 +423,9 @@ export default class AppDataManager {
         }
     }
 
-    private constructor(user_id: number) {
-        this.user_id = user_id;
+    private constructor(token: string) {
+        this.user_id = 0;
+        this.token = token;
 
         this.targets = this.getTargets();
         this.todos = this.getToDos();

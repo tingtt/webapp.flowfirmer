@@ -80,7 +80,7 @@ export default function Today() {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(0)
+            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
         } catch (e) {
             return  AppDataManager.getInstance();
         }
