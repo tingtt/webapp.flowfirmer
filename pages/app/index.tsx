@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import Layout from "../../components/app/Layout";
+import AppDataManager from "../../lib/app/appDataManager";
 
 interface ServerSideIndexProps{
     token: string
@@ -7,7 +8,14 @@ interface ServerSideIndexProps{
 
 const appIndex = ({ token }: ServerSideIndexProps) => {
     console.log(`appIndex: ${token}`);
-    // TODO: appDataManagerにTokenを渡して検証
+    const appDataManager: AppDataManager = (() => {
+        try {
+            return  AppDataManager.generateInstance(token);
+        } catch (e) {
+            return  AppDataManager.getInstance();
+        }
+    })();
+    AppDataManager.validateToken(token);
     return (
         <Layout />
     );
