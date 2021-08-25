@@ -182,6 +182,29 @@ export default class AppDataManager {
         // 新規Targetを追加
         this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
 
+        axios.post('/api/saveTodo', {
+            "token": this.token,
+            "data": {
+                "name": name,
+                "startDatetimeScheduled": datetime != undefined ? datetime.date : undefined,
+                "timeInfoExisted": datetime != undefined ? datetime.timeSetted : false,
+                "processingTimeScheduled": processingTime,
+                "repeatPattern": repeatPattern != undefined ? repeatPattern.interval : undefined,
+                "repeatDayForWeekly": repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+                "targetList": targetIds,
+                "term": termId,
+                "completed": completed,
+                "archived": false,
+            }
+        }).then((res) => {
+            if (res.data.status == 200) {
+                console.log(res.data.objectId);
+                // TODO: AppDataManager内でToDoを追加
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+
         return newTodo;
     }
 
