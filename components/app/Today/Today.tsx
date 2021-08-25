@@ -117,7 +117,7 @@ export default function Today() {
                     >
                         {/* 日時未指定のToDos */}
                         {todos.filter(value => !value.completed && value.startDatetimeScheduled == undefined).length > 0 && (
-                            <Collapse in={noDateToDosShown} collapsedHeight="33px">
+                            <Collapse in={noDateToDosShown} collapsedSize="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setNoDateToDosShown(current => !current)}
@@ -154,7 +154,7 @@ export default function Today() {
                             const date = new Date();
                             return value.startDatetimeScheduled.getFullYear() <= date.getFullYear() && value.startDatetimeScheduled.getMonth() <= date.getMonth() && value.startDatetimeScheduled.getDate() < date.getDate();
                         })()).length > 0 && (
-                            <Collapse in={delayedToDosShown} collapsedHeight="33px">
+                            <Collapse in={delayedToDosShown} collapsedSize="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setDelayedToDosShown(current => !current)}
@@ -214,7 +214,7 @@ export default function Today() {
                             return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
 
                         }).length > 0 && (
-                            <Collapse in={todayPendingToDosShown} collapsedHeight="33px">
+                            <Collapse in={todayPendingToDosShown} collapsedSize="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setTodayPendingToDosShown(current => !current)}
@@ -277,7 +277,7 @@ export default function Today() {
                             const date = new Date();
                             return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
                         }).length > 0 && (
-                            <Collapse in={todayCompletedToDosShown} collapsedHeight="33px">
+                            <Collapse in={todayCompletedToDosShown} collapsedSize="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
                                     onClick={() => setTodayCompletedToDosShown(current => !current)}
