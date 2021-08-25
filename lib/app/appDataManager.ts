@@ -391,6 +391,32 @@ export default class AppDataManager {
         // 新規Targetを追加
         this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
 
+        axios.post('/api/saveTarget', {
+            "token": this.token,
+            "data": {
+                "name" : "name",
+                "themeColor" : themeColor != undefined ?
+                    themeColor
+                    :
+                    // テーマカラーが指定されていない場合にカラーコードを生成
+                    {
+                        r: (Math.random() * 0xFF | 0),
+                        g: (Math.random() * 0xFF | 0),
+                        b: (Math.random() * 0xFF | 0)
+                    },
+                "outcomes" : []
+            }
+        }).then((res) => {
+            if (res.data.status == 200) {
+                console.log(res.data.objectId);
+                // TODO: AppDataManager内でTargetを追加
+            } else {
+                console.log(res.data.message._message);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+
         return newTarget;
     }
 
