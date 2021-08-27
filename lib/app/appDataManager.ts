@@ -223,6 +223,32 @@ export default class AppDataManager {
             // 値の更新(IDが一致するものを更新する)
             this.todos.map(value => {
                 if (value.id == updatedValue.id) {
+                    // call api
+                    axios.post('/api/updateTodoByObjectId', {
+                        "token": this.token,
+                        "data": {
+                            "_id": updatedValue.id,
+                            "name": updatedValue.name,
+                            "description": updatedValue.description,
+                            "startDatetimeScheduled": updatedValue.startDatetimeScheduled,
+                            "timeInfoExisted": updatedValue.timeInfoExisted,
+                            "processingTimeScheduled": updatedValue.processingTimeScheduled,
+                            "repeatPattern": updatedValue.repeatPattern,
+                            "repeatDayForWeekly": updatedValue.repeatDayForWeekly,
+                            "targetList": updatedValue.targetList != undefined ? updatedValue.targetList.map(target => target.id) : [],
+                            "term": updatedValue.term?.id,
+                            "completed": updatedValue.completed,
+                            "archived": updatedValue.archived,
+                        }
+                    }).then((res) => {
+                        if (res.data.status == 200) {
+                            console.log(res.data);
+                        } else {
+                            console.log(res.data.message);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                     return updatedValue
                 }
                 return value
@@ -322,6 +348,33 @@ export default class AppDataManager {
                         value.repeatPattern = undefined;
                         value.repeatDayForWeekly = undefined;
                     }
+
+                    // call api
+                    axios.post('/api/updateTodoByObjectId', {
+                        "token": this.token,
+                        "data": {
+                            "_id": value.id,
+                            "name": value.name,
+                            "description": value.description,
+                            "startDatetimeScheduled": value.startDatetimeScheduled,
+                            "timeInfoExisted": value.timeInfoExisted,
+                            "processingTimeScheduled": value.processingTimeScheduled,
+                            "repeatPattern": value.repeatPattern,
+                            "repeatDayForWeekly": value.repeatDayForWeekly,
+                            "targetList": value.targetList != undefined ? value.targetList.map(target => target.id) : [],
+                            "term": value.term?.id,
+                            "completed": value.completed,
+                            "archived": value.archived,
+                        }
+                    }).then((res) => {
+                        if (res.data.status == 200) {
+                            console.log(res.data);
+                        } else {
+                            console.log(res.data.message);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                 }
                 return value;
             })
