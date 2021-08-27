@@ -186,6 +186,7 @@ export default class AppDataManager {
             "token": this.token,
             "data": {
                 "name": name,
+                "description": description,
                 "startDatetimeScheduled": datetime != undefined ? datetime.date : undefined,
                 "timeInfoExisted": datetime != undefined ? datetime.timeSetted : false,
                 "processingTimeScheduled": processingTime,
