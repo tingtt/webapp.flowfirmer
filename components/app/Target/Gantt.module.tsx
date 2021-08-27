@@ -24,7 +24,7 @@ export const useStyles = makeStyles(() =>
     },
     // 今日の日付
     today_highlight: {
-      fill: "#f60",
+      fill: "#f0600080",
       opacity: 0.5,
     },
     //日付表示
