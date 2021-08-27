@@ -421,6 +421,22 @@ export default class AppDataManager {
                 this.deletedToDos.push(poppedTodo);
             }
             this.todos = this.todos.filter(value => value.id != id);
+
+            // call api
+            axios.post('/api/deleteTodoByObjectId', {
+                "token": this.token,
+                "data": {
+                    "_id": id
+                }
+            }).then((res) => {
+                if (res.data.status == 200) {
+                    console.log(res.data);
+                } else {
+                    console.log(res.data.message);
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
         }
     }
 
