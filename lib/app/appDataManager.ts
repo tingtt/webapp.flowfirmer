@@ -448,6 +448,33 @@ export default class AppDataManager {
             const poppedTodo = this.deletedToDos.pop();
             console.log(poppedTodo);
             if (poppedTodo != undefined) {
+                // call api
+                axios.post('/api/saveTodo', {
+                    "token": this.token,
+                    "data": {
+                        "name": poppedTodo.name,
+                        "description": poppedTodo.description,
+                        "startDatetimeScheduled": poppedTodo.startDatetimeScheduled,
+                        "timeInfoExisted": poppedTodo.timeInfoExisted,
+                        "processingTimeScheduled": poppedTodo.processingTimeScheduled,
+                        "repeatPattern": poppedTodo.repeatPattern,
+                        "repeatDayForWeekly": poppedTodo.repeatDayForWeekly,
+                        "targetList": poppedTodo.targetList?.map(target => target.id),
+                        "term": poppedTodo.term?.id,
+                        "completed": poppedTodo.completed,
+                        "archived": poppedTodo.archived,
+                    }
+                }).then((res) => {
+                    if (res.data.status == 200) {
+                        console.log(res.data.objectId);
+                        // 新しいobjectIdを適応
+                        poppedTodo.id = res.data.objectId;
+                    } else {
+                        console.log(res.data.message);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
                 this.todos.push(poppedTodo);
             }
         }
