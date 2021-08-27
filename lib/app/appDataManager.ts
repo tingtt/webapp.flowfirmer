@@ -200,6 +200,8 @@ export default class AppDataManager {
             if (res.data.status == 200) {
                 console.log(res.data.objectId);
                 // TODO: AppDataManager内でToDoを追加
+            } else {
+                console.log(res.data.message);
             }
         }).catch((err) => {
             console.log(err);
