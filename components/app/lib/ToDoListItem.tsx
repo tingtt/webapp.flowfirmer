@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.spacing(2.4),
             whiteSpace: 'nowrap',
             width: '100%',
+            "& .MuiInputBase-root": {
+                width: '100%',
+            },
             overflowX: 'scroll',
             msOverflowStyle: 'none',    /* IE, Edge 対応 */
             scrollbarWidth: 'none', /* Firefox 対応 */
