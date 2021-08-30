@@ -78,8 +78,8 @@ export default class AppDataManager {
         name: string,
         datetime?: { date: Date, timeSetted: boolean},
         processingTime?: number,
-        targetIds?: number[],
-        termId?: number,
+        targetIds?: string[],
+        termId?: string,
         repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
         description = "",
         completed = false
@@ -95,7 +95,7 @@ export default class AppDataManager {
             }
             return 0;
         })[this.todos.length - 1] : undefined;
-        const id: number = this.todos != undefined && todoHasLastId != undefined ? todoHasLastId.id + 1 : 0;
+        const id: string = this.todos != undefined && todoHasLastId != undefined ? todoHasLastId.id + 1 : "";
 
 
         const newTodo: ToDo = {
@@ -154,12 +154,12 @@ export default class AppDataManager {
         return this.todos;
     }
 
-    private todoCompletionStateToggledTodoIds: number[] = [];
+    private todoCompletionStateToggledTodoIds: string[] = [];
 
     /**
      * / toggleTodoCompletionState
      */
-    public toggleTodoCompletionState(id: number) {
+    public toggleTodoCompletionState(id: string) {
         // TODO: API叩く処理?
         // 更新
         if (this.todos != undefined) {
@@ -171,8 +171,8 @@ export default class AppDataManager {
             var processingTime: number | undefined;
             var interval: "Daily" | "Weekly" | "Monthly" = "Daily";
             var repeatDay: number[] = [];
-            var targetList: number[] = [];
-            var termId: number | undefined;
+            var targetList: string[] = [];
+            var termId: string | undefined;
             // 新規ToDoを追加するかどうかのフラグ
             var flg = false;
 
@@ -279,9 +279,9 @@ export default class AppDataManager {
 
     /**
      * deleteTodo
-     * @param id number
+     * @param id string
      */
-    public deleteTodo(id: number) {
+    public deleteTodo(id: string) {
         if (this.todos != undefined) {
             const poppedTodo = this.todos.filter(value => value.id == id).pop();
             if (poppedTodo != undefined) {
@@ -320,7 +320,7 @@ export default class AppDataManager {
         b: number
     }): Target {
         // TODO: APIを叩いてTargetを登録し、IDを取得
-        const id: number = this.targets != undefined ? this.targets.length : 0;
+        const id: string = "";
 
         const newTarget: Target = {
             id: id,
@@ -392,7 +392,7 @@ export default class AppDataManager {
         } else {
             // register
             // TODO: APIを叩いてArchiveを登録し、IDを取得
-            const id: number = this.archives != undefined ? this.archives.length : 0;
+            const id: string = "";
 
             // Archiveデータを作成
             const newArchive: Archive = {

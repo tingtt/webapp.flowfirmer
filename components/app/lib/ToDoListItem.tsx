@@ -8,7 +8,7 @@ import AppDataManager from "../../../lib/app/appDataManager";
 type Props = {
     todo: ToDo,
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
-    selectedToDoIdSetter: React.Dispatch<React.SetStateAction<number | undefined>>
+    selectedToDoIdSetter: React.Dispatch<React.SetStateAction<string | undefined>>
     snackbarStateSetter: React.Dispatch<React.SetStateAction<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>>
     showDate?: boolean
     exDiaryDialogStateSetter: React.Dispatch<React.SetStateAction<ToDo | undefined>>
