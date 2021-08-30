@@ -1,7 +1,7 @@
 import { Target } from "./target";
 
 export type Document = {
-    id: number
+    id: string
     user_id: number
 
     name: string

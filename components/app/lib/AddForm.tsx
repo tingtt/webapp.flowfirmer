@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type Props = {
-    defaultSelectTargetId?: number
+    defaultSelectTargetId?: string
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
 };
 
@@ -100,10 +100,10 @@ export default function AddForm(props: Props) {
     const [targetAutoCompleteMenuAnchorEl, setTargetAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // 選択状態(デフォルト選択があれば指定)
-    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<number[] | undefined>(props.defaultSelectTargetId != undefined ? [props.defaultSelectTargetId] : undefined);
+    const [selectedTargetIdList, setSelectedTargetIdList] = React.useState<string[] | undefined>(props.defaultSelectTargetId != undefined ? [props.defaultSelectTargetId] : undefined);
 
     // 選択解除
-    const removeTarget = (targetId?: number) => {
+    const removeTarget = (targetId?: string) => {
         if (targetId != undefined) {
             setSelectedTargetIdList(current => current?.filter(value => value != targetId));
         } else {
@@ -250,7 +250,7 @@ export default function AddForm(props: Props) {
                 <div
                     className={classes.targetChipDiv}
                 >
-                    {appDataManager.targets != undefined && selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value != -1).map(targetId =>
+                    {appDataManager.targets != undefined && selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value != "").map(targetId =>
                         <Chip
                             className={classes.targetChip}
                             key={targetId}
@@ -259,7 +259,7 @@ export default function AddForm(props: Props) {
                         />
                     )}
                     {/* 2つ以上のTargetを選択中に全クリア用のChip */}
-                    {selectedTargetIdList != undefined && selectedTargetIdList.filter(value => value > -1).length >= 2 &&
+                    {selectedTargetIdList != undefined && selectedTargetIdList.length >= 2 &&
                         <div
                             className={classes.clearTargetChipDiv}
                         >
