@@ -108,10 +108,16 @@ export default function GanttChart() {
         );
         container!!.scrollLeft = container!!.clientWidth / ChangeNum;
       }
-      console.log(container!!.clientWidth / ChangeNum);
-    }else if(timeUnit == "year"){
-      
+    } else if (timeUnit == "year") {
+      let Lastyear = year - 1;
+
+      [...Array(ChangeNum + 2)].map((_: undefined, idx: number) =>
+        arrayday.push(new Date(Lastyear + idx, setNumber, 0).getFullYear()) //表示する付きの総数
+      );
+
+      setDatelen({index: arrayday});
     }
+    console.log(container!!.scrollLeft);
   };
 
   //ガントチャート描画距離の指定
@@ -127,7 +133,7 @@ export default function GanttChart() {
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     let select = e.target.value;
 
-    if (select == "weekly") {
+    if (select == "Weekly") {
       setCalendar({ name: "week", numSelecter: [1, 2, 3, 4, 5, 6] });
     } else if (select == "Monthly") {
       setCalendar({
@@ -307,11 +313,7 @@ export default function GanttChart() {
             : [...Array(SelectNum + 2)].map((_: undefined, idx: number) => {
                 return idx == 0 ? (
                   //月の名前を表示
-                  <text
-                    key={idx}
-                    x={endall / (SelectNum + 2) / 2 - 15}
-                    y="25"
-                  >
+                  <text key={idx} x={endall / (SelectNum + 2) / 2 - 15} y="25">
                     {strmonth[SelectView[idx]]}
                   </text>
                 ) : (
@@ -568,7 +570,7 @@ export default function GanttChart() {
         )}
       </select>
       <select id="calendar" defaultValue={"Monthly"} onChange={selectChange}>
-        <option value="weekly">週</option>
+        <option value="Weekly">週</option>
         <option value="Monthly">月</option>
         <option value="Yearly">年</option>
       </select>
