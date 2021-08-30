@@ -8,7 +8,7 @@ import AppDataManager from "../../../lib/app/appDataManager";
 type Props = {
     todo: ToDo,
     setTodos: React.Dispatch<React.SetStateAction<ToDo[] | undefined>>
-    selectedToDoIdSetter: React.Dispatch<React.SetStateAction<number | undefined>>
+    selectedToDoIdSetter: React.Dispatch<React.SetStateAction<string | undefined>>
     snackbarStateSetter: React.Dispatch<React.SetStateAction<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>>
     showDate?: boolean
     exDiaryDialogStateSetter: React.Dispatch<React.SetStateAction<ToDo | undefined>>
@@ -58,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: theme.spacing(2.4),
             whiteSpace: 'nowrap',
             width: '100%',
+            "& .MuiInputBase-root": {
+                width: '100%',
+            },
             overflowX: 'scroll',
             msOverflowStyle: 'none',    /* IE, Edge 対応 */
             scrollbarWidth: 'none', /* Firefox 対応 */
@@ -131,7 +134,7 @@ export default function ToDoListItem(props: Props) {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(0)
+            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
         } catch (e) {
             return  AppDataManager.getInstance();
         }

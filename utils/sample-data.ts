@@ -44,7 +44,7 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
 
 export const sampleTargets: Target[] = [
     {
-        id: 0,
+        id: "0",
         user_id: 0,
 
         name: "トレーニング",
@@ -60,7 +60,7 @@ export const sampleTargets: Target[] = [
         parentTarget: undefined
     },
     {
-        id: 1,
+        id: "1",
         user_id: 0,
 
         name: "Flowfirmer",
@@ -73,7 +73,7 @@ export const sampleTargets: Target[] = [
         pinnedAtNavigationList: true
     },
     {
-        id: 2,
+        id: "2",
         user_id: 0,
 
         name: "IntelliBase",
@@ -89,7 +89,7 @@ export const sampleTargets: Target[] = [
 
 export const sampleDocument: Document[] = [
     {
-        id: 0,
+        id: "0",
         user_id: 0,
 
         name: "sample document",
@@ -98,7 +98,7 @@ export const sampleDocument: Document[] = [
         targetList: [sampleTargets[1]]
     },
     {
-        id: 1,
+        id: "1",
         user_id: 0,
 
         name: "設計（UIワイヤーフレーム）",
@@ -107,7 +107,7 @@ export const sampleDocument: Document[] = [
         targetList: [sampleTargets[1]]
     },
     {
-        id: 2,
+        id: "2",
         user_id: 0,
 
         name: "設計（オブジェクトとシナリオ）",
@@ -116,7 +116,7 @@ export const sampleDocument: Document[] = [
         targetList: [sampleTargets[1]]
     },
     {
-        id: 3,
+        id: "3",
         user_id: 0,
 
         name: "設計（DB）",
@@ -128,7 +128,7 @@ export const sampleDocument: Document[] = [
 
 export const sampleTerms: Term[] = [
     {
-        id: 0,
+        id: "0",
         user_id: 0,
 
         name: "スクワットと腹筋の習慣化",
@@ -147,7 +147,7 @@ export const sampleTerms: Term[] = [
         documentList: undefined
     },
     {
-        id: 1,
+        id: "1",
         user_id: 0,
 
         name: "ToDay画面",
@@ -165,7 +165,7 @@ export const sampleTerms: Term[] = [
         documentList: [sampleDocument[1]]
     },
     {
-        id: 2,
+        id: "2",
         user_id: 0,
 
         name: "Weekly画面",
@@ -183,7 +183,7 @@ export const sampleTerms: Term[] = [
         documentList: [sampleDocument[1]]
     },
     {
-        id: 3,
+        id: "3",
         user_id: 0,
 
         name: "データ管理クラス",
@@ -201,7 +201,7 @@ export const sampleTerms: Term[] = [
         documentList: [sampleDocument[2], sampleDocument[3]]
     },
     {
-        id: 4,
+        id: "4",
         user_id: 0,
 
         name: "プロパティ更新実装",
@@ -219,7 +219,7 @@ export const sampleTerms: Term[] = [
         documentList: [sampleDocument[2], sampleDocument[3]]
     },
     {
-        id: 5,
+        id: "5",
         user_id: 0,
 
         name: "ToDo, Term詳細モーダル",
@@ -240,7 +240,7 @@ export const sampleTerms: Term[] = [
 
 export const sampleToDos: ToDo[] = [
     {
-        id: 0,
+        id: "0",
         user_id: 0,
 
         name: "1セット",
@@ -260,7 +260,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 1,
+        id: "1",
         user_id: 0,
 
         name: "1セット",
@@ -280,7 +280,7 @@ export const sampleToDos: ToDo[] = [
         archived: false
     },
     {
-        id: 2,
+        id: "2",
         user_id: 0,
 
         name: "1セット",
@@ -301,7 +301,7 @@ export const sampleToDos: ToDo[] = [
         archived: false
     },
     {
-        id: 3,
+        id: "3",
         user_id: 0,
 
         name: "朝HIIT",
@@ -321,7 +321,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 4,
+        id: "4",
         user_id: 0,
 
         name: "朝HIIT",
@@ -341,7 +341,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 5,
+        id: "5",
         user_id: 0,
 
         name: "朝HIIT",
@@ -361,7 +361,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 6,
+        id: "6",
         user_id: 0,
 
         name: "朝HIIT",
@@ -381,7 +381,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 7,
+        id: "7",
         user_id: 0,
 
         name: "朝HIIT",
@@ -401,7 +401,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 8,
+        id: "8",
         user_id: 0,
 
         name: "朝HIIT",
@@ -421,7 +421,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 9,
+        id: "9",
         user_id: 0,
 
         name: "朝HIIT",
@@ -441,7 +441,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 10,
+        id: "10",
         user_id: 0,
 
         name: "朝HIIT",
@@ -461,7 +461,7 @@ export const sampleToDos: ToDo[] = [
         archived: true
     },
     {
-        id: 11,
+        id: "11",
         user_id: 0,
 
         name: "朝HIIT",
@@ -484,7 +484,7 @@ export const sampleToDos: ToDo[] = [
 
 export const sampleHabitReminds: HabitRemind[] = [
     {
-        id: 0,
+        id: "0",
         user_id: 0,
 
         name: "トレーニングが終わったら水分補給をする",
@@ -507,7 +507,7 @@ export const sampleFeelingTypes: FeelingType[] = [
 
 export const sampleArchives: Archive[] = [
     {
-        id: 0,
+        id: "0",
         user_id: 0,
 
         refInfo: {
@@ -544,7 +544,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 7, 17)
     },
     {
-        id: 1,
+        id: "1",
         user_id: 0,
 
         refInfo: {
@@ -579,7 +579,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 7, 17, 30)
     },
     {
-        id: 2,
+        id: "2",
         user_id: 0,
 
         refInfo: {
@@ -615,7 +615,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 14, 5, 35)
     },
     {
-        id: 3,
+        id: "3",
         user_id: 0,
 
         refInfo: {
@@ -640,7 +640,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 15, 5, 35)
     },
     {
-        id: 4,
+        id: "4",
         user_id: 0,
 
         refInfo: {
@@ -665,7 +665,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 16, 5, 35)
     },
     {
-        id: 5,
+        id: "5",
         user_id: 0,
 
         refInfo: {
@@ -690,7 +690,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 17, 5, 35)
     },
     {
-        id: 6,
+        id: "6",
         user_id: 0,
 
         refInfo: {
@@ -715,7 +715,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 18, 5, 35),
     },
     {
-        id: 7,
+        id: "7",
         user_id: 0,
 
         refInfo: {
@@ -740,7 +740,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 19, 6, 10)
     },
     {
-        id: 8,
+        id: "8",
         user_id: 0,
 
         refInfo: {
@@ -765,7 +765,7 @@ export const sampleArchives: Archive[] = [
         recordingDateTime: new Date(2001, 6, 20, 5, 35)
     },
     {
-        id: 9,
+        id: "9",
         user_id: 0,
 
         refInfo: {
