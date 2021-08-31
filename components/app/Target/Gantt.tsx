@@ -7,21 +7,28 @@ import AppDataManager from "../../../lib/app/appDataManager";
 export default function GanttChart() {
   const appDataManager: AppDataManager = (() => {
     try {
-      return AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);;
+      return AppDataManager.generateInstance(
+        document.cookie
+          .split("; ")
+          .find((row: string) => row.startsWith("token"))!
+          .split("=")[1]
+      );
     } catch (e) {
       return AppDataManager.getInstance();
     }
   })();
 
-  let today = new Date(); //今日の日付
-  let year = today.getFullYear(); //今年
-  let month = today.getMonth(); //今月
+  let Today = new Date(); //今日の日付
+  let Year = Today.getFullYear(); //今年
+  let Month = Today.getMonth(); //今月
 
-  let startday: number; //termの始める日
-  let endday: number; //termの終わる日
-  let termDay: number; //termの期間
-  let startmonth: number; //termの開始月
-  let endmonth: number; //termの終了月
+  let StartDay: number; //termの始める日
+  let EndDay: number; //termの終わる日
+  let TermDay: number; //termの期間
+  let StartMonth: number; //termの開始月
+  let EndMonth: number; //termの終了月
+  let StartYear: number; //termの開始年
+  let EndYear: number; //termの終了年
 
   const [endall, setendall] = React.useState(0); //表示する付きの総数
 
@@ -34,11 +41,11 @@ export default function GanttChart() {
     end: new Date(),
   });
 
-  let countmonth = -1;
+  let countMonth = -1;
   const [SelectNum, setSelectNum] = React.useState(1); //svg描画距離の一時保存
   const [SelectView, setSelectview] = React.useState([0]);
   const [Days, setDays] = React.useState(0);
-  const strmonth = [
+  const strMonth = [
     "January",
     "February",
     "March",
@@ -66,39 +73,40 @@ export default function GanttChart() {
     if (timeUnit == "month") {
       [...Array(ChangeNum + 2)].map(
         (_: undefined, idx: number) => (
-          arrayday.push(new Date(year, setNumber + idx, 0).getDate()),
-          (total += new Date(year, setNumber + idx, 0).getDate()), //表示する付きの総数
-          view.push(new Date(year, setNumber + idx, 0).getMonth())
+          arrayday.push(new Date(Year, setNumber + idx, 0).getDate()),
+          (total += new Date(Year, setNumber + idx, 0).getDate()), //表示する付きの総数
+          view.push(new Date(Year, setNumber + idx, 0).getMonth())
         )
       );
       setDatelen({ index: arrayday });
+      setSelectview(view);
+      setDays(total);
+
       if (ChangeNum == 1) {
         setendall(
-          container!!.clientWidth * 3 //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
+          container!!.clientWidth * 3 //画面最大の表示を表示したい日にちで割り前後１ヶ月を含んで元に戻す
         );
         container!!.scrollLeft = container!!.clientWidth;
       } else {
         setendall(
-          (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
+          (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい日にちで割り前後１ヶ月を含んで元に戻す
         );
         container!!.scrollLeft = container!!.clientWidth / ChangeNum;
       }
-      setSelectNum(ChangeNum);
-      setSelectview(view);
-      setDays(total);
     } else if (timeUnit == "week") {
-      let weekNumber = Math.floor((today.getDate() - today.getDay() + 12) / 7); //今週が何番目
-      let startDay = new Date(year, month, (weekNumber - 2) * 7 + 1); //今週の始め
-      let day = startDay.getDay();
-      startDay.setDate(startDay.getDate() + (day ? 0 - day : 0));
-      let endDay = new Date(startDay); //今週の終わり
-      endDay.setDate(endDay.getDate() + 7 * (ChangeNum + 1) + 6);
+      let weekNumber = Math.floor((Today.getDate() - Today.getDay() + 12) / 7); //今週が何番目
+      let StartDay = new Date(Year, Month, (weekNumber - 2) * 7 + 1); //今週の始め
+      let day = StartDay.getDay();
+      StartDay.setDate(StartDay.getDate() + (day ? 0 - day : 0));
+      let EndDay = new Date(StartDay); //今週の終わり
+      EndDay.setDate(EndDay.getDate() + 7 * (ChangeNum + 1) + 6);
+
       setDatelen({ index: [7 * (ChangeNum + 2)] }); //日にちの長さ
-      setSelectNum(ChangeNum); //何週間表示するか
-      setLastWeek({ start: startDay, end: endDay }); //先週初め先
+      setLastWeek({ start: StartDay, end: EndDay }); //先週初め先
+
       if (ChangeNum == 1) {
         setendall(
-          (container!!.clientWidth / (7 * ChangeNum)) * (ChangeNum + 2) * 7 //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
+          (container!!.clientWidth / 7) * 21 //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
         );
         container!!.scrollLeft =
           (container!!.clientWidth / (7 * ChangeNum)) * 7;
@@ -109,15 +117,29 @@ export default function GanttChart() {
         container!!.scrollLeft = container!!.clientWidth / ChangeNum;
       }
     } else if (timeUnit == "year") {
-      let Lastyear = year - 1;
+      let LastYear = Year - 1;
 
-      [...Array(ChangeNum + 2)].map((_: undefined, idx: number) =>
-        arrayday.push(new Date(Lastyear + idx, setNumber, 0).getFullYear()) //表示する付きの総数
+      [...Array(ChangeNum + 2)].map(
+        (_: undefined, idx: number) =>
+          arrayday.push(new Date(LastYear + idx, setNumber, 0).getFullYear()) //表示する付きの総数
       );
 
-      setDatelen({index: arrayday});
+      setDatelen({ index: arrayday });
+
+      if (ChangeNum == 1) {
+        setendall(
+          container!!.clientWidth * 3 //表示を表示したい年数を３年で固定
+        );
+        container!!.scrollLeft = container!!.clientWidth;
+      } else {
+        setendall(
+          (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい年数で割り前後１年を含んで元に戻す
+        );
+        container!!.scrollLeft = container!!.clientWidth / ChangeNum;
+      }
     }
-    console.log(container!!.scrollLeft);
+
+    setSelectNum(ChangeNum); //画面表示する数を入れる
   };
 
   //ガントチャート描画距離の指定
@@ -127,7 +149,7 @@ export default function GanttChart() {
   });
 
   React.useEffect(() => {
-    viewcalendar(calendarState.name, month, SelectNum);
+    viewcalendar(calendarState.name, Month, SelectNum);
   }, []);
 
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -155,12 +177,12 @@ export default function GanttChart() {
     let target = document.getElementById(
       calendarState.name
     ) as HTMLSelectElement;
-    viewcalendar(calendarState.name, month, parseInt(target.value));
+    viewcalendar(calendarState.name, Month, +target.value);
   }, [calendarState]);
 
   //数字が動いたときに再描画させたい
   const chengeCalendar = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    viewcalendar(calendarState.name, month, parseInt(e.target.value));
+    viewcalendar(calendarState.name, Month, +e.target.value);
   };
 
   const classes = useStyles();
@@ -177,7 +199,7 @@ export default function GanttChart() {
   function setdrawig(state: string) {
     //月の表示
     if (state == "month") {
-      let i: number = 0;
+      let count: number = 0;
       return (
         <svg id="gantt" height={termlength!! * 40 + 60} width={endall}>
           <g id="chart">
@@ -187,7 +209,7 @@ export default function GanttChart() {
               appDataManager.terms?.map((value) => (
                 <rect
                   x="0"
-                  y={value.id * 40 + 59}
+                  y={+value.id * 40 + 59}
                   width={endall}
                   height="40"
                   className={classes.grid_row}
@@ -195,15 +217,15 @@ export default function GanttChart() {
               ))
             )}
           </g>
-          <g id="today">
+          <g id="Today">
             {/*今日の日付をオレンジ色にする  */}
             {React.Children.toArray(
               SelectView.map((value) => {
-                if (value == today.getMonth()) {
+                if (value == Today.getMonth()) {
                   return (
                     <rect
                       x={
-                        (Datelen.index[0] + today.getDate() - 1) *
+                        (Datelen.index[0] + Today.getDate() - 1) *
                         (endall / Days)
                       }
                       y="0"
@@ -260,7 +282,7 @@ export default function GanttChart() {
           {SelectNum == 1
             ? React.Children.toArray(
                 Datelen.index.map((value) => (
-                  <g className={"date" + SelectView[++countmonth]}>
+                  <g className={"date" + SelectView[++countMonth]}>
                     {React.Children.toArray(
                       [...Array(value)].map((_: undefined, idx: number) =>
                         (() => {
@@ -269,10 +291,7 @@ export default function GanttChart() {
                               // 日付を書く場所
                               <text
                                 key={idx}
-                                x={
-                                  ((endall / Days) * 1) / 2 +
-                                  (endall / Days) * i
-                                }
+                                x={endall / Days / 2 + (endall / Days) * count}
                                 y="50"
                                 className={classes.monthly_text}
                               >
@@ -280,11 +299,11 @@ export default function GanttChart() {
                               </text>,
                               //月の名前を表示
                               <text
-                                key={SelectView[countmonth]}
-                                x={(endall / Days) * (15 + i)}
+                                key={SelectView[countMonth]}
+                                x={(endall / Days) * (15 + count)}
                                 y="25"
                               >
-                                {strmonth[SelectView[countmonth]]}
+                                {strMonth[SelectView[countMonth]]}
                               </text>,
                             ];
                           } else {
@@ -293,8 +312,8 @@ export default function GanttChart() {
                               <text
                                 key={idx}
                                 x={
-                                  ((endall / Days) * 1) / 2 +
-                                  (endall / Days) * (idx + i)
+                                  endall / Days / 2 +
+                                  (endall / Days) * (idx + count)
                                 }
                                 y="50"
                                 className={classes.monthly_text}
@@ -306,7 +325,7 @@ export default function GanttChart() {
                         })()
                       )
                     )}
-                    {(i += value)}
+                    {(count += value)}
                   </g>
                 ))
               )
@@ -314,7 +333,7 @@ export default function GanttChart() {
                 return idx == 0 ? (
                   //月の名前を表示
                   <text key={idx} x={endall / (SelectNum + 2) / 2 - 15} y="25">
-                    {strmonth[SelectView[idx]]}
+                    {strMonth[SelectView[idx]]}
                   </text>
                 ) : (
                   //月の名前を表示
@@ -327,7 +346,7 @@ export default function GanttChart() {
                     }
                     y="25"
                   >
-                    {strmonth[SelectView[idx]]}
+                    {strMonth[SelectView[idx]]}
                   </text>
                 );
               })}
@@ -336,19 +355,19 @@ export default function GanttChart() {
             {React.Children.toArray(
               appDataManager.terms?.map(
                 (value) => (
-                  (startday = value.startDatetimeScheduled.getDate()),
-                  (endday = value.endDatetimeScheduled.getDate()),
-                  (termDay = (endday - startday) / 86400000),
-                  (startmonth = value.startDatetimeScheduled.getMonth()), //termの開始月
-                  (endmonth = value.endDatetimeScheduled.getMonth()), //termの終了月
+                  (StartDay = value.startDatetimeScheduled.getDate()),
+                  (EndDay = value.endDatetimeScheduled.getDate()),
+                  (TermDay = (EndDay - StartDay) / 86400000),
+                  (StartMonth = value.startDatetimeScheduled.getMonth()), //termの開始月
+                  (EndMonth = value.endDatetimeScheduled.getMonth()), //termの終了月
                   (
                     <g className={classes.bar_wrapper}>
                       <g className="bar_group">
                         {/* termの全体表示 */}
                         <rect
-                          x={(startday - 1) * 40}
-                          y={28 + (value.id + 1) * 40}
-                          width={(endday - startday + 1) * 40}
+                          x={(StartDay - 1) * 40}
+                          y={28 + (+value.id + 1) * 40}
+                          width={(EndDay - StartDay + 1) * 40}
                           height="25"
                           rx="3"
                           ry="3"
@@ -356,8 +375,8 @@ export default function GanttChart() {
                         />
                         {/* termの名前表示 */}
                         <text
-                          x={(startday - 1) * 40 + (endday - startday + 1) * 20}
-                          y={41 + (value.id + 1) * 40}
+                          x={(StartDay - 1) * 40 + (EndDay - StartDay + 1) * 20}
+                          y={41 + (+value.id + 1) * 40}
                           className={classes.bar_label}
                         >
                           {value.name}
@@ -372,7 +391,7 @@ export default function GanttChart() {
         </svg>
       );
     } else if (state == "week") {
-      let i: number = 7 * (SelectNum + 2);
+      let week: number = 7 * (SelectNum + 2);
       let changeDate = LastWeek.start;
       //週の表示
       return (
@@ -383,7 +402,7 @@ export default function GanttChart() {
               appDataManager.terms?.map((value) => (
                 <rect
                   x="0"
-                  y={value.id * 40 + 59}
+                  y={+value.id * 40 + 59}
                   width={endall}
                   height="40"
                   className={classes.grid_row}
@@ -391,12 +410,12 @@ export default function GanttChart() {
               ))
             )}
           </g>
-          <g id="today">
+          <g id="Today">
             {/*今日の日付をオレンジ色にする  */}
             <rect
-              x={((7 + today.getDay()) * endall) / i}
+              x={((7 + Today.getDay()) * endall) / week}
               y="0"
-              width={endall / i}
+              width={endall / week}
               height={(termlength!! + 1) * 40 + 19}
               className={classes.today_highlight}
             />
@@ -418,10 +437,13 @@ export default function GanttChart() {
           <g className="drawing">
             {SelectNum == 1
               ? React.Children.toArray(
-                  [...Array(i)].map((_: undefined, idx: number) => (
+                  [...Array(week)].map((_: undefined, idx: number) => (
                     <path
                       d={
-                        "M " + (endall / i) * idx + " 59 v" + termlength!! * 40
+                        "M " +
+                        (endall / week) * idx +
+                        " 59 v" +
+                        termlength!! * 40
                       }
                       className={classes.tick}
                     />
@@ -441,7 +463,7 @@ export default function GanttChart() {
 
             {React.Children.toArray(
               Datelen.index.map((value) => (
-                <g className={"date" + SelectView[++countmonth]}>
+                <g className={"date" + SelectView[++countMonth]}>
                   {React.Children.toArray(
                     [...Array(value)].map((_: undefined, idx: number) =>
                       (() => {
@@ -513,20 +535,20 @@ export default function GanttChart() {
             {React.Children.toArray(
               appDataManager.terms?.map(
                 (value) => (
-                  (startday = value.startDatetimeScheduled.getDate()),
-                  (endday = value.endDatetimeScheduled.getDate()),
-                  (termDay = (endday - startday) / 86400000),
-                  (startmonth = value.startDatetimeScheduled.getMonth()), //termの開始月
-                  (endmonth = value.endDatetimeScheduled.getMonth()), //termの終了月
+                  (StartDay = value.startDatetimeScheduled.getDate()),
+                  (EndDay = value.endDatetimeScheduled.getDate()),
+                  (TermDay = (EndDay - StartDay) / 86400000),
+                  (StartMonth = value.startDatetimeScheduled.getMonth()), //termの開始月
+                  (EndMonth = value.endDatetimeScheduled.getMonth()), //termの終了月
                   (
                     <g className={classes.bar_wrapper}>
                       <g className="bar_group">
                         {/* termの全体表示 */}
                         <rect
-                          x={((startday - 1) * endall) / i}
-                          y={28 + (value.id + 1) * 40}
+                          x={((StartDay - 1) * endall) / week}
+                          y={28 + (+value.id + 1) * 40}
                           width={
-                            (endday - startday + 1) *
+                            (EndDay - StartDay + 1) *
                             (endall / (7 * (SelectNum + 2)))
                           }
                           height="25"
@@ -537,10 +559,10 @@ export default function GanttChart() {
                         {/* termの名前表示 */}
                         <text
                           x={
-                            ((startday - 1) * endall) / i +
-                            ((endday - startday + 1) * endall) / i / 2
+                            ((StartDay - 1) * endall) / week +
+                            ((EndDay - StartDay + 1) * endall) / week / 2
                           }
-                          y={41 + (value.id + 1) * 40}
+                          y={41 + (+value.id + 1) * 40}
                           className={classes.bar_label}
                         >
                           {value.name}
@@ -555,6 +577,218 @@ export default function GanttChart() {
         </svg>
       );
     } else if (state == "year") {
+      let TotalYear = 4 * (SelectNum + 2);
+      let Firstcount = 0;
+      let Yearcount = 0;
+      //週の表示
+      return (
+        <svg id="gantt" height={termlength!! * 40 + 60} width={endall}>
+          <g id="chart">
+            {/* ガントチャートの表を作成 */}
+            {React.Children.toArray(
+              appDataManager.terms?.map((value) => (
+                <rect
+                  x="0"
+                  y={+value.id * 40 + 59}
+                  width={endall}
+                  height="40"
+                  className={classes.grid_row}
+                />
+              ))
+            )}
+          </g>
+          <g id="Today">
+            {/*今日の日付をオレンジ色にする  */}
+            <rect
+              x={(endall / TotalYear) * (4 + Math.floor(Today.getMonth() / 3))}
+              y="0"
+              width={endall / TotalYear}
+              height={(termlength!! + 1) * 40 + 19}
+              className={classes.today_highlight}
+            />
+          </g>
+
+          {/* 日付を表示する土台 */}
+          <rect
+            x="0"
+            y="0"
+            width={endall}
+            height="60"
+            className={classes.grid_header}
+          />
+
+          {/* ガントチャートの枠組み */}
+          <path d="M 0 59 v 190" className={classes.tick_thick} />
+
+          {/* 日付の区切りを線で表示 */}
+          <g className="drawing">
+            {SelectNum == 1
+              ? React.Children.toArray(
+                  [...Array(TotalYear)].map((_: undefined, idx: number) => (
+                    <path
+                      key={idx}
+                      d={
+                        "M " +
+                        (endall / TotalYear) * idx +
+                        " 59 v" +
+                        termlength!! * 40
+                      }
+                      className={classes.tick}
+                    />
+                  ))
+                )
+              : [...Array(SelectNum + 1)].map((_: undefined, idx: number) => (
+                  <path
+                    key={idx}
+                    d={
+                      "M " +
+                      (endall / (SelectNum + 2)) * (idx + 1) +
+                      " 59 v" +
+                      termlength!! * 40
+                    }
+                    className={classes.tick}
+                  />
+                ))}
+
+            {SelectNum == 1
+              ? React.Children.toArray(
+                  Datelen.index.map((value) => (
+                    <g className={`${value}`}>
+                      {React.Children.toArray(
+                        [...Array(4)].map((_: undefined, idx: number) =>
+                          (() => {
+                            if (idx == 0) {
+                              return [
+                                // 日付を書く場所
+                                <text
+                                  key={idx}
+                                  x={
+                                    endall / (SelectNum + 2) / 2 +
+                                    (endall / (4 * (SelectNum + 2))) *
+                                      Firstcount -
+                                    15
+                                  }
+                                  y="25"
+                                >
+                                  {Datelen.index[Yearcount++]}
+                                </text>,
+                                <text
+                                  key={idx}
+                                  x={
+                                    endall / (4 * (SelectNum + 2)) / 2 +
+                                    (endall / (4 * (SelectNum + 2))) *
+                                      Firstcount++
+                                  }
+                                  y="50"
+                                  className={classes.monthly_text}
+                                >
+                                  {1 + " ～ " + 3}
+                                </text>,
+                              ];
+                            } else {
+                              // 日付を書く場所
+                              return (
+                                <text
+                                  key={idx}
+                                  x={
+                                    endall / (4 * (SelectNum + 2)) / 2 +
+                                    (endall / (4 * (SelectNum + 2))) *
+                                      Firstcount++
+                                  }
+                                  y="50"
+                                  className={classes.monthly_text}
+                                >
+                                  {idx * 3 + 1 + " ～ " + (idx + 1) * 3}
+                                </text>
+                              );
+                            }
+                          })()
+                        )
+                      )}
+                    </g>
+                  ))
+                )
+              : [...Array(SelectNum + 2)].map((_: undefined, idx: number) => {
+                  //最大描写数が１以外の時
+                  //年を表示する
+                  return idx == 0 ? (
+                    <text
+                      key={idx}
+                      x={endall / (SelectNum + 2) / 2 - 15}
+                      y="25"
+                    >
+                      {Datelen.index[idx]}
+                    </text>
+                  ) : (
+                    <text
+                      key={idx}
+                      x={
+                        (endall / (SelectNum + 2)) * idx +
+                        endall / (SelectNum + 2) / 2 -
+                        15
+                      }
+                      y="25"
+                    >
+                      {Datelen.index[idx]}
+                    </text>
+                  );
+                })}
+          </g>
+
+          {/* termの内容を表示 */}
+          <g>
+            {React.Children.toArray(
+              appDataManager.terms?.map(
+                (value) => (
+                  (StartYear = value.startDatetimeScheduled.getFullYear()),
+                  (EndYear = value.endDatetimeScheduled.getFullYear()),
+                  (StartMonth = value.startDatetimeScheduled.getMonth()), //termの開始月
+                  (EndMonth = value.endDatetimeScheduled.getMonth()), //termの終了月
+                  () => {
+                    if (
+                      StartYear - (Year - 1) <= 0 &&
+                      EndYear - Year <= SelectNum
+                    ) {
+                      return (
+                        <g className={classes.bar_wrapper}>
+                          <g className="bar_group">
+                            {/* termの全体表示 */}
+                            <rect
+                              x={((StartDay - 1) * endall) / TotalYear}
+                              y={28 + (+value.id + 1) * 40}
+                              width={
+                                (EndDay - StartDay + 1) *
+                                (endall / (7 * (SelectNum + 2)))
+                              }
+                              height="25"
+                              rx="3"
+                              ry="3"
+                              className={classes.bar}
+                            />
+                            {/* termの名前表示 */}
+                            <text
+                              x={
+                                ((StartDay - 1) * endall) / TotalYear +
+                                ((EndDay - StartDay + 1) * endall) /
+                                  TotalYear /
+                                  2
+                              }
+                              y={41 + (+value.id + 1) * 40}
+                              className={classes.bar_label}
+                            >
+                              {value.name}
+                            </text>
+                          </g>
+                        </g>
+                      );
+                    }
+                  }
+                )
+              )
+            )}
+          </g>
+        </svg>
+      );
     }
   }
 
