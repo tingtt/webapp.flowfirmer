@@ -30,15 +30,6 @@ export default class AppDataManager {
 
     private token: string;
 
-    public static async validateToken(token: string) {
-        try {
-            await axios.post(`/api/toOngoingData`, { token });
-            return true;
-        } catch (_) {
-            return false;
-        }
-    }
-
     public targets?: Target[];
     public todos?: ToDo[];
     public terms?: Term[];
