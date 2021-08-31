@@ -191,11 +191,9 @@ export default class AppDataManager {
      * @returns ToDo[]
      */
     public updateTodo(updatedValue: ToDo) {
-        // TODO: API叩く処理?
         // 更新
-        this.todos = this.todos != undefined ?
-            // 値の更新(IDが一致するものを更新する)
-            this.todos.map(value => {
+        if (this.todos != undefined) {
+            this.todos = this.todos.map(value => {
                 if (value.id == updatedValue.id) {
                     // call api
                     axios.post('/api/updateTodoByObjectId', {
@@ -226,10 +224,8 @@ export default class AppDataManager {
                     return updatedValue
                 }
                 return value
-            })
-            :
-            // 値の追加
-            [updatedValue];
+            });
+        }
 
         return this.todos;
     }
