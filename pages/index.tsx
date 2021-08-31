@@ -4,7 +4,7 @@ const IndexPage = () => (
   <div>
     <h1>Hello Flow firmer. 👋</h1>
     <p>
-      <Link href="/login">
+      <Link href="/app">
         <a>Login</a>
       </Link>
     </p>

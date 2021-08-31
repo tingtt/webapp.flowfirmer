@@ -1,3 +1,4 @@
+import axios from "axios";
 import { sampleArchives, sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
 import { Percentage } from "../interface/archive";
 import { Archive, FeelingType, HabitRemind, OutcomeScheme, Target, Term, ToDo } from "../interface/index";
@@ -6,14 +7,14 @@ export default class AppDataManager {
 
     private static _instance: AppDataManager
 
-    public static generateInstance(user_id: number): AppDataManager {
+    public static generateInstance(token: string): AppDataManager {
         // インスタンスが既に生成されている場合にエラー
         if (this._instance) {
             throw new Error("AppDataManager instance already exists.");
         }
 
         console.log("Generating 'AppDataManager' instance.");
-        this._instance = new AppDataManager(user_id);
+        this._instance = new AppDataManager(token);
 
         return this._instance;
     }
@@ -27,6 +28,17 @@ export default class AppDataManager {
 
     private user_id: number;
 
+    private token: string;
+
+    public static async validateToken(token: string) {
+        try {
+            await axios.post(`/api/toOngoingData`, { token });
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
     public targets?: Target[];
     public todos?: ToDo[];
     public terms?: Term[];
@@ -36,19 +48,73 @@ export default class AppDataManager {
     // TODO: ユーザーの登録データを取得
 
     private getTargets() {
+        axios.post(`/api/getTarget`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleTargets.filter(value => value.user_id == this.user_id);
     }
 
     private getToDos() {
+        axios.post(`/api/getTodoByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleToDos.filter(value => value.user_id == this.user_id);
     }
 
     private getTerms() {
+        axios.post(`/api/getTermByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleTerms.filter(value => value.user_id == this.user_id);
     }
 
     private getHabitReminds() {
+        axios.post(`/api/getHabitByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         return sampleHabitReminds.filter(value => value.user_id == this.user_id);
+    }
+
+    private getArchives() {
+        axios.post(`/api/getTodoArchiveByUserId`, { token: this.token })
+            .then((res) => {
+                if (res.data.status == 200) {
+                    const ary = res.data.data;
+                    console.log(ary);
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        return sampleArchives.filter(value => value.user_id == this.user_id);
     }
 
     /**
@@ -60,63 +126,63 @@ export default class AppDataManager {
      * @param termId number | undefined
      * @param repeatPattern { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay?: number[] } | undefined
      * @param completed boolean
-     * @returns ToDo
+     * @returns ToDo | false
      */
     public registerTodo(
         name: string,
         datetime?: { date: Date, timeSetted: boolean},
         processingTime?: number,
-        targetIds?: number[],
-        termId?: number,
+        targetIds?: string[],
+        termId?: string,
         repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
         description = "",
         completed = false
     ) {
-        // TODO: APIを叩いてToDoを登録し、IDを取得
-        const todoHasLastId = this.todos != undefined ? this.todos.sort((a, b) => {
-            // Idで昇順
-            if (a.id < b.id) {
-                return -1;
+        // APIを叩いてToDoを登録し、IDを取得
+        axios.post('/api/saveTodo', {
+            "token": this.token,
+            "data": {
+                "name": name,
+                "description": description,
+                "startDatetimeScheduled": datetime != undefined ? datetime.date : undefined,
+                "timeInfoExisted": datetime != undefined ? datetime.timeSetted : false,
+                "processingTimeScheduled": processingTime,
+                "repeatPattern": repeatPattern != undefined ? repeatPattern.interval : undefined,
+                "repeatDayForWeekly": repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+                "targetList": targetIds,
+                "term": termId,
+                "completed": completed,
+                "archived": false,
             }
-            if (a.id > b.id) {
-                return 1;
+        }).then((res) => {
+            if (res.data.status == 200) {
+                console.log(res.data.objectId);
+                const newTodo: ToDo = {
+                    id: res.data.objectId,
+                    user_id: this.user_id,
+                    name: name,
+                    description: description,
+                    startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
+                    timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
+                    processingTimeScheduled: processingTime,
+                    repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
+                    repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+                    targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
+                    term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
+                    completed: completed,
+                    archived: false,
+                };
+                // 新規Targetを追加
+                this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
+                return newTodo;
+            } else {
+                console.log(res.data.message);
             }
-            return 0;
-        })[this.todos.length - 1] : undefined;
-        const id: number = this.todos != undefined && todoHasLastId != undefined ? todoHasLastId.id + 1 : 0;
+        }).catch((err) => {
+            console.log(err);
+        });
 
-
-        const newTodo: ToDo = {
-            id: id,
-            user_id: this.user_id,
-
-            name: name,
-
-            description: description,
-
-            startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
-
-            timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
-
-            processingTimeScheduled: processingTime,
-
-            repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
-
-            repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
-
-            targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
-
-            term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
-
-            completed: completed,
-
-            archived: false,
-        }
-
-        // 新規Targetを追加
-        this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
-
-        return newTodo;
+        return false;
     }
 
     /**
@@ -125,29 +191,51 @@ export default class AppDataManager {
      * @returns ToDo[]
      */
     public updateTodo(updatedValue: ToDo) {
-        // TODO: API叩く処理?
         // 更新
-        this.todos = this.todos != undefined ?
-            // 値の更新(IDが一致するものを更新する)
-            this.todos.map(value => {
+        if (this.todos != undefined) {
+            this.todos = this.todos.map(value => {
                 if (value.id == updatedValue.id) {
+                    // call api
+                    axios.post('/api/updateTodoByObjectId', {
+                        "token": this.token,
+                        "data": {
+                            "_id": updatedValue.id,
+                            "name": updatedValue.name,
+                            "description": updatedValue.description,
+                            "startDatetimeScheduled": updatedValue.startDatetimeScheduled,
+                            "timeInfoExisted": updatedValue.timeInfoExisted,
+                            "processingTimeScheduled": updatedValue.processingTimeScheduled,
+                            "repeatPattern": updatedValue.repeatPattern,
+                            "repeatDayForWeekly": updatedValue.repeatDayForWeekly,
+                            "targetList": updatedValue.targetList != undefined ? updatedValue.targetList.map(target => target.id) : [],
+                            "term": updatedValue.term?.id,
+                            "completed": updatedValue.completed,
+                            "archived": updatedValue.archived,
+                        }
+                    }).then((res) => {
+                        if (res.data.status == 200) {
+                            console.log(res.data);
+                        } else {
+                            console.log(res.data.message);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                     return updatedValue
                 }
                 return value
-            })
-            :
-            // 値の追加
-            [updatedValue];
+            });
+        }
 
         return this.todos;
     }
 
-    private todoCompletionStateToggledTodoIds: number[] = [];
+    private todoCompletionStateToggledTodoIds: string[] = [];
 
     /**
      * / toggleTodoCompletionState
      */
-    public toggleTodoCompletionState(id: number) {
+    public toggleTodoCompletionState(id: string) {
         // TODO: API叩く処理?
         // 更新
         if (this.todos != undefined) {
@@ -159,8 +247,8 @@ export default class AppDataManager {
             var processingTime: number | undefined;
             var interval: "Daily" | "Weekly" | "Monthly" = "Daily";
             var repeatDay: number[] = [];
-            var targetList: number[] = [];
-            var termId: number | undefined;
+            var targetList: string[] = [];
+            var termId: string | undefined;
             // 新規ToDoを追加するかどうかのフラグ
             var flg = false;
 
@@ -230,6 +318,33 @@ export default class AppDataManager {
                         value.repeatPattern = undefined;
                         value.repeatDayForWeekly = undefined;
                     }
+
+                    // call api
+                    axios.post('/api/updateTodoByObjectId', {
+                        "token": this.token,
+                        "data": {
+                            "_id": value.id,
+                            "name": value.name,
+                            "description": value.description,
+                            "startDatetimeScheduled": value.startDatetimeScheduled,
+                            "timeInfoExisted": value.timeInfoExisted,
+                            "processingTimeScheduled": value.processingTimeScheduled,
+                            "repeatPattern": value.repeatPattern,
+                            "repeatDayForWeekly": value.repeatDayForWeekly,
+                            "targetList": value.targetList != undefined ? value.targetList.map(target => target.id) : [],
+                            "term": value.term?.id,
+                            "completed": value.completed,
+                            "archived": value.archived,
+                        }
+                    }).then((res) => {
+                        if (res.data.status == 200) {
+                            console.log(res.data);
+                        } else {
+                            console.log(res.data.message);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    });
                 }
                 return value;
             })
@@ -267,15 +382,31 @@ export default class AppDataManager {
 
     /**
      * deleteTodo
-     * @param id number
+     * @param id string
      */
-    public deleteTodo(id: number) {
+    public deleteTodo(id: string) {
         if (this.todos != undefined) {
             const poppedTodo = this.todos.filter(value => value.id == id).pop();
             if (poppedTodo != undefined) {
                 this.deletedToDos.push(poppedTodo);
             }
             this.todos = this.todos.filter(value => value.id != id);
+
+            // call api
+            axios.post('/api/deleteTodoByObjectId', {
+                "token": this.token,
+                "data": {
+                    "_id": id
+                }
+            }).then((res) => {
+                if (res.data.status == 200) {
+                    console.log(res.data);
+                } else {
+                    console.log(res.data.message);
+                }
+            }).catch((err) => {
+                console.log(err);
+            });
         }
     }
 
@@ -287,49 +418,99 @@ export default class AppDataManager {
             const poppedTodo = this.deletedToDos.pop();
             console.log(poppedTodo);
             if (poppedTodo != undefined) {
+                // call api
+                axios.post('/api/saveTodo', {
+                    "token": this.token,
+                    "data": {
+                        "name": poppedTodo.name,
+                        "description": poppedTodo.description,
+                        "startDatetimeScheduled": poppedTodo.startDatetimeScheduled,
+                        "timeInfoExisted": poppedTodo.timeInfoExisted,
+                        "processingTimeScheduled": poppedTodo.processingTimeScheduled,
+                        "repeatPattern": poppedTodo.repeatPattern,
+                        "repeatDayForWeekly": poppedTodo.repeatDayForWeekly,
+                        "targetList": poppedTodo.targetList?.map(target => target.id),
+                        "term": poppedTodo.term?.id,
+                        "completed": poppedTodo.completed,
+                        "archived": poppedTodo.archived,
+                    }
+                }).then((res) => {
+                    if (res.data.status == 200) {
+                        console.log(res.data.objectId);
+                        // 新しいobjectIdを適応
+                        poppedTodo.id = res.data.objectId;
+                    } else {
+                        console.log(res.data.message);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                });
                 this.todos.push(poppedTodo);
             }
         }
-    }
-
-    private getArchives() {
-        return sampleArchives.filter(value => value.user_id == this.user_id);
     }
 
     /**
      *
      * @param name string
      * @param themeColor string
-     * @returns Target
+     * @returns Target | false
      */
     public registerTarget(name: string, themeColor?: {
         r: number
         g: number
         b: number
-    }): Target {
-        // TODO: APIを叩いてTargetを登録し、IDを取得
-        const id: number = this.targets != undefined ? this.targets.length : 0;
+    }): Target | false {
+        // APIを叩いてTargetを登録し、IDを取得
+        var id: string;
+        var newTarget: Target | undefined;
+        axios.post('/api/saveTarget', {
+            "token": this.token,
+            "data": {
+                "name" : "name",
+                "themeColor" : themeColor != undefined ?
+                    themeColor
+                    :
+                    // テーマカラーが指定されていない場合にカラーコードを生成
+                    {
+                        r: (Math.random() * 0xFF | 0),
+                        g: (Math.random() * 0xFF | 0),
+                        b: (Math.random() * 0xFF | 0)
+                    },
+                "outcomes" : []
+            }
+        }).then((res) => {
+            if (res.data.status == 200) {
+                console.log(res.data.objectId);
+                // 取得したIDを保持
+                id = res.data.objectId;
 
-        const newTarget: Target = {
-            id: id,
-            user_id: this.user_id,
+                newTarget = {
+                    id: id,
+                    user_id: this.user_id,
 
-            name: name,
-            themeColor: themeColor != undefined ?
-                themeColor
-                :
-                // テーマカラーが指定されていない場合にカラーコードを生成
-                {
-                    r: (Math.random() * 0xFF | 0),
-                    g: (Math.random() * 0xFF | 0),
-                    b: (Math.random() * 0xFF | 0)
-                },
-        };
+                    name: name,
+                    themeColor: themeColor != undefined ?
+                        themeColor
+                        :
+                        // テーマカラーが指定されていない場合にカラーコードを生成
+                        {
+                            r: (Math.random() * 0xFF | 0),
+                            g: (Math.random() * 0xFF | 0),
+                            b: (Math.random() * 0xFF | 0)
+                        },
+                };
 
-        // 新規Targetを追加
-        this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
+                // 新規Targetを追加
+                this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
+            } else {
+                console.log(res.data.message._message);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
 
-        return newTarget;
+        return newTarget != undefined ? newTarget : false;
     }
 
     /**
@@ -377,28 +558,117 @@ export default class AppDataManager {
                 }
                 return value;
             })
+
+            // call api
+            if (refInfo.refType == 'ToDo') {
+                const date = new Date();
+
+                const [positivePercent, negativePercent] = (() => {
+                    if (feelingList == undefined) return [0,0];
+                    return feelingList.reduce((prev, curr) => {
+                        return [prev[0] + curr.positivePercent, prev[1]+ curr.negativePercent];
+                    }, [0,0]).map(val => val / feelingList.length)
+                })();
+
+                var statistics: {[key: string]: any} = {}
+                outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
+                    statistics[val.scheme.id.toString()] = [{
+                        "targetId": val.scheme.target_id,
+                        "name": val.scheme.name,
+                        "unitname": val.scheme.unitName,
+                        "statisticsRule": val.scheme.statisticsRule,
+                        "defaultValue": val.scheme.defaultValue,
+                        "value": val.value,
+                        "feelingText": text,
+                        "feelingName": undefined,
+                        "positivePercent": positivePercent,
+                        "negativePercent": negativePercent,
+                        "recordingDateTime": date
+                    }]
+                })
+
+                axios.post('/api/saveTodoArchive', {
+                    "token": this.token,
+                    "data": {
+                        "todoId": refInfo.ref.id,
+                        "checkInDateTime": date,
+                        "targets": targets?.map(target => target.id),
+                        "statistics": statistics
+                    }
+                }).then((res) => {
+                    if (res.data.status == 200) {
+                        console.log(res.data);
+                    } else {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch((err) => { console.log(err) });
+            }
         } else {
             // register
-            // TODO: APIを叩いてArchiveを登録し、IDを取得
-            const id: number = this.archives != undefined ? this.archives.length : 0;
 
-            // Archiveデータを作成
-            const newArchive: Archive = {
-                id: id,
-                user_id: this.user_id,
-                refInfo: refInfo,
-                checkInDateTime: new Date(),
-                targets: targets,
-                outcomes: outcomes,
-                text: text,
-                feelingList: feelingList,
-                recordingDateTime: new Date()
+            // call api
+            if (refInfo.refType == 'ToDo') {
+                const date = new Date();
+
+                const [positivePercent, negativePercent] = (() => {
+                    if (feelingList == undefined) return [0,0];
+                    return feelingList.reduce((prev, curr) => {
+                        return [prev[0] + curr.positivePercent, prev[1]+ curr.negativePercent];
+                    }, [0,0]).map(val => val / feelingList.length)
+                })();
+
+                var statistics: {[key: string]: any} = {}
+                outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
+                    statistics[val.scheme.id.toString()] = [{
+                        "targetId": val.scheme.target_id,
+                        "name": val.scheme.name,
+                        "unitname": val.scheme.unitName,
+                        "statisticsRule": val.scheme.statisticsRule,
+                        "defaultValue": val.scheme.defaultValue,
+                        "value": val.value,
+                        "feelingText": text,
+                        "feelingName": undefined,
+                        "positivePercent": positivePercent,
+                        "negativePercent": negativePercent,
+                        "recordingDateTime": date
+                    }]
+                })
+
+                axios.post('/api/saveTodoArchive', {
+                    "token": this.token,
+                    "data": {
+                        "todoId": refInfo.ref.id,
+                        "checkInDateTime": date,
+                        "targets": targets?.map(target => target.id),
+                        "statistics": statistics
+                    }
+                }).then((res) => {
+                    if (res.data.status == 200) {
+                        console.log(res.data.objectId);
+                        // Archiveデータを作成
+                        const newArchive: Archive = {
+                            id: res.data.objectId,
+                            user_id: this.user_id,
+                            refInfo: refInfo,
+                            checkInDateTime: new Date(),
+                            targets: targets,
+                            outcomes: outcomes,
+                            text: text,
+                            feelingList: feelingList,
+                            recordingDateTime: new Date()
+                        }
+
+                        console.log(newArchive);
+
+                        // データを追加
+                        this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
+                    } else {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch((err) => { console.log(err) });
             }
-
-            console.log(newArchive);
-
-            // データを追加
-            this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
 
             //
             if (refInfo.refType == 'ToDo') {
@@ -411,8 +681,9 @@ export default class AppDataManager {
         }
     }
 
-    private constructor(user_id: number) {
-        this.user_id = user_id;
+    private constructor(token: string) {
+        this.user_id = 0;
+        this.token = token;
 
         this.targets = this.getTargets();
         this.todos = this.getToDos();

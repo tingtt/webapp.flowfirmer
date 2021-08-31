@@ -1,5 +1,5 @@
 export type Target = {
-    id: number
+    id: string
     user_id: number
 
     name: string

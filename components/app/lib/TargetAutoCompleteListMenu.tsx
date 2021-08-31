@@ -6,8 +6,8 @@ import { useHotkeys } from 'react-hotkeys-hook';
 type Props = {
     menuAnchorEl: null | HTMLElement
     menuAnchorElSetter: React.Dispatch<React.SetStateAction<null | HTMLElement>>
-    selectedIdList: number[] | undefined
-    idListSetter: React.Dispatch<React.SetStateAction<number[] | undefined>>
+    selectedIdList: string[] | undefined
+    idListSetter: React.Dispatch<React.SetStateAction<string[] | undefined>>
     text: string
     textSetter: React.Dispatch<React.SetStateAction<string>>
 };
@@ -25,14 +25,14 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(0)
+            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
         } catch (e) {
             return  AppDataManager.getInstance();
         }
     })();
 
     // 選択処理
-    const selectTarget = (targetId: number) => {
+    const selectTarget = (targetId: string) => {
         props.idListSetter(current => current == undefined ? [targetId] : current.concat([targetId]) )
         closeMenu();
         // #~~を削除
@@ -41,10 +41,12 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
     // Target新規追加処理
     const createNewTarget = (targetName: string) => {
-        // TODO: Targetの新規作成、ID取得処理
+        // Targetの新規作成、ID取得処理
         const newTarget = appDataManager.registerTarget(targetName);
-        // 新規Targetを選択
-        selectTarget(newTarget.id);
+        if (newTarget != false) {
+            // 新規Targetを選択
+            selectTarget(newTarget.id);
+        }
         // メニューを閉じる
         props.menuAnchorElSetter(null);
     };

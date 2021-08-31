@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import { Button, TextField } from '@material-ui/core';
 import { useRouter } from 'next/dist/client/router';
@@ -158,7 +157,7 @@ export default function registerComponent() {
             email: email
         };
 
-        axios.post("http://localhost/api/new_user_reg", args)
+        axios.post(`/api/new_user_reg`, args)
             .then(function (response) {
                 // if (response.data.status == 200 && typeof response.data.token === "string") {
                 if (response.data.status == 200) {
@@ -180,6 +179,7 @@ export default function registerComponent() {
             })
             .catch(function (error) {
                 console.log(error);
+                setMessage("Failed to access api.");
             });
     }
 

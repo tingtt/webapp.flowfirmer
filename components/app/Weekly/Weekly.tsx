@@ -11,7 +11,7 @@ export default function Weekly() {
   //termの取得するための関数
   const appDataManager: AppDataManager = (() => {
     try {
-      return AppDataManager.generateInstance(0);
+      return AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);;
     } catch (e) {
       return AppDataManager.getInstance();
     }
@@ -43,8 +43,8 @@ export default function Weekly() {
   const getweek = getWeekOfMonth(year, month, week);
   const weekstart: any = getweek.start;
   const weekend = getweek.end;
-  let chengeDate = new Date(weekstart);
-  chengeDate.setDate(weekstart.getDate());
+  let changeDate = new Date(weekstart);
+  changeDate.setDate(weekstart.getDate());
   let i: number = 0;
 
   const classes = useStyles(); //css呼び出し
@@ -52,7 +52,7 @@ export default function Weekly() {
   const weekchenge = (e: React.MouseEvent<HTMLButtonElement>) => {
     let num = Number(e.currentTarget.getAttribute("value"));
     setweek((current) => current + num); //今週から１週前か後に移動
-    chengeDate = getweek.start;
+    changeDate = getweek.start;
   };
 
   //日曜はじめ又は、月曜はじめを決める
@@ -136,9 +136,9 @@ export default function Weekly() {
             </g>
 
               {/*今日の日付をオレンジ色にする  */}
-              {chengeDate.getMonth() == today.getMonth() && (
+              {changeDate.getMonth() == today.getMonth() && (
                 <rect
-                  x={(today.getDate() - chengeDate.getDate()) * 14.3 + "%"}
+                  x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
                   y="59"
                   width="14.3%"
                   height={termlength!! * 40 + 59}
@@ -185,12 +185,12 @@ export default function Weekly() {
                         y="50"
                         className={classes.lower_text}
                       >
-                        {chengeDate.getMonth() + 1 + "/" + chengeDate.getDate()}
+                        {changeDate.getMonth() + 1 + "/" + changeDate.getDate()}
                       </text>
                     );
-                  } else if (chengeDate.getDate() == 1) {
+                  } else if (changeDate.getDate() == 1) {
                     // １週間の表示中に月が変わった場合
-                    chengeDate.setDate(chengeDate.getDate() + 1)
+                    changeDate.setDate(changeDate.getDate() + 1)
                     return (
                       <text
                         key={idx}
@@ -198,12 +198,12 @@ export default function Weekly() {
                         y="50"
                         className={classes.lower_text}
                       >
-                        {chengeDate.getMonth() + 1 + "/" + chengeDate.getDate()}
+                        {changeDate.getMonth() + 1 + "/" + changeDate.getDate()}
                       </text>
                     );
                   } else {
                     //それ以外
-                    chengeDate.setDate(chengeDate.getDate() + 1)
+                    changeDate.setDate(changeDate.getDate() + 1)
                     return (
                       <text
                         key={idx}
@@ -211,7 +211,7 @@ export default function Weekly() {
                         y="50"
                         className={classes.lower_text}
                       >
-                        {chengeDate.getDate()}
+                        {changeDate.getDate()}
                       </text>
                     );
                   }
@@ -242,12 +242,12 @@ export default function Weekly() {
                               x={
                                 ((startday - weekstart) / 86400000) * 14.3 + "%"
                               }
-                              y={28 + value.id * 40}
+                              y={28 + +value.id * 40}
                               width={termDay * 14.285 + "%"}
                               height="25"
                               rx="3"
                               ry="3"
-                              id={value.id.toString()}
+                              id={value.id}
                               className={classes.bar}
                               // onMouseDown={drag}
                             />
@@ -258,7 +258,7 @@ export default function Weekly() {
                                 (termDay * 14.3) / 2 +
                                 "%"
                               }
-                              y={41 + value.id * 40}
+                              y={41 + +value.id * 40}
                               className={classes.bar_label}
                             >
                               {value.name}
@@ -271,22 +271,22 @@ export default function Weekly() {
                               x={
                                 ((startday - weekstart) / 86400000) * 14.3 + "%"
                               }
-                              y={28 + value.id * 40}
+                              y={28 + +value.id * 40}
                               width="10"
                               height="25"
                               rx="3"
                               ry="3"
-                              id={value.id.toString()}
+                              id={value.id}
                               className={classes.handle_left}
                             />
                             <rect
                               x={((endday - weekstart) / 86400000) * 14.2 + "%"}
-                              y={28 + value.id * 40}
+                              y={28 + +value.id * 40}
                               width="10"
                               height="25"
                               rx="3"
                               ry="3"
-                              id={value.id.toString()}
+                              id={value.id}
                               className={classes.handle_right}
                             />
                           </g>

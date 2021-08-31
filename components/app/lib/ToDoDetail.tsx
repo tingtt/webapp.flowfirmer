@@ -21,12 +21,19 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
             fontSize: theme.spacing(3),
+            width: '100%',
+            "& .MuiInputBase-root": {
+                width: '100%',
+            },
             "& input": {
                 fontSize: theme.spacing(3),
             },
         },
         descDiv: {
             margin: theme.spacing(2.4),
+            "& .MuiInputBase-root": {
+                width: "100%",
+            },
         },
         colorRed: {
             color: theme.palette.error.main
@@ -46,7 +53,7 @@ export default function ToDoDetail(props: Props) {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(0)
+            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
         } catch (e) {
             return  AppDataManager.getInstance();
         }
