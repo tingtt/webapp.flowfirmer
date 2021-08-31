@@ -484,35 +484,16 @@ export default class AppDataManager {
      *
      * @param name string
      * @param themeColor string
-     * @returns Target
+     * @returns Target | false
      */
     public registerTarget(name: string, themeColor?: {
         r: number
         g: number
         b: number
-    }): Target {
-        // TODO: APIを叩いてTargetを登録し、IDを取得
-        const id: string = "";
-
-        const newTarget: Target = {
-            id: id,
-            user_id: this.user_id,
-
-            name: name,
-            themeColor: themeColor != undefined ?
-                themeColor
-                :
-                // テーマカラーが指定されていない場合にカラーコードを生成
-                {
-                    r: (Math.random() * 0xFF | 0),
-                    g: (Math.random() * 0xFF | 0),
-                    b: (Math.random() * 0xFF | 0)
-                },
-        };
-
-        // 新規Targetを追加
-        this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
-
+    }): Target | false {
+        // APIを叩いてTargetを登録し、IDを取得
+        var id: string;
+        var newTarget: Target | undefined;
         axios.post('/api/saveTarget', {
             "token": this.token,
             "data": {
@@ -531,7 +512,27 @@ export default class AppDataManager {
         }).then((res) => {
             if (res.data.status == 200) {
                 console.log(res.data.objectId);
-                // TODO: AppDataManager内でTargetを追加
+                // 取得したIDを保持
+                id = res.data.objectId;
+
+                newTarget = {
+                    id: id,
+                    user_id: this.user_id,
+
+                    name: name,
+                    themeColor: themeColor != undefined ?
+                        themeColor
+                        :
+                        // テーマカラーが指定されていない場合にカラーコードを生成
+                        {
+                            r: (Math.random() * 0xFF | 0),
+                            g: (Math.random() * 0xFF | 0),
+                            b: (Math.random() * 0xFF | 0)
+                        },
+                };
+
+                // 新規Targetを追加
+                this.targets = this.targets != undefined ? [...this.targets, newTarget] : [newTarget];
             } else {
                 console.log(res.data.message._message);
             }
@@ -539,7 +540,7 @@ export default class AppDataManager {
             console.log(err);
         })
 
-        return newTarget;
+        return newTarget != undefined ? newTarget : false;
     }
 
     /**
