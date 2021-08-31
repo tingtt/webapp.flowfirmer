@@ -558,28 +558,117 @@ export default class AppDataManager {
                 }
                 return value;
             })
+
+            // call api
+            if (refInfo.refType == 'ToDo') {
+                const date = new Date();
+
+                const [positivePercent, negativePercent] = (() => {
+                    if (feelingList == undefined) return [0,0];
+                    return feelingList.reduce((prev, curr) => {
+                        return [prev[0] + curr.positivePercent, prev[1]+ curr.negativePercent];
+                    }, [0,0]).map(val => val / feelingList.length)
+                })();
+
+                var statistics: {[key: string]: any} = {}
+                outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
+                    statistics[val.scheme.id.toString()] = [{
+                        "targetId": val.scheme.target_id,
+                        "name": val.scheme.name,
+                        "unitname": val.scheme.unitName,
+                        "statisticsRule": val.scheme.statisticsRule,
+                        "defaultValue": val.scheme.defaultValue,
+                        "value": val.value,
+                        "feelingText": text,
+                        "feelingName": undefined,
+                        "positivePercent": positivePercent,
+                        "negativePercent": negativePercent,
+                        "recordingDateTime": date
+                    }]
+                })
+
+                axios.post('/api/saveTodoArchive', {
+                    "token": this.token,
+                    "data": {
+                        "todoId": refInfo.ref.id,
+                        "checkInDateTime": date,
+                        "targets": targets?.map(target => target.id),
+                        "statistics": statistics
+                    }
+                }).then((res) => {
+                    if (res.data.status == 200) {
+                        console.log(res.data);
+                    } else {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch((err) => { console.log(err) });
+            }
         } else {
             // register
-            // TODO: APIを叩いてArchiveを登録し、IDを取得
-            const id: string = "";
 
-            // Archiveデータを作成
-            const newArchive: Archive = {
-                id: id,
-                user_id: this.user_id,
-                refInfo: refInfo,
-                checkInDateTime: new Date(),
-                targets: targets,
-                outcomes: outcomes,
-                text: text,
-                feelingList: feelingList,
-                recordingDateTime: new Date()
+            // call api
+            if (refInfo.refType == 'ToDo') {
+                const date = new Date();
+
+                const [positivePercent, negativePercent] = (() => {
+                    if (feelingList == undefined) return [0,0];
+                    return feelingList.reduce((prev, curr) => {
+                        return [prev[0] + curr.positivePercent, prev[1]+ curr.negativePercent];
+                    }, [0,0]).map(val => val / feelingList.length)
+                })();
+
+                var statistics: {[key: string]: any} = {}
+                outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
+                    statistics[val.scheme.id.toString()] = [{
+                        "targetId": val.scheme.target_id,
+                        "name": val.scheme.name,
+                        "unitname": val.scheme.unitName,
+                        "statisticsRule": val.scheme.statisticsRule,
+                        "defaultValue": val.scheme.defaultValue,
+                        "value": val.value,
+                        "feelingText": text,
+                        "feelingName": undefined,
+                        "positivePercent": positivePercent,
+                        "negativePercent": negativePercent,
+                        "recordingDateTime": date
+                    }]
+                })
+
+                axios.post('/api/saveTodoArchive', {
+                    "token": this.token,
+                    "data": {
+                        "todoId": refInfo.ref.id,
+                        "checkInDateTime": date,
+                        "targets": targets?.map(target => target.id),
+                        "statistics": statistics
+                    }
+                }).then((res) => {
+                    if (res.data.status == 200) {
+                        console.log(res.data.objectId);
+                        // Archiveデータを作成
+                        const newArchive: Archive = {
+                            id: res.data.objectId,
+                            user_id: this.user_id,
+                            refInfo: refInfo,
+                            checkInDateTime: new Date(),
+                            targets: targets,
+                            outcomes: outcomes,
+                            text: text,
+                            feelingList: feelingList,
+                            recordingDateTime: new Date()
+                        }
+
+                        console.log(newArchive);
+
+                        // データを追加
+                        this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
+                    } else {
+                        console.log(res.data.message);
+                    }
+                })
+                .catch((err) => { console.log(err) });
             }
-
-            console.log(newArchive);
-
-            // データを追加
-            this.archives = this.archives != undefined ? [...this.archives, newArchive] : [newArchive];
 
             //
             if (refInfo.refType == 'ToDo') {
@@ -589,53 +678,6 @@ export default class AppDataManager {
                     this.updateTodo(todo);
                 }
             }
-        }
-
-        // call api
-        if (refInfo.refType == 'ToDo') {
-            const date = new Date();
-
-            const [positivePercent, negativePercent] = (() => {
-                if (feelingList == undefined) return [0,0];
-                return feelingList.reduce((prev, curr) => {
-                    return [prev[0] + curr.positivePercent, prev[1]+ curr.negativePercent];
-                }, [0,0]).map(val => val / feelingList.length)
-            })();
-
-            var statistics: {[key: string]: any} = {}
-            outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
-                statistics[val.scheme.id.toString()] = [{
-                    "targetId": val.scheme.target_id,
-                    "name": val.scheme.name,
-                    "unitname": val.scheme.unitName,
-                    "statisticsRule": val.scheme.statisticsRule,
-                    "defaultValue": val.scheme.defaultValue,
-                    "value": val.value,
-                    "feelingText": text,
-                    "feelingName": undefined,
-                    "positivePercent": positivePercent,
-                    "negativePercent": negativePercent,
-                    "recordingDateTime": date
-                }]
-            })
-
-            axios.post('/api/saveTodoArchive', {
-                "token": this.token,
-                "data": {
-                    "todoId": refInfo.ref.id,
-                    "checkInDateTime": date,
-                    "targets": targets?.map(target => target.id),
-                    "statistics": statistics
-                }
-            }).then((res) => {
-                if (res.data.status == 200) {
-                    console.log(res.data);
-                    // TODO: appDataManager内でArchiveの追加
-                } else {
-                    console.log(res.data.message);
-                }
-            })
-            .catch((err) => { console.log(err) });
         }
     }
 
