@@ -88,7 +88,7 @@ export default function Today() {
 
     const [todos, setTodos] = React.useState(appDataManager.todos)
 
-    const [selectedToDoId, setSelectedToDoId] = React.useState<number>();
+    const [selectedToDoId, setSelectedToDoId] = React.useState<string>();
 
     // Collapse state
     const [noDateToDosShown, setNoDateToDosShown] = React.useState<boolean>(true);

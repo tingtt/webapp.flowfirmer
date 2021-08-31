@@ -24,7 +24,7 @@ export const useStyles = makeStyles(() =>
     },
     // 今日の日付
     today_highlight: {
-      fill: "#f60",
+      fill: "#f0600080",
       opacity: 0.5,
     },
     //日付表示
@@ -42,7 +42,21 @@ export const useStyles = makeStyles(() =>
       position: "relative",
       strokeWidth: 0.2,
     },
-    lower_text: {
+    weekly_text: {
+      fill: "#333",
+      fontSize: 12,
+      textAnchor: "middle",
+      "&:nth-child(7n)":{
+        fill: "#00F"
+      },
+      "&:nth-child(1)":{
+        fill: "#F00"
+      },
+      "&:nth-child(7n+1)":{
+        fill: "#F00"
+      },
+    },
+    monthly_text: {
       fill: "#333",
       fontSize: 12,
       textAnchor: "middle",
