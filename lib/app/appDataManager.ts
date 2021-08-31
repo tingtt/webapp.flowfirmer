@@ -50,18 +50,57 @@ export default class AppDataManager {
         return sampleTargets;
     }
 
-    private getToDos() {
-        axios.post(`/api/getTodoByUserId`, { token: this.token })
+    private async getToDos() {
+        var todos: ToDo[] = [];
+        await axios.post(`/api/getTodoByUserId`, { token: this.token })
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
                     console.log(ary);
+                    todos = todos.concat(ary.map((value: {
+                        _id: string;
+                        name: string;
+                        description: string;
+                        startDatetimeScheduled: Date | null;
+                        timeInfoExisted: boolean;
+                        processingTimeScheduled: number | null;
+                        repeatPattern: "Daily" | "Weekly" | "Monthly" | null;
+                        repeatDayForWeekly: number[] | null;
+                        targetList: string[] | null;
+                        term: string | null,
+                        completed: boolean;
+                        archived: boolean;
+                    }) => {
+                        const todo:ToDo = {
+                            id: value._id,
+                            name: value.name,
+                            description: value.description,
+
+                            startDatetimeScheduled: value.startDatetimeScheduled != null ? new Date(value.startDatetimeScheduled) : undefined,
+                            timeInfoExisted: value.timeInfoExisted,
+
+                            processingTimeScheduled: value.processingTimeScheduled != null ? value.processingTimeScheduled : undefined,
+
+                            repeatPattern: value.repeatPattern != null ? value.repeatPattern : undefined,
+                            repeatDayForWeekly: value.repeatDayForWeekly != null ? value.repeatDayForWeekly : undefined,
+
+                            targetList: value.targetList != null ? value.targetList.map((targetId: string) => this.targets!.find(target => target.id == targetId)!) : undefined,
+                            // TODO: Targetが不一致時の処理？
+
+                            term: value.term != null ? this.terms?.find(term => term.id == value.term) : undefined,
+
+                            completed: value.completed,
+                            archived: value.archived
+                        }
+                        return todo;
+                    }))
+                    console.log(todos);
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleToDos;
+        return todos;
     }
 
     private getTerms() {
@@ -671,8 +710,8 @@ export default class AppDataManager {
         this.token = token;
 
         this.targets = this.getTargets();
-        this.todos = this.getToDos();
         this.terms = this.getTerms();
+        this.getToDos().then((value) => this.todos = value);
         this.habitReminds = this.getHabitReminds();
         this.archives = this.getArchives();
     }
