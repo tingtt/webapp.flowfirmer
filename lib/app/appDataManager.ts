@@ -126,7 +126,7 @@ export default class AppDataManager {
      * @param termId number | undefined
      * @param repeatPattern { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay?: number[] } | undefined
      * @param completed boolean
-     * @returns ToDo
+     * @returns ToDo | false
      */
     public registerTodo(
         name: string,
@@ -138,50 +138,7 @@ export default class AppDataManager {
         description = "",
         completed = false
     ) {
-        // TODO: APIを叩いてToDoを登録し、IDを取得
-        const todoHasLastId = this.todos != undefined ? this.todos.sort((a, b) => {
-            // Idで昇順
-            if (a.id < b.id) {
-                return -1;
-            }
-            if (a.id > b.id) {
-                return 1;
-            }
-            return 0;
-        })[this.todos.length - 1] : undefined;
-        const id: string = this.todos != undefined && todoHasLastId != undefined ? todoHasLastId.id + 1 : "";
-
-
-        const newTodo: ToDo = {
-            id: id,
-            user_id: this.user_id,
-
-            name: name,
-
-            description: description,
-
-            startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
-
-            timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
-
-            processingTimeScheduled: processingTime,
-
-            repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
-
-            repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
-
-            targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
-
-            term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
-
-            completed: completed,
-
-            archived: false,
-        }
-
-        // 新規Targetを追加
-        this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
-
+        // APIを叩いてToDoを登録し、IDを取得
         axios.post('/api/saveTodo', {
             "token": this.token,
             "data": {
@@ -200,7 +157,24 @@ export default class AppDataManager {
         }).then((res) => {
             if (res.data.status == 200) {
                 console.log(res.data.objectId);
-                // TODO: AppDataManager内でToDoを追加
+                const newTodo: ToDo = {
+                    id: res.data.objectId,
+                    user_id: this.user_id,
+                    name: name,
+                    description: description,
+                    startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
+                    timeInfoExisted: datetime != undefined ? datetime.timeSetted : false,
+                    processingTimeScheduled: processingTime,
+                    repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
+                    repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+                    targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
+                    term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
+                    completed: completed,
+                    archived: false,
+                };
+                // 新規Targetを追加
+                this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
+                return newTodo;
             } else {
                 console.log(res.data.message);
             }
@@ -208,7 +182,7 @@ export default class AppDataManager {
             console.log(err);
         });
 
-        return newTodo;
+        return false;
     }
 
     /**
