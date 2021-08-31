@@ -1,6 +1,5 @@
 export type Target = {
     id: string
-    user_id: number
 
     name: string
     themeColor: {
@@ -21,7 +20,6 @@ export type Target = {
 // 成果記録の型
 export type OutcomeScheme = {
     id: number
-    user_id: number
 
     target_id: number
 

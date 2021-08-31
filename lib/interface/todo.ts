@@ -4,7 +4,6 @@ import { Term } from "./term";
 
 export type ToDo = {
     id: string
-    user_id: number
 
     name: string
     description?: string

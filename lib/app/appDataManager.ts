@@ -26,8 +26,6 @@ export default class AppDataManager {
         return this._instance;
     }
 
-    private user_id: number;
-
     private token: string;
 
     public targets?: Target[];
@@ -49,7 +47,7 @@ export default class AppDataManager {
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleTargets.filter(value => value.user_id == this.user_id);
+        return sampleTargets;
     }
 
     private getToDos() {
@@ -63,7 +61,7 @@ export default class AppDataManager {
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleToDos.filter(value => value.user_id == this.user_id);
+        return sampleToDos;
     }
 
     private getTerms() {
@@ -77,7 +75,7 @@ export default class AppDataManager {
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleTerms.filter(value => value.user_id == this.user_id);
+        return sampleTerms;
     }
 
     private getHabitReminds() {
@@ -91,7 +89,7 @@ export default class AppDataManager {
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleHabitReminds.filter(value => value.user_id == this.user_id);
+        return sampleHabitReminds;
     }
 
     private getArchives() {
@@ -105,7 +103,7 @@ export default class AppDataManager {
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleArchives.filter(value => value.user_id == this.user_id);
+        return sampleArchives;
     }
 
     /**
@@ -150,7 +148,6 @@ export default class AppDataManager {
                 console.log(res.data.objectId);
                 const newTodo: ToDo = {
                     id: res.data.objectId,
-                    user_id: this.user_id,
                     name: name,
                     description: description,
                     startDatetimeScheduled: datetime != undefined ? datetime.date : undefined,
@@ -478,7 +475,6 @@ export default class AppDataManager {
 
                 newTarget = {
                     id: id,
-                    user_id: this.user_id,
 
                     name: name,
                     themeColor: themeColor != undefined ?
@@ -640,7 +636,6 @@ export default class AppDataManager {
                         // Archiveデータを作成
                         const newArchive: Archive = {
                             id: res.data.objectId,
-                            user_id: this.user_id,
                             refInfo: refInfo,
                             checkInDateTime: new Date(),
                             targets: targets,
@@ -673,7 +668,6 @@ export default class AppDataManager {
     }
 
     private constructor(token: string) {
-        this.user_id = 0;
         this.token = token;
 
         this.targets = this.getTargets();
