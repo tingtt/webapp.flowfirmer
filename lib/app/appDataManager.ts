@@ -180,18 +180,31 @@ export default class AppDataManager {
         return terms;
     }
 
-    private getHabitReminds() {
-        axios.post(`/api/getHabitByUserId`, { token: this.token })
+    private async getHabitReminds() {
+        var habits: HabitRemind[] = [];
+        await axios.post(`/api/getHabitByUserId`, { token: this.token })
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
                     console.log(ary);
+                    habits = habits.concat(ary.map((value: {
+                        _id: string;
+                        name: string;
+                        target: string | null;
+                    }) => {
+                        const habit: HabitRemind = {
+                            id: value._id,
+                            name: value.name,
+                            target: value.target != null ? this.targets!.find(target => target.id == value.target) : undefined
+                        }
+                        return habit;
+                    }))
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleHabitReminds;
+        return habits;
     }
 
     private getArchives() {
@@ -775,7 +788,7 @@ export default class AppDataManager {
         this.getTargets().then((value) => this.targets = value);
         this.getTerms().then((value) => this.terms = value);
         this.getToDos().then((value) => this.todos = value);
-        this.habitReminds = this.getHabitReminds();
+        this.getHabitReminds().then((value) => this.habitReminds = value);
         this.archives = this.getArchives();
     }
 }
