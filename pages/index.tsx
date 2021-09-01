@@ -1,14 +1,14 @@
+import Link from 'next/link'
+
 const IndexPage = () => (
   <div>
-
-    <h1>Hello Next.js 👋</h1>
+    <h1>Hello Flow firmer. 👋</h1>
     <p>
-
-        <a>About</a>
-
+      <Link href="/app">
+        <a>Login</a>
+      </Link>
     </p>
-    </div>
-
+  </div>
 )
 
 export default IndexPage

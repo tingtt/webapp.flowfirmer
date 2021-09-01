@@ -8,9 +8,18 @@
     "type-check": "tsc"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.59",
+    "@material-ui/pickers": "^3.3.10",
+    "axios": "^0.21.1",
+    "material-ui": "^0.20.2",
     "next": "latest",
+    "next-iron-session": "^4.1.13",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1"
+    "react-dom": "^17.0.1",
+    "react-hotkeys-hook": "^3.3.1",
+    "recharts": "^2.0.9"
   },
   "devDependencies": {
     "@types/node": "^12.12.21",
