@@ -144,18 +144,40 @@ export default class AppDataManager {
         return todos;
     }
 
-    private getTerms() {
-        axios.post(`/api/getTermByUserId`, { token: this.token })
+    private async getTerms() {
+        var terms: Term[] = [];
+        await axios.post(`/api/getTermByUserId`, { token: this.token })
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
                     console.log(ary);
+                    terms = terms.concat(ary.map((value: {
+                        _id: string;
+                        name: string;
+                        description: string | null;
+                        targetList: string[] | null;
+                        startDatetimeScheduled: Date;
+                        endDatetimeScheduled: Date;
+                        startDateTime: Date | null;
+                    }) =>{
+                        const term: Term = {
+                            id: value._id,
+                            name : value.name,
+                            description : value.description != null ? value.description : undefined,
+                            targetList : value.targetList != null ? value.targetList.map(targetId => this.targets!.find(target => target.id == targetId)!) : undefined,
+                            // TODO: Targetが不一致時の処理？
+                            startDatetimeScheduled: value.startDatetimeScheduled,
+                            endDatetimeScheduled: value.endDatetimeScheduled,
+                            startDatetime: value.startDateTime != null ? value.startDateTime : undefined
+                        };
+                        return term;
+                    }))
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleTerms;
+        return terms;
     }
 
     private getHabitReminds() {
@@ -751,7 +773,7 @@ export default class AppDataManager {
         this.token = token;
 
         this.getTargets().then((value) => this.targets = value);
-        this.terms = this.getTerms();
+        this.getTerms().then((value) => this.terms = value);
         this.getToDos().then((value) => this.todos = value);
         this.habitReminds = this.getHabitReminds();
         this.archives = this.getArchives();
