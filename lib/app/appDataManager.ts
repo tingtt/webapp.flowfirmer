@@ -220,9 +220,9 @@ export default class AppDataManager {
      * @param termId number | undefined
      * @param repeatPattern { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay?: number[] } | undefined
      * @param completed boolean
-     * @returns ToDo | false
+     * @returns ToDo[] | false
      */
-    public registerTodo(
+    public async registerTodo(
         name: string,
         datetime?: { date: Date, timeSetted: boolean},
         processingTime?: number,
@@ -231,9 +231,10 @@ export default class AppDataManager {
         repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
         description = "",
         completed = false
-    ) {
+    ): Promise<ToDo[] | false> {
+        var ret: ToDo[] | false = false;
         // APIを叩いてToDoを登録し、IDを取得
-        axios.post('/api/saveTodo', {
+        await axios.post('/api/saveTodo', {
             "token": this.token,
             "data": {
                 "name": name,
@@ -267,7 +268,7 @@ export default class AppDataManager {
                 };
                 // 新規Targetを追加
                 this.todos = this.todos != undefined ? [...this.todos, newTodo] : [newTodo];
-                return newTodo;
+                ret = this.todos;
             } else {
                 console.log(res.data.message);
             }
@@ -275,7 +276,7 @@ export default class AppDataManager {
             console.log(err);
         });
 
-        return false;
+        return ret;
     }
 
     /**

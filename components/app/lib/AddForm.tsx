@@ -193,6 +193,8 @@ export default function AddForm(props: Props) {
 
     const registerTodo = () => {
         // 登録
+        // リストのStateを同期
+        console.log(appDataManager.todos);
         appDataManager.registerTodo(
             inputText,
             date != null ? { date : date, timeSetted: timeSetted } : undefined,
@@ -200,12 +202,15 @@ export default function AddForm(props: Props) {
             selectedTargetIdList,
             undefined,
             date != null && selectedRepeatPattern != null ? selectedRepeatPattern : undefined
-        );
-        // リストのStateを同期
-        props.setTodos(appDataManager.todos);
-        // 入力値をクリア
-        clearAll();
-        // console.log(appDataManager.todos);
+        ).then((res) => {
+            console.log(res);
+            if (res != false) {
+                // stateの更新
+                props.setTodos(res)
+                // 入力値をクリア
+                clearAll();
+            }
+        })
     };
 
     return (
