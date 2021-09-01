@@ -125,7 +125,7 @@ export default class AppDataManager {
                             repeatPattern: value.repeatPattern != null ? value.repeatPattern : undefined,
                             repeatDayForWeekly: value.repeatDayForWeekly != null ? value.repeatDayForWeekly : undefined,
 
-                            targetList: value.targetList != null ? value.targetList.map((targetId: string) => this.targets!.find(target => target.id == targetId)!) : undefined,
+                            targetList: value.targetList != null ? value.targetList.map((targetId: string) => this.targets?.find(target => target.id == targetId)).filter(target => target != undefined) : undefined,
                             // TODO: Targetが不一致時の処理？
 
                             term: value.term != null ? this.terms?.find(term => term.id == value.term) : undefined,
@@ -164,7 +164,7 @@ export default class AppDataManager {
                             id: value._id,
                             name : value.name,
                             description : value.description != null ? value.description : undefined,
-                            targetList : value.targetList != null ? value.targetList.map(targetId => this.targets!.find(target => target.id == targetId)!) : undefined,
+                            targetList : value.targetList != null ? value.targetList.map(targetId => this.targets!.find(target => target.id == targetId)).filter(target => target != undefined) : undefined,
                             // TODO: Targetが不一致時の処理？
                             startDatetimeScheduled: value.startDatetimeScheduled,
                             endDatetimeScheduled: value.endDatetimeScheduled,
