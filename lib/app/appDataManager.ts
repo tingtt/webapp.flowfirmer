@@ -208,16 +208,16 @@ export default class AppDataManager {
     }
 
     private getArchives() {
-        axios.post(`/api/getTodoArchiveByUserId`, { token: this.token })
-            .then((res) => {
-                if (res.data.status == 200) {
-                    const ary = res.data.data;
-                    console.log(ary);
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        // axios.post(`/api/getTodoArchiveByUserId`, { token: this.token })
+        //     .then((res) => {
+        //         if (res.data.status == 200) {
+        //             const ary = res.data.data;
+        //             console.log(ary);
+        //         }
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
         return sampleArchives;
     }
 
