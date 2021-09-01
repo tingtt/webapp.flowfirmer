@@ -19,9 +19,9 @@ export type Target = {
 
 // 成果記録の型
 export type OutcomeScheme = {
-    id: number
+    id: string
 
-    target_id: number
+    target_id: string
 
     name: string
     //単位

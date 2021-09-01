@@ -2,9 +2,9 @@ import { Target, OutcomeScheme, ToDo, Term, HabitRemind, Document, Archive, Feel
 
 export const sampleOutcomeSchemes: OutcomeScheme[] = [
     {
-        id: 0,
+        id: "0",
 
-        target_id: 0,
+        target_id: "0",
 
         name: "スクワット",
         unitName: "回",
@@ -14,9 +14,9 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         defaultValue: 20
     },
     {
-        id: 1,
+        id: "1",
 
-        target_id: 0,
+        target_id: "0",
 
         name: "腹筋",
         unitName: "回",
@@ -26,9 +26,9 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         defaultValue: 20
     },
     {
-        id: 2,
+        id: "2",
 
-        target_id: 0,
+        target_id: "0",
 
         name: "HIIT",
         unitName: "分",

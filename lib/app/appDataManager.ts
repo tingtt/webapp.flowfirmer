@@ -36,18 +36,59 @@ export default class AppDataManager {
 
     // TODO: ユーザーの登録データを取得
 
-    private getTargets() {
-        axios.post(`/api/getTarget`, { token: this.token })
+    private async getTargets() {
+        var targets: Target[] = []
+        await axios.post(`/api/getTarget`, { token: this.token })
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
                     console.log(ary);
+                    targets = targets.concat(ary.map((value: {
+                        _id: string;
+                        name: string;
+                        outcomes: {
+                            _id: string,
+                            name: string,
+                            unitName: string | null,
+                            statisticsRule: "String" | "Sum" | "Max" | "Min",
+                            targetValue: number | null,
+                            defaultValue: string | number | null
+                        }[];
+                        pinnedAtNavigationList: boolean | null;
+                        hiddenAtNavigationList: boolean | null;
+                        themeColor: { r: number; g: number; b: number; };
+                    }) => {
+                        const target: Target = {
+                            id: value._id,
+                            name: value.name,
+                            outcomeSchemes: value.outcomes.map(outcomeScheme => {
+                                const res: OutcomeScheme = {
+                                    id: outcomeScheme._id,
+                                    target_id: value._id,
+                                    name: outcomeScheme.name,
+                                    unitName: outcomeScheme.unitName != null ? outcomeScheme.unitName : "",
+                                    statisticsRule: outcomeScheme.statisticsRule,
+                                    targetValue: outcomeScheme.targetValue != null ? outcomeScheme.targetValue : undefined,
+                                    defaultValue: outcomeScheme.defaultValue != null ? outcomeScheme.defaultValue : undefined,
+                                };
+                                return res;
+                            }),
+                            pinnedAtNavigationList: value.pinnedAtNavigationList ? true : undefined,
+                            hiddenAtNavigationList: value.hiddenAtNavigationList ? true : undefined,
+                            themeColor: {
+                                r: value.themeColor.r,
+                                g: value.themeColor.g,
+                                b: value.themeColor.b
+                            }
+                        };
+                        return target;
+                    }))
                 }
             })
             .catch(function (error) {
                 console.log(error);
             });
-        return sampleTargets;
+        return targets;
     }
 
     private async getToDos() {
@@ -709,7 +750,7 @@ export default class AppDataManager {
     private constructor(token: string) {
         this.token = token;
 
-        this.targets = this.getTargets();
+        this.getTargets().then((value) => this.targets = value);
         this.terms = this.getTerms();
         this.getToDos().then((value) => this.todos = value);
         this.habitReminds = this.getHabitReminds();
