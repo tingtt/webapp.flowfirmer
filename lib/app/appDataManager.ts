@@ -494,7 +494,7 @@ export default class AppDataManager {
         axios.post('/api/saveTarget', {
             "token": this.token,
             "data": {
-                "name" : "name",
+                "name" : name,
                 "themeColor" : themeColor != undefined ?
                     themeColor
                     :
