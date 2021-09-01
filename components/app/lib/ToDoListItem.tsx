@@ -222,7 +222,7 @@ export default function ToDoListItem(props: Props) {
                                 }
                             }}
                             className={clsx({
-                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()
+                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && ((props.todo.startDatetimeScheduled.getFullYear() * 100 + props.todo.startDatetimeScheduled.getMonth()) * 100 + props.todo.startDatetimeScheduled.getDate() < ((new Date()).getFullYear() * 100 + (new Date()).getMonth()) * 100 + (new Date()).getDate())
                             })}
                             autoComplete="off"
                         />
@@ -232,7 +232,7 @@ export default function ToDoListItem(props: Props) {
                         className={clsx(
                             classes.detailInfoDiv,
                             {
-                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()
+                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && ((props.todo.startDatetimeScheduled.getFullYear() * 100 + props.todo.startDatetimeScheduled.getMonth()) * 100 + props.todo.startDatetimeScheduled.getDate() < ((new Date()).getFullYear() * 100 + (new Date()).getMonth()) * 100 + (new Date()).getDate())
                             },
                         )}
                     >

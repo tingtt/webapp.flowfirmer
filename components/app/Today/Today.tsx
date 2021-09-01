@@ -152,7 +152,7 @@ export default function Today() {
                         {/* 遅延しているToDo */}
                         {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && (() => {
                             const date = new Date();
-                            return value.startDatetimeScheduled.getFullYear() <= date.getFullYear() && value.startDatetimeScheduled.getMonth() <= date.getMonth() && value.startDatetimeScheduled.getDate() < date.getDate();
+                            return (value.startDatetimeScheduled.getFullYear() * 100 + value.startDatetimeScheduled.getMonth()) * 100 + value.startDatetimeScheduled.getDate() < (date.getFullYear() * 100 + date.getMonth()) * 100 + date.getDate();
                         })()).length > 0 && (
                             <Collapse in={delayedToDosShown} collapsedSize="33px">
                                 <div
@@ -168,7 +168,7 @@ export default function Today() {
                                 </div>
                                 {todos.filter(value => value.startDatetimeScheduled != undefined && !value.completed && (() => {
                                     const date = new Date();
-                                    return value.startDatetimeScheduled.getFullYear() <= date.getFullYear() && value.startDatetimeScheduled.getMonth() <= date.getMonth() && value.startDatetimeScheduled.getDate() < date.getDate();
+                                    return (value.startDatetimeScheduled.getFullYear() * 100 + value.startDatetimeScheduled.getMonth()) * 100 + value.startDatetimeScheduled.getDate() < (date.getFullYear() * 100 + date.getMonth()) * 100 + date.getDate();
                                 })()).sort((a,b) => {
                                     var comparison: number = 0;
                                     if (a.startDatetimeScheduled == undefined) {
