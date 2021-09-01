@@ -1,5 +1,5 @@
 import axios from "axios";
-import { sampleArchives, sampleHabitReminds, sampleTargets, sampleTerms, sampleToDos } from "../../utils/sample-data";
+import { sampleArchives } from "../../utils/sample-data";
 import { Percentage } from "../interface/archive";
 import { Archive, FeelingType, HabitRemind, OutcomeScheme, Target, Term, ToDo } from "../interface/index";
 
@@ -34,15 +34,12 @@ export default class AppDataManager {
     public habitReminds?: HabitRemind[];
     public archives?: Archive[];
 
-    // TODO: ユーザーの登録データを取得
-
     private async getTargets() {
         var targets: Target[] = []
         await axios.post(`/api/getTarget`, { token: this.token })
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
-                    console.log(ary);
                     targets = targets.concat(ary.map((value: {
                         _id: string;
                         name: string;
@@ -97,7 +94,6 @@ export default class AppDataManager {
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
-                    console.log(ary);
                     todos = todos.concat(ary.map((value: {
                         _id: string;
                         name: string;
@@ -125,8 +121,7 @@ export default class AppDataManager {
                             repeatPattern: value.repeatPattern != null ? value.repeatPattern : undefined,
                             repeatDayForWeekly: value.repeatDayForWeekly != null ? value.repeatDayForWeekly : undefined,
 
-                            targetList: value.targetList != null ? value.targetList.map((targetId: string) => this.targets?.find(target => target.id == targetId)).filter(target => target != undefined) : undefined,
-                            // TODO: Targetが不一致時の処理？
+                            targetList: value.targetList != null && this.targets != undefined ? value.targetList.map((targetId: string) => this.targets!.find(target => target.id == targetId)).filter((target): target is Target => target != undefined) : undefined,
 
                             term: value.term != null ? this.terms?.find(term => term.id == value.term) : undefined,
 
@@ -135,7 +130,6 @@ export default class AppDataManager {
                         }
                         return todo;
                     }))
-                    console.log(todos);
                 }
             })
             .catch(function (error) {
@@ -150,7 +144,6 @@ export default class AppDataManager {
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
-                    console.log(ary);
                     terms = terms.concat(ary.map((value: {
                         _id: string;
                         name: string;
@@ -164,8 +157,7 @@ export default class AppDataManager {
                             id: value._id,
                             name : value.name,
                             description : value.description != null ? value.description : undefined,
-                            targetList : value.targetList != null ? value.targetList.map(targetId => this.targets!.find(target => target.id == targetId)).filter(target => target != undefined) : undefined,
-                            // TODO: Targetが不一致時の処理？
+                            targetList : value.targetList != null && this.targets != undefined ? value.targetList.map(targetId => this.targets!.find(target => target.id == targetId)).filter((target): target is Target => target != undefined) : undefined,
                             startDatetimeScheduled: value.startDatetimeScheduled,
                             endDatetimeScheduled: value.endDatetimeScheduled,
                             startDatetime: value.startDateTime != null ? value.startDateTime : undefined
@@ -186,7 +178,6 @@ export default class AppDataManager {
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
-                    console.log(ary);
                     habits = habits.concat(ary.map((value: {
                         _id: string;
                         name: string;
@@ -212,7 +203,6 @@ export default class AppDataManager {
         //     .then((res) => {
         //         if (res.data.status == 200) {
         //             const ary = res.data.data;
-        //             console.log(ary);
         //         }
         //     })
         //     .catch(function (error) {
@@ -339,7 +329,6 @@ export default class AppDataManager {
      * / toggleTodoCompletionState
      */
     public toggleTodoCompletionState(id: string) {
-        // TODO: API叩く処理?
         // 更新
         if (this.todos != undefined) {
             // 新規ToDo用の値を保持するフィールド
