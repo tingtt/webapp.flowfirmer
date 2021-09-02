@@ -7,14 +7,14 @@ export default class AppDataManager {
 
     private static _instance: AppDataManager
 
-    public static generateInstance(token: string): AppDataManager {
+    public static generateInstance(): AppDataManager {
         // インスタンスが既に生成されている場合にエラー
         if (this._instance) {
             throw new Error("AppDataManager instance already exists.");
         }
 
         console.log("Generating 'AppDataManager' instance.");
-        this._instance = new AppDataManager(token);
+        this._instance = new AppDataManager();
 
         return this._instance;
     }
@@ -26,8 +26,6 @@ export default class AppDataManager {
         return this._instance;
     }
 
-    private token: string;
-
     public targets?: Target[];
     public todos?: ToDo[];
     public terms?: Term[];
@@ -36,7 +34,7 @@ export default class AppDataManager {
 
     private async getTargets() {
         var targets: Target[] = []
-        await axios.post(`/api/getTarget`, { token: this.token })
+        await axios.post(`/api/getTarget`)
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
@@ -90,7 +88,7 @@ export default class AppDataManager {
 
     private async getToDos() {
         var todos: ToDo[] = [];
-        await axios.post(`/api/getTodoByUserId`, { token: this.token })
+        await axios.post(`/api/getTodoByUserId`)
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
@@ -140,7 +138,7 @@ export default class AppDataManager {
 
     private async getTerms() {
         var terms: Term[] = [];
-        await axios.post(`/api/getTermByUserId`, { token: this.token })
+        await axios.post(`/api/getTermByUserId`)
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
@@ -174,7 +172,7 @@ export default class AppDataManager {
 
     private async getHabitReminds() {
         var habits: HabitRemind[] = [];
-        await axios.post(`/api/getHabitByUserId`, { token: this.token })
+        await axios.post(`/api/getHabitByUserId`)
             .then((res) => {
                 if (res.data.status == 200) {
                     const ary = res.data.data;
@@ -199,7 +197,7 @@ export default class AppDataManager {
     }
 
     private getArchives() {
-        // axios.post(`/api/getTodoArchiveByUserId`, { token: this.token })
+        // axios.post(`/api/getTodoArchiveByUserId`)
         //     .then((res) => {
         //         if (res.data.status == 200) {
         //             const ary = res.data.data;
@@ -235,7 +233,6 @@ export default class AppDataManager {
         var ret: ToDo[] | false = false;
         // APIを叩いてToDoを登録し、IDを取得
         await axios.post('/api/saveTodo', {
-            "token": this.token,
             "data": {
                 "name": name,
                 "description": description,
@@ -291,7 +288,6 @@ export default class AppDataManager {
                 if (value.id == updatedValue.id) {
                     // call api
                     axios.post('/api/updateTodoByObjectId', {
-                        "token": this.token,
                         "data": {
                             "_id": updatedValue.id,
                             "name": updatedValue.name,
@@ -414,7 +410,6 @@ export default class AppDataManager {
 
                     // call api
                     axios.post('/api/updateTodoByObjectId', {
-                        "token": this.token,
                         "data": {
                             "_id": value.id,
                             "name": value.name,
@@ -487,7 +482,6 @@ export default class AppDataManager {
 
             // call api
             axios.post('/api/deleteTodoByObjectId', {
-                "token": this.token,
                 "data": {
                     "_id": id
                 }
@@ -513,7 +507,6 @@ export default class AppDataManager {
             if (poppedTodo != undefined) {
                 // call api
                 axios.post('/api/saveTodo', {
-                    "token": this.token,
                     "data": {
                         "name": poppedTodo.name,
                         "description": poppedTodo.description,
@@ -558,7 +551,6 @@ export default class AppDataManager {
         var id: string;
         var newTarget: Target | undefined;
         axios.post('/api/saveTarget', {
-            "token": this.token,
             "data": {
                 "name" : name,
                 "themeColor" : themeColor != undefined ?
@@ -680,7 +672,6 @@ export default class AppDataManager {
                 })
 
                 axios.post('/api/saveTodoArchive', {
-                    "token": this.token,
                     "data": {
                         "todoId": refInfo.ref.id,
                         "checkInDateTime": date,
@@ -728,7 +719,6 @@ export default class AppDataManager {
                 })
 
                 axios.post('/api/saveTodoArchive', {
-                    "token": this.token,
                     "data": {
                         "todoId": refInfo.ref.id,
                         "checkInDateTime": date,
@@ -772,9 +762,7 @@ export default class AppDataManager {
         }
     }
 
-    private constructor(token: string) {
-        this.token = token;
-
+    private constructor() {
         this.getTargets().then((value) => this.targets = value);
         this.getTerms().then((value) => this.terms = value);
         this.getToDos().then((value) => this.todos = value);

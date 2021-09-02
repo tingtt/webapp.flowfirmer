@@ -197,7 +197,7 @@ export default function ArchiveExpressiveDiary(props: Props) {
 
     const appDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
+            return  AppDataManager.generateInstance();
         } catch (e) {
             return  AppDataManager.getInstance();
         }
