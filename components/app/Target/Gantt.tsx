@@ -4,7 +4,11 @@ import { Gantt } from "../../../lib/interface/gantt";
 // import { Term } from '../../../lib/interface';
 import AppDataManager from "../../../lib/app/appDataManager";
 
-export default function GanttChart() {
+type Props = {
+  targetId: string
+};
+
+export default function GanttChart(props: Props) {
   const appDataManager: AppDataManager = (() => {
     try {
       return AppDataManager.generateInstance(
