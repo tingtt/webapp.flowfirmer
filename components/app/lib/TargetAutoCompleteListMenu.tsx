@@ -52,7 +52,7 @@ export default function DateTimeInfoSelectMenu(props: Props) {
             }
         })
         // メニューを閉じる
-        props.menuAnchorElSetter(null);
+        closeMenu();
     };
 
     return (
@@ -60,8 +60,8 @@ export default function DateTimeInfoSelectMenu(props: Props) {
             anchorEl={props.menuAnchorEl}
             getContentAnchorEl={null}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
+                vertical: 'bottom',
+                horizontal: 'left',
             }}
             open={Boolean(props.menuAnchorEl)}
             onClose={closeMenu}

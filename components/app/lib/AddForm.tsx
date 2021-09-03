@@ -194,7 +194,6 @@ export default function AddForm(props: Props) {
     const registerTodo = () => {
         // 登録
         // リストのStateを同期
-        console.log(appDataManager.todos);
         appDataManager.registerTodo(
             inputText,
             date != null ? { date : date, timeSetted: timeSetted } : undefined,
