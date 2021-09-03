@@ -93,7 +93,7 @@ export default function Layout() {
                 { navigationState.name == 'All' && <AllView /> }
                 { navigationState.name == 'Today' && <TodayView /> }
                 { navigationState.name == 'Weekly' && <WeeklyView /> }
-                { navigationState.name == 'Target' && <TargetView /> }
+                { navigationState.name == 'Target' && <TargetView targetId={navigationState.target.id} /> }
                 { navigationState.name == 'Dashboard' && <DashboardView /> }
             </main>
         </div>

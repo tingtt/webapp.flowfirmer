@@ -1,9 +1,13 @@
 import GanttChart from "./Gantt";
 
-export default function Target() {
+type Props = {
+    targetId: string
+};
+
+export default function Target(props: Props) {
     return (
         <div>
-            <GanttChart/>
+            <GanttChart targetId={props.targetId}/>
         </div>
     )
 }
