@@ -12,10 +12,12 @@ import { ClassNameMap } from "@material-ui/styles";
 import AppNavigatoinListManager from "../../lib/app/appNavigationListManager";
 import AppDataManager from "../../lib/app/appDataManager";
 import { AccountCircle, AddCircle, Bookmark, BookmarkBorder, Search, Today, ViewWeek, AllInbox, Dashboard } from "@material-ui/icons";
+import { useEffect } from "react";
 
 type Props = {
 	drawerOpen: boolean
 	setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+    nav: NavigationState
 	setNav: React.Dispatch<React.SetStateAction<NavigationState>>
 	classes: ClassNameMap
 }
@@ -50,6 +52,22 @@ export default function NavigationDrawer(props: Props) {
             return  AppNavigatoinListManager.getInstance();
         }
     })();
+
+    const [count, setCount] = React.useState(0);
+
+    useEffect(() => {
+        // targetのリストが表示されるようにロード
+        if (count == 0) {
+            setCount(current => current + 1);
+            const otherNav = appNavigationManager.navigationListItems.find(value => value.name != props.nav.name);
+            if (otherNav != undefined) {
+                props.setNav(otherNav);
+            }
+        } else if (count <= 2) {
+            setCount(current => current + 1);
+            props.setNav(appNavigationManager.getInitNavigationState());
+        }
+    }, [props.nav])
 
     return (
         <Drawer

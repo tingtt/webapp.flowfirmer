@@ -80,6 +80,7 @@ export default function Layout() {
             <NavigationDrawer
                 drawerOpen={navigationDrawerOpen}
                 setDrawerOpen={setNavigationDrawerOpen}
+                nav={navigationState}
                 setNav={setNavigationState}
                 classes={classes}
             />
