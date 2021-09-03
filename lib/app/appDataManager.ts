@@ -537,6 +537,60 @@ export default class AppDataManager {
     }
 
     /**
+     * registerTerm
+     *
+     * @param name string
+     * @param startDatetimeScheduled Date
+     * @param endDatetimeScheduled Date
+     * @param targetList string[]
+     * @param description string
+     * @param startDatetime Date
+     * @param endDatetime Date
+     * @returns Term[] | false
+     */
+    public async registerTerm(
+        name: string,
+        startDatetimeScheduled: Date,
+        endDatetimeScheduled: Date,
+        targetList: string[] = [],
+        description: string = "",
+        startDatetime: Date | undefined = undefined,
+        endDatetime: Date | undefined = undefined
+    ): Promise<Term[] | false> {
+        var ret: Term[] | false = false;
+        await axios.post('/api/saveTerm', {
+            data : {
+                name : name,
+                description : description,
+                targetList : targetList,
+                startDatetimeScheduled: startDatetimeScheduled,
+                endDatetimeScheduled: endDatetimeScheduled,
+                startDatetime: startDatetime,
+                endDatetime: endDatetime
+            }
+        }).then((res) => {
+            if (res.data.status == 200) {
+                console.log(res.data.objectId);
+                const newTerm: Term = {
+                    id: res.data.objectId,
+                    name: name,
+                    description: description,
+                    targetList: targetList.map(id => this.targets?.find(target => target.id == id)).filter((target): target is Target => target != undefined),
+                    startDatetimeScheduled: startDatetimeScheduled,
+                    endDatetimeScheduled: endDatetimeScheduled,
+                    startDatetime: startDatetime,
+                    endDatetime: endDatetime
+                };
+                this.terms = this.terms != undefined ? this.terms.concat([newTerm]) : [newTerm];
+                ret = this.terms;
+            } else {
+                console.log(res.data.message);
+            }
+        })
+        return ret;
+    }
+
+    /**
      *
      * @param name string
      * @param themeColor string

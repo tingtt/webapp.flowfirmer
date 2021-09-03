@@ -136,12 +136,19 @@ export default function AddForm(props: Props) {
     // 開始時間の指定状態
     const [timeSetted, setTimeSetted] = React.useState<boolean>(false);
 
+    // Term flag
+    const [termFlg, setTermFlg] = React.useState(false);
+
+    // 終了日時（Term）
+    const [endDate, setEndDate] = React.useState<Date | null>(null);
+
     // メニューのアンカー
     const [datetimeInfoSelectMenuAnchorEl, setDatetimeInfoSelectMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // 日時指定テキストフィールド用の文字列
     const [dateStr, setDateStr] = React.useState<string>("");
     const [timeStr, setTimeStr] = React.useState<string>("");
+    const [endDateStr, setEndDateStr] = React.useState<string>("");
 
     /**
      * syntaxDetection
@@ -189,10 +196,13 @@ export default function AddForm(props: Props) {
         setSelectedTargetIdList(undefined);
         setTimeSetted(false);
         setTimeStr("");
+        setEndDate(null);
+        setEndDateStr("");
+        setTermFlg(false);
     }
 
     const registerTodo = () => {
-        // 登録
+        // to-do登録
         // リストのStateを同期
         appDataManager.registerTodo(
             inputText,
@@ -212,6 +222,27 @@ export default function AddForm(props: Props) {
         })
     };
 
+    const registerTerm = () => {
+        if (inputText == "" || date == null || endDate == null) {
+            console.log("日付情報が必要です。");
+            return false;
+        }
+        // Term登録
+        appDataManager.registerTerm(
+            inputText,
+            date,
+            endDate,
+            selectedTargetIdList
+        ).then((res) => {
+            if (res != false) {
+                // TODO: stateの更新
+                console.log(res);
+                // 入力値をクリア
+                clearAll();
+            }
+        })
+    }
+
     return (
         <div
             className={classes.root}
@@ -224,7 +255,11 @@ export default function AddForm(props: Props) {
                     autoComplete="off"
                     className={classes.form}
                     onSubmit={(e: React.FormEvent<HTMLFormElement>) => {
-                        registerTodo();
+                        if (termFlg) {
+                            registerTerm();
+                        } else {
+                            registerTodo();
+                        }
                         e.preventDefault();
                     }}
                 >
@@ -329,6 +364,12 @@ export default function AddForm(props: Props) {
                 timeStrSetter={setTimeStr}
                 repeatPattern={selectedRepeatPattern}
                 repeatPatternSetter={setRepeatPattern}
+                termFlg={termFlg}
+                termFlgSetter={setTermFlg}
+                endDate={endDate}
+                endDateSetter={setEndDate}
+                endDateStr={endDateStr}
+                endDateStrSetter={setEndDateStr}
             />
         </div>
     );
