@@ -1,21 +1,17 @@
 import { NavigationState } from "../state/navigationState";
-import { Target } from "../interface/index";
-
-//sampleData
-import { sampleTargets } from "../../utils/sample-data"
 
 export default class AppNavigatoinListManager {
 
     private static _instance: AppNavigatoinListManager;
 
-    public static generateInstance(user_id: number): AppNavigatoinListManager {
+    public static generateInstance(): AppNavigatoinListManager {
         // インスタンスが既に生成されている場合にエラー
         if (this._instance) {
             throw new Error("AppNavigationManager instance already exists.");
         }
 
         console.log("Generating 'AppNavigationManager' instance.");
-        this._instance = new AppNavigatoinListManager(user_id);
+        this._instance = new AppNavigatoinListManager();
 
         return this._instance;
     }
@@ -27,24 +23,13 @@ export default class AppNavigatoinListManager {
         return this._instance;
     }
 
-    // ユーザーID
-    private user_id: number
-
     // ナビゲーションに表示するリスト
-    public navigationListItems = {
-        originalItems: [
-            { name: 'All' },
-            { name: 'Today' },
-            { name: 'Weekly' },
-            { name: 'Dashboard'}
-        ] as NavigationState[],
-        pinnedTargets: [
-
-        ] as NavigationState[],
-        otherTargets: [
-
-        ] as NavigationState[],
-    }
+    public navigationListItems: NavigationState[] = [
+        { name: 'All' },
+        { name: 'Today' },
+        { name: 'Weekly' },
+        { name: 'Dashboard'}
+    ];
 
     /**
      * インスタンス生成時に保持したユーザーIDからナビゲーション状態の初期値を取得
@@ -74,33 +59,8 @@ export default class AppNavigatoinListManager {
         ];
     }
 
-    /**
-     * インスタンス生成時に保持したユーザーIDからTargetを取得
-     * @returns Target[]
-     */
-    private getTargets(): Target[] {
-        return sampleTargets.filter(value => value.user_id == this.user_id);
-    }
-
-    private constructor(user_id: number) {
-
-        // ユーザーIDを保持
-        this.user_id = user_id;
-
+    private constructor() {
         // ユーザーが設定したナビゲーション項目の表示設定を適応
-        this.navigationListItems.originalItems = this.getInitNavigationItemList()
-
-        // ユーザーのTargetを取得
-        const targets = this.getTargets();
-
-        // ユーザーがピン留めいている且つ表示するTargetを抽出し、NavigationStateに変換してナビゲーションリストに追加
-        this.navigationListItems.pinnedTargets = this.navigationListItems.pinnedTargets.concat(
-            targets.filter(value => !value.hiddenAtNavigationList && value.pinnedAtNavigationList).map(value => ({name: 'Target', target: value} as NavigationState))
-        );
-
-        // ユーザーがピン留めしていない且つ表示するTargetを抽出し、NavigationStateに変換してナビゲーションリストに追加
-        this.navigationListItems.otherTargets = this.navigationListItems.otherTargets.concat(
-            targets.filter(value => !value.hiddenAtNavigationList && !value.pinnedAtNavigationList).map(value => ({name: 'Target', target: value} as NavigationState))
-        );
+        this.navigationListItems = this.getInitNavigationItemList()
     }
 }

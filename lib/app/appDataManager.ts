@@ -542,11 +542,7 @@ export default class AppDataManager {
      * @param themeColor string
      * @returns Target | false
      */
-    public registerTarget(name: string, themeColor?: {
-        r: number
-        g: number
-        b: number
-    }): Target | false {
+    public registerTarget(name: string, themeColor?: { r: number, g: number, b: number }, pinned?: true, hidden?: true): Target | false {
         // APIを叩いてTargetを登録し、IDを取得
         var id: string;
         var newTarget: Target | undefined;
@@ -562,7 +558,9 @@ export default class AppDataManager {
                         g: (Math.random() * 0xFF | 0),
                         b: (Math.random() * 0xFF | 0)
                     },
-                "outcomes" : []
+                "outcomes" : [],
+                pinnedAtNavigationList: pinned,
+                hiddenAtNavigationList: hidden,
             }
         }).then((res) => {
             if (res.data.status == 200) {
@@ -583,6 +581,8 @@ export default class AppDataManager {
                             g: (Math.random() * 0xFF | 0),
                             b: (Math.random() * 0xFF | 0)
                         },
+                    pinnedAtNavigationList: pinned,
+                    hiddenAtNavigationList: hidden,
                 };
 
                 // 新規Targetを追加
