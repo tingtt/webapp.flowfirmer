@@ -5,8 +5,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 type Props = {
     menuAnchorEl: null | HTMLElement
     menuAnchorElSetter: React.Dispatch<React.SetStateAction<null | HTMLElement>>
-    selectedRepeatPattern: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null
-    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null>>
+    selectedRepeatPattern: { interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null
+    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null>>
     date: Date | null
     dateSetter: React.Dispatch<React.SetStateAction<Date | null>>
     timeSettedBool: boolean
@@ -28,16 +28,20 @@ export default function RepeatPatternAutoCompleteListMenu(props: Props) {
 
     const selectRepeatPattern = (key: 'Daily' | 'Weekly' | 'Monthly' | 'Sun' | 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat') => {
         if (key == 'Daily' || key == 'Monthly') {
+            // 日付指定がされていない場合に当日の日付を指定する
+            const newDate = new Date();
             if (props.date == null) {
-                // 日付指定がされていない場合に当日の日付を指定する
-                const newDate = new Date();
                 // 日付指定
                 props.dateSetter(newDate);
                 // フォームの値を同期
                 props.dateStrSetter(`${newDate.getFullYear()}-${("0" + (newDate.getMonth() + 1)).slice(-2)}-${("0" + newDate.getDate()).slice(-2)}`);
             }
             // 繰り返し情報を更新
-            props.repeatPatternSetter({ interval: key });
+            if (key == 'Daily') {
+                props.repeatPatternSetter({ interval: key });
+            } else {
+                props.repeatPatternSetter({ interval: key, repeatDate: props.date != null ? props.date.getDate() : newDate.getDate() })
+            }
         } else {
             if (key == 'Weekly') {
                 const date = props.date != null ? props.date : new Date();

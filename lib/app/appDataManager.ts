@@ -226,7 +226,7 @@ export default class AppDataManager {
         processingTime?: number,
         targetIds?: string[],
         termId?: string,
-        repeatPattern?: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] },
+        repeatPattern?: { interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number },
         description = "",
         completed = false
     ): Promise<ToDo[] | false> {
@@ -241,6 +241,7 @@ export default class AppDataManager {
                 "processingTimeScheduled": processingTime,
                 "repeatPattern": repeatPattern != undefined ? repeatPattern.interval : undefined,
                 "repeatDayForWeekly": repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+                "repeatDateForMonthly": repeatPattern != undefined && datetime != undefined && repeatPattern.interval == 'Monthly' ? repeatPattern.repeatDate != undefined ? repeatPattern.repeatDate : datetime.date.getDate() : undefined,
                 "targetList": targetIds,
                 "term": termId,
                 "completed": completed,
@@ -258,6 +259,7 @@ export default class AppDataManager {
                     processingTimeScheduled: processingTime,
                     repeatPattern: repeatPattern != undefined ? repeatPattern.interval : undefined,
                     repeatDayForWeekly: repeatPattern != undefined && repeatPattern.interval == 'Weekly' ? repeatPattern.repeatDay : undefined,
+                    "repeatDateForMonthly": repeatPattern != undefined && repeatPattern.interval == 'Monthly' ? repeatPattern.repeatDate : undefined,
                     targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
                     term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
                     completed: completed,
@@ -336,6 +338,7 @@ export default class AppDataManager {
             var processingTime: number | undefined;
             var interval: "Daily" | "Weekly" | "Monthly" = "Daily";
             var repeatDay: number[] = [];
+            var repeatDate: number | undefined;
             var targetList: string[] = [];
             var termId: string | undefined;
             // 新規ToDoを追加するかどうかのフラグ
@@ -366,9 +369,11 @@ export default class AppDataManager {
                                 break;
                             case 'Monthly':
                                 // 翌月の同じ日に新規ToDo
-                                // 1ヶ月加算
-                                // TODO: 月末時の日付のズレを修正（繰り返し情報に日付を追加する）
-                                date.setMonth( date.getMonth() + 1 );
+                                const nextMonth = (date.getMonth() + 2) == 13 ? 1 : date.getMonth() + 2;
+                                date = new Date(date.getFullYear(), nextMonth - 1, value.repeatDateForMonthly);
+                                if (date.getMonth() + 1 != nextMonth) {
+                                    date.setDate(0);
+                                }
                                 break;
                             case 'Weekly':
                                 if (value.repeatDayForWeekly != undefined && value.repeatDayForWeekly.filter(dayNum => dayNum <= 6 && dayNum >= 0).length != 0) {
@@ -401,6 +406,7 @@ export default class AppDataManager {
                         termId = value.term?.id;
                         interval = value.repeatPattern;
                         repeatDay = value.repeatDayForWeekly != undefined ? value.repeatDayForWeekly : [];
+                        repeatDate = value.repeatDateForMonthly;
                         flg = true;
 
                         // このToDoの繰り返し情報の削除
@@ -445,7 +451,7 @@ export default class AppDataManager {
                     processingTime,
                     targetList,
                     termId,
-                    interval == 'Weekly' ? {interval, repeatDay} : {interval},
+                    interval == 'Daily' ? {interval} : interval == 'Weekly' ? {interval, repeatDay} : {interval, repeatDate},
                     description,
                     false
                 );

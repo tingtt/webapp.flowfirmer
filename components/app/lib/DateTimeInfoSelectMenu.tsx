@@ -16,8 +16,8 @@ type Props = {
     dateStrSetter: React.Dispatch<React.SetStateAction<string>>
     timeStr: string
     timeStrSetter: React.Dispatch<React.SetStateAction<string>>
-    repeatPattern: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null
-    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null>>
+    repeatPattern: { interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null
+    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null>>
     endDate: Date | null
     endDateSetter: React.Dispatch<React.SetStateAction<Date | null>>
     endDateStr: string
@@ -103,6 +103,9 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         if (e.target.value == "") {
             // 初期化
             props.dateSetter(null);
+            if (props.repeatPattern?.interval == 'Monthly') {
+                props.repeatPatternSetter({ interval: 'Monthly', repeatDate: undefined })
+            }
             return;
         }
 
@@ -120,6 +123,11 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
             return new Date(splited[0], splited[1] - 1, splited[2]);
         });
+
+        // Monthlyの場合に繰り返す日付を更新
+        if (props.repeatPattern?.interval == 'Monthly') {
+            props.repeatPatternSetter({ interval: 'Monthly', repeatDate: (new Date(splited[0], splited[1] - 1, splited[2])).getDate() })
+        }
     };
 
     // 時間指定
@@ -383,8 +391,8 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                             }
                             if (value == 'Weekly') {
                                 props.repeatPatternSetter({ interval: value, repeatDay: [props.date != null ? props.date.getDay() : nowDate.getDay()] });
-                            } else {
-                                props.repeatPatternSetter({ interval: value });
+                            } else if (value == 'Monthly') {
+                                props.repeatPatternSetter({ interval: value, repeatDate: props.date != null ? props.date.getDate() : nowDate.getDate() });
                             }
                             setRepeatPatternMenuAnchorEl(null);
                         }}

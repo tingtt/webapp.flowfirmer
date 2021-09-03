@@ -119,7 +119,7 @@ export default function AddForm(props: Props) {
     const [repeatPatternAutoCompleteMenuAnchorEl, setRepeatPatternAutoCompleteMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // 選択状態
-    const [selectedRepeatPattern, setRepeatPattern] = React.useState<{ interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null>(null);
+    const [selectedRepeatPattern, setRepeatPattern] = React.useState<{ interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null>(null);
 
     // 選択解除
     const clearRepeatPattern = () => {
