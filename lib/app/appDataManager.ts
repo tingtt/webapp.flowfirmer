@@ -540,13 +540,13 @@ export default class AppDataManager {
      *
      * @param name string
      * @param themeColor string
-     * @returns Target | false
+     * @returns Promise<Target | false>
      */
-    public registerTarget(name: string, themeColor?: { r: number, g: number, b: number }, pinned?: true, hidden?: true): Target | false {
+    public async registerTarget(name: string, themeColor?: { r: number, g: number, b: number }, pinned?: true, hidden?: true): Promise<Target | false> {
         // APIを叩いてTargetを登録し、IDを取得
         var id: string;
         var newTarget: Target | undefined;
-        axios.post('/api/saveTarget', {
+        await axios.post('/api/saveTarget', {
             "data": {
                 "name" : name,
                 "themeColor" : themeColor != undefined ?
