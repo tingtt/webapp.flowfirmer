@@ -156,9 +156,9 @@ export default class AppDataManager {
                             name : value.name,
                             description : value.description != null ? value.description : undefined,
                             targetList : value.targetList != null && this.targets != undefined ? value.targetList.map(targetId => this.targets!.find(target => target.id == targetId)).filter((target): target is Target => target != undefined) : undefined,
-                            startDatetimeScheduled: value.startDatetimeScheduled,
-                            endDatetimeScheduled: value.endDatetimeScheduled,
-                            startDatetime: value.startDateTime != null ? value.startDateTime : undefined
+                            startDatetimeScheduled: new Date(value.startDatetimeScheduled),
+                            endDatetimeScheduled: new Date(value.endDatetimeScheduled),
+                            startDatetime: value.startDateTime != null ? new Date(value.startDateTime) : undefined
                         };
                         return term;
                     }))
