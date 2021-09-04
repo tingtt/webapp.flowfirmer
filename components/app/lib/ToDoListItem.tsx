@@ -151,9 +151,12 @@ export default function ToDoListItem(props: Props) {
             props.snackbarStateSetter({open: true, msg: `${props.todo.name} completed.`, type: 'todoCompleted'});
         }
         // 完了状態を更新
-        appDataManager.toggleTodoCompletionState(props.todo.id);
-        // APIを叩いて値を更新し、stateも更新
-        props.setTodos(appDataManager.todos);
+        appDataManager.toggleTodoCompletionState(props.todo.id).then((res) => {
+            if (res != undefined && res != false) {
+                // state更新
+                props.setTodos(res);
+            }
+        });
     };
 
     const nameChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -327,7 +327,8 @@ export default class AppDataManager {
     /**
      * / toggleTodoCompletionState
      */
-    public toggleTodoCompletionState(id: string) {
+    public async toggleTodoCompletionState(id: string) {
+        var ret: ToDo[] | false | undefined;
         // 更新
         if (this.todos != undefined) {
             // 新規ToDo用の値を保持するフィールド
@@ -445,7 +446,7 @@ export default class AppDataManager {
 
             // 新規ToDoの追加
             if (flg) {
-                this.registerTodo(
+                await this.registerTodo(
                     newName,
                     {date, timeSetted},
                     processingTime,
@@ -454,9 +455,10 @@ export default class AppDataManager {
                     interval == 'Daily' ? {interval} : interval == 'Weekly' ? {interval, repeatDay} : {interval, repeatDate},
                     description,
                     false
-                );
+                ).then((res) => ret = res);
             }
         }
+        return ret;
     }
 
     /**
