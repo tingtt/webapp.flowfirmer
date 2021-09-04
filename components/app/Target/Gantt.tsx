@@ -194,10 +194,10 @@ export default function GanttChart(props: Props) {
   //termの数
   const termlength = appDataManager.terms?.filter(
     (value) =>
-      (value.startDatetimeScheduled.getTime() -
-        value.endDatetimeScheduled.getTime()) /
-        86400000 !=
-      0
+      (value.endDatetimeScheduled.getTime() -
+        value.startDatetimeScheduled.getTime()) /
+        86400000 >
+      -1
   ).length;
 
   function setdrawig(state: string) {
@@ -783,9 +783,15 @@ export default function GanttChart(props: Props) {
                 EndMonth = value.endDatetimeScheduled.getMonth(); //termの終了月
                 StartDate = value.startDatetimeScheduled.getDate();
                 EndDate = value.endDatetimeScheduled.getDate();
+                let Time =
+                  (value.endDatetimeScheduled.getTime() -
+                    value.startDatetimeScheduled.getTime()) /
+                  3600000 /
+                  24;
                 return (
                   StartYear - (Year - 1) >= 0 &&
                   EndYear - Year <= SelectNum &&
+                  Time > -1 &&
                   (SelectNum == 1 ? (
                     <g className={classes.bar_wrapper}>
                       <g className="bar_group">
@@ -795,22 +801,22 @@ export default function GanttChart(props: Props) {
                           x={
                             ((StartYear - (Year - 1)) * 12 + StartMonth) *
                               (endall / 36) +
-                            StartDate
+                            (StartDate * endall) / (36 * 30.5)
                           }
                           y={28 + (+value.id + 1) * 40}
-                          width={value.name.length*20}
+                          width={((Time + 1) * endall) / (36 * 30.5)}
                           height="25"
                           rx="3"
                           ry="3"
                           className={classes.bar}
                         />
-                        {console.log(StartMonth)}
                         {/* termの名前表示 */}
                         <text
                           key={value.name}
                           x={
                             ((StartYear - (Year - 1)) * 12 + StartMonth) *
-                            (endall / 36) + (value.name.length * 10)
+                              (endall / 36) +
+                            (StartDate * endall) / (36 * 30.5)
                           }
                           y={41 + (+value.id + 1) * 40}
                           className={classes.bar_label}
@@ -825,22 +831,28 @@ export default function GanttChart(props: Props) {
                         {/* termの全体表示 */}
                         <rect
                           key={value.id}
-                          x={250}
+                          x={
+                            ((StartYear - (Year - 1)) * 12 + StartMonth) *
+                              (endall / ((SelectNum+2) * 12)) +
+                            (StartDate * endall) / ((SelectNum+2) * 12 * 30.5)
+                          }
                           y={28 + (+value.id + 1) * 40}
                           width={
-                            (EndDate - StartDate + 1) *
-                            (endall / (7 * (SelectNum + 2)))
+                            ((Time + 1) * endall) / ((SelectNum+2) * 12 * 30.5)
                           }
                           height="25"
                           rx="3"
                           ry="3"
                           className={classes.bar}
                         />
-                        {console.log(StartMonth)}
                         {/* termの名前表示 */}
                         <text
                           key={value.name}
-                          x={250}
+                          x={
+                            ((StartYear - (Year - 1)) * 12 + StartMonth) *
+                              (endall / ((SelectNum+2) * 12)) +
+                            (StartDate * endall) / ((SelectNum+2) * 12 * 30.5)
+                          }
                           y={41 + (+value.id + 1) * 40}
                           className={classes.bar_label}
                         >

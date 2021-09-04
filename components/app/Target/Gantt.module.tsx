@@ -77,7 +77,8 @@ export const useStyles = makeStyles(() =>
     bar_label: {
       fill: "#000",
       dominantBaseline: "central",
-      textAnchor: "middle",
+      // textAnchor: "middle",
+      zIndex: 10,
       fontSize: 12,
       fontWeight: "lighter",
     },
@@ -97,5 +98,3 @@ export const useStyles = makeStyles(() =>
     },
   })
 );
-
-
