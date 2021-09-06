@@ -10,7 +10,7 @@ export const useStyles = makeStyles(() =>
       fontSize: 12,
       overflow: "auto",
       width: "100%",
-      height: 219,
+      maxHeight: 219,
     },
     // ガントチャート
     gantt: {
@@ -29,6 +29,9 @@ export const useStyles = makeStyles(() =>
     },
     //日付表示
     grid_header: {
+      position: "fixed",
+      top: 0,
+      left: 0,
       fill: "#ffffff",
       stroke: "#e0e0e0",
       strokeWidth: 1.4,
