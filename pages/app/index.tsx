@@ -12,7 +12,6 @@ const appIndex = ({ token }: ServerSideIndexProps) => {
     } catch (e) {
         AppDataManager.getInstance();
     }
-    AppDataManager.validateToken(token);
     return (
         <Layout />
     );

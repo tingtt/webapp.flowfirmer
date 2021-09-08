@@ -10,11 +10,14 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core';
 import { NavigationState } from '../../lib/state/navigationState'
 import { ClassNameMap } from "@material-ui/styles";
 import AppNavigatoinListManager from "../../lib/app/appNavigationListManager";
+import AppDataManager from "../../lib/app/appDataManager";
 import { AccountCircle, AddCircle, Bookmark, BookmarkBorder, Search, Today, ViewWeek, AllInbox, Dashboard } from "@material-ui/icons";
+import { useEffect } from "react";
 
 type Props = {
 	drawerOpen: boolean
 	setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>
+    nav: NavigationState
 	setNav: React.Dispatch<React.SetStateAction<NavigationState>>
 	classes: ClassNameMap
 }
@@ -34,14 +37,37 @@ export default function NavigationDrawer(props: Props) {
     const layoutClasses = props.classes;
     const classes = useStyles();
 
+    const appDataManager: AppDataManager = (() => {
+        try {
+            return  AppDataManager.generateInstance();
+        } catch (e) {
+            return  AppDataManager.getInstance();
+        }
+    })();
+
     const appNavigationManager: AppNavigatoinListManager = (() => {
         try {
-            return  AppNavigatoinListManager.generateInstance(0)
+            return  AppNavigatoinListManager.generateInstance()
         } catch (e) {
             return  AppNavigatoinListManager.getInstance();
         }
     })();
 
+    const [count, setCount] = React.useState(0);
+
+    useEffect(() => {
+        // targetのリストが表示されるようにロード
+        if (count == 0) {
+            setCount(current => current + 1);
+            const otherNav = appNavigationManager.navigationListItems.find(value => value.name != props.nav.name);
+            if (otherNav != undefined) {
+                props.setNav(otherNav);
+            }
+        } else if (count <= 2) {
+            setCount(current => current + 1);
+            props.setNav(appNavigationManager.getInitNavigationState());
+        }
+    }, [props.nav])
 
     return (
         <Drawer
@@ -78,7 +104,7 @@ export default function NavigationDrawer(props: Props) {
             <List>
                 {/* ナビゲーションリスト */}
                 {/* TargetとDashboard以外を抽出して表示 */}
-                {appNavigationManager.navigationListItems.originalItems.filter(value => value.name != 'Target' && value.name != 'Dashboard').map((navigationState) => (
+                {appNavigationManager.navigationListItems.filter(value => value.name != 'Target' && value.name != 'Dashboard').map((navigationState) => (
                     <ListItem button key={navigationState.name} onClick={()=>props.setNav(navigationState)}>
                         <ListItemIcon>
                             {/* アイコンの切り替え */}
@@ -94,15 +120,27 @@ export default function NavigationDrawer(props: Props) {
             >
                 <List>
                     {/* Targetのナビゲーションリスト */}
-                    {[...appNavigationManager.navigationListItems.pinnedTargets, ...appNavigationManager.navigationListItems.otherTargets].filter(value => value.name == 'Target').map((navigationState) => (
-                        <ListItem button key={navigationState.name == 'Target' ? navigationState.target.name : ""} onClick={()=>props.setNav(navigationState)}>
-                            <ListItemIcon>
-                                {/* ピン留めされているかの判定でアイコンを切り替え */}
-                                {(navigationState.name == 'Target' && navigationState.target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
-                            </ListItemIcon>
-                            <ListItemText primary={navigationState.name == 'Target' ? navigationState.target.name : ""} />
-                        </ListItem>
-                    ))}
+                    {appDataManager.targets != undefined && appDataManager.targets.filter(value => !value.hiddenAtNavigationList)
+                    // pinされているTargetを優先表示
+                    .sort((a, b) => a.pinnedAtNavigationList == b.pinnedAtNavigationList ? 0 : !a.pinnedAtNavigationList && b.pinnedAtNavigationList ? 1 : -1)
+                    .map(value => ({name: 'Target', targetId: value.id} as NavigationState)).map((navigationState) => {
+                        const target = appDataManager.targets!.find(target => target.id == (navigationState.name == 'Target' ? navigationState.targetId : ""));
+                        // Targetのチェック
+                        if (target === undefined || target === null) {
+                            throw new Error(
+                                `Expected 'val' to be defined, but received ${target}`
+                            );
+                        }
+                        return (
+                            <ListItem button key={target.name} onClick={()=>props.setNav(navigationState)}>
+                                <ListItemIcon>
+                                    {/* ピン留めされているかの判定でアイコンを切り替え */}
+                                    {(navigationState.name == 'Target' && target.pinnedAtNavigationList) ? <Bookmark /> : <BookmarkBorder />}
+                                </ListItemIcon>
+                                <ListItemText primary={target.name} />
+                            </ListItem>
+                        );
+                    })}
                 </List>
             </div>
             <div
@@ -112,7 +150,7 @@ export default function NavigationDrawer(props: Props) {
                 <List>
                     {/* Dashboard */}
                     {/* navigationListItemにDashboardが含まれていて、hiddenがundefinedの場合に表示 */}
-                    {appNavigationManager.navigationListItems.originalItems.filter(value => value.name == 'Dashboard' && value.hidden == undefined).length != 0 &&
+                    {appNavigationManager.navigationListItems.filter(value => value.name == 'Dashboard' && value.hidden == undefined).length != 0 &&
                         <ListItem button key={'Dashboard'} onClick={()=>props.setNav({name: 'Dashboard'})}>
                             <ListItemIcon>
                                 <Dashboard />

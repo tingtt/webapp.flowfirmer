@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-import { Button, Menu, MenuItem, TextField } from '@material-ui/core';
+import { Button, Menu, MenuItem, Tab, Tabs, TextField } from '@material-ui/core';
 import { Clear, Loop } from '@material-ui/icons';
 import { useHotkeys } from 'react-hotkeys-hook';
 
@@ -16,8 +16,14 @@ type Props = {
     dateStrSetter: React.Dispatch<React.SetStateAction<string>>
     timeStr: string
     timeStrSetter: React.Dispatch<React.SetStateAction<string>>
-    repeatPattern: { interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null
-    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' | 'Monthly' } | { interval: 'Weekly', repeatDay: number[] } | null>>
+    repeatPattern: { interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null
+    repeatPatternSetter: React.Dispatch<React.SetStateAction<{ interval: 'Daily' } | { interval: 'Weekly', repeatDay: number[] } | { interval: 'Monthly', repeatDate?: number } | null>>
+    endDate: Date | null
+    endDateSetter: React.Dispatch<React.SetStateAction<Date | null>>
+    endDateStr: string
+    endDateStrSetter: React.Dispatch<React.SetStateAction<string>>
+    termFlg: boolean
+    termFlgSetter: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,11 +37,14 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: theme.spacing(1.5),
             paddingRight: theme.spacing(1.5),
         },
-        dateDiv: {
-            display: 'flex',
+        tabsDiv: {
             marginBottom: theme.spacing(2),
         },
-        timeDiv: {
+        tab: {
+            width: "50%",
+            minWidth: "unset",
+        },
+        fieldDiv: {
             display: 'flex',
             marginBottom: theme.spacing(2),
         },
@@ -94,6 +103,9 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         if (e.target.value == "") {
             // 初期化
             props.dateSetter(null);
+            if (props.repeatPattern?.interval == 'Monthly') {
+                props.repeatPatternSetter({ interval: 'Monthly', repeatDate: undefined })
+            }
             return;
         }
 
@@ -111,6 +123,11 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
             return new Date(splited[0], splited[1] - 1, splited[2]);
         });
+
+        // Monthlyの場合に繰り返す日付を更新
+        if (props.repeatPattern?.interval == 'Monthly') {
+            props.repeatPatternSetter({ interval: 'Monthly', repeatDate: (new Date(splited[0], splited[1] - 1, splited[2])).getDate() })
+        }
     };
 
     // 時間指定
@@ -142,6 +159,33 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         props.timeSettedBoolSetter(true);
     };
 
+    // 終了日
+    const setEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // TextFieldの値を更新
+        props.endDateStrSetter(e.target.value);
+
+        if (e.target.value == "") {
+            // 初期化
+            props.endDateSetter(null);
+            return;
+        }
+
+        // 文字列を分解してnumber[]に
+        const splited = e.target.value.split(/[-/]/).map(value => +value);
+
+        // 得た数値からDate型の値を生成してStateの日付情報を更新
+        props.endDateSetter(current => {
+            if (current != null) {
+                current.setFullYear(splited[0]);
+                current.setMonth((splited[1] - 1));
+                current.setDate(splited[2]);
+                return current;
+            }
+
+            return new Date(splited[0], splited[1] - 1, splited[2]);
+        });
+    }
+
     const [repeatPatternMenuAnchorEl, setRepeatPatternMenuAnchorEl] = React.useState<null | HTMLElement>(null);
 
     // Clear all
@@ -152,6 +196,8 @@ export default function DateTimeInfoSelectMenu(props: Props) {
         props.timeStrSetter("");
         props.menuAnchorElSetter(null);
         props.repeatPatternSetter(null);
+        props.endDateSetter(null);
+        props.endDateStrSetter("");
     }
 
     return (
@@ -174,8 +220,31 @@ export default function DateTimeInfoSelectMenu(props: Props) {
             <div
                 className={classes.menuInnerDiv}
             >
+                <Tabs
+                    className={classes.tabsDiv}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered
+                    value={props.termFlg ? 1 : 0}
+                    onChange={(_, value:number) => {
+                        if (value == 0) {
+                            props.termFlgSetter(false);
+                        } else {
+                            props.termFlgSetter(true);
+                        }
+                    }}
+                >
+                    <Tab
+                        className={classes.tab}
+                        label={"ToDo"}
+                    />
+                    <Tab
+                        className={classes.tab}
+                        label={"Term"}
+                    />
+                </Tabs>
                 <div
-                    className={classes.dateDiv}
+                    className={classes.fieldDiv}
                 >
                     <TextField
                         className={classes.textField}
@@ -200,50 +269,78 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                         <Clear />
                     </div>}
                 </div>
-                <div
-                    className={classes.timeDiv}
-                >
-                    <TextField
-                        className={classes.textField}
-                        label="Start time"
-                        type="time"
-                        value={props.timeStr}
-                        onChange={setTime}
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                    {props.timeSettedBool &&  <div
-                        className={classes.clearButtonDiv}
-                        onClick={() => {
-                            props.timeSettedBoolSetter(false);
-                            props.timeStrSetter("");
-                        }}
+                {props.termFlg ?
+                    <div
+                        className={classes.fieldDiv}
                     >
-                        <Clear/>
-                    </div>}
-                </div>
-                <div
-                    className={classes.repeatPatternSelecterDiv}
-                >
-                    <Button
-                        className={clsx(classes.button, {
-                            [classes.buttonFontColorPrimary]: props.repeatPattern != undefined
-                        })}
-                        variant="outlined"
-                        onClick={(e: React.MouseEvent<HTMLElement>) => setRepeatPatternMenuAnchorEl(e.currentTarget)}
-                    >
-                        <Loop />{props.repeatPattern != undefined ? props.repeatPattern.interval == 'Weekly' ? props.repeatPattern.interval + " (" + props.repeatPattern.repeatDay.map(value => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][value] + ",") + ")" : props.repeatPattern.interval : "Repeat"}
-                    </Button>
-                    {props.repeatPattern != undefined && <div
-                        className={classes.clearRepeatPatternDiv}
-                        onClick={() => {
-                            props.repeatPatternSetter(null);
-                        }}
-                    >
-                        <Clear />
-                    </div>}
-                </div>
+                        <TextField
+                            className={classes.textField}
+                            label="End date"
+                            type="date"
+                            value={props.endDateStr}
+                            onChange={setEndDate}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        {props.endDate != null && <div
+                            className={classes.clearButtonDiv}
+                            onClick={() => {
+                                props.endDateSetter(null);
+                                props.endDateStrSetter("");
+                            }}
+                        >
+                            <Clear />
+                        </div>}
+                    </div>
+                    :
+                    <div>
+                        <div
+                            className={classes.fieldDiv}
+                        >
+                            <TextField
+                                className={classes.textField}
+                                label="Start time"
+                                type="time"
+                                value={props.timeStr}
+                                onChange={setTime}
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            />
+                            {props.timeSettedBool &&  <div
+                                className={classes.clearButtonDiv}
+                                onClick={() => {
+                                    props.timeSettedBoolSetter(false);
+                                    props.timeStrSetter("");
+                                }}
+                            >
+                                <Clear/>
+                            </div>}
+                        </div>
+                        <div
+                            className={classes.repeatPatternSelecterDiv}
+                        >
+                            <Button
+                                className={clsx(classes.button, {
+                                    [classes.buttonFontColorPrimary]: props.repeatPattern != undefined
+                                })}
+                                variant="outlined"
+                                onClick={(e: React.MouseEvent<HTMLElement>) => setRepeatPatternMenuAnchorEl(e.currentTarget)}
+                            >
+                                <Loop />{props.repeatPattern != undefined ? props.repeatPattern.interval == 'Weekly' ? props.repeatPattern.interval + " (" + props.repeatPattern.repeatDay.map(value => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][value] + ",") + ")" : props.repeatPattern.interval : "Repeat"}
+                            </Button>
+                            {props.repeatPattern != undefined && <div
+                                className={classes.clearRepeatPatternDiv}
+                                onClick={() => {
+                                    props.repeatPatternSetter(null);
+                                }}
+                            >
+                                <Clear />
+                            </div>}
+                        </div>
+                    </div>
+                }
                 <div
                     className={classes.mainButtonsDiv}
                 >
@@ -294,8 +391,8 @@ export default function DateTimeInfoSelectMenu(props: Props) {
                             }
                             if (value == 'Weekly') {
                                 props.repeatPatternSetter({ interval: value, repeatDay: [props.date != null ? props.date.getDay() : nowDate.getDay()] });
-                            } else {
-                                props.repeatPatternSetter({ interval: value });
+                            } else if (value == 'Monthly') {
+                                props.repeatPatternSetter({ interval: value, repeatDate: props.date != null ? props.date.getDate() : nowDate.getDate() });
                             }
                             setRepeatPatternMenuAnchorEl(null);
                         }}

@@ -80,6 +80,7 @@ export default function Layout() {
             <NavigationDrawer
                 drawerOpen={navigationDrawerOpen}
                 setDrawerOpen={setNavigationDrawerOpen}
+                nav={navigationState}
                 setNav={setNavigationState}
                 classes={classes}
             />
@@ -92,7 +93,7 @@ export default function Layout() {
                 { navigationState.name == 'All' && <AllView /> }
                 { navigationState.name == 'Today' && <TodayView /> }
                 { navigationState.name == 'Weekly' && <WeeklyView /> }
-                { navigationState.name == 'Target' && <TargetView /> }
+                { navigationState.name == 'Target' && <TargetView targetId={navigationState.targetId} /> }
                 { navigationState.name == 'Dashboard' && <DashboardView /> }
             </main>
         </div>
