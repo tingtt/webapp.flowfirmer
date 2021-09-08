@@ -242,12 +242,12 @@ export default function Weekly() {
                               x={
                                 ((startday - weekstart) / 86400000) * 14.3 + "%"
                               }
-                              y={28 + value.id * 40}
+                              y={28 + +value.id * 40}
                               width={termDay * 14.285 + "%"}
                               height="25"
                               rx="3"
                               ry="3"
-                              id={value.id.toString()}
+                              id={value.id}
                               className={classes.bar}
                               // onMouseDown={drag}
                             />
@@ -258,7 +258,7 @@ export default function Weekly() {
                                 (termDay * 14.3) / 2 +
                                 "%"
                               }
-                              y={41 + value.id * 40}
+                              y={41 + +value.id * 40}
                               className={classes.bar_label}
                             >
                               {value.name}
@@ -271,22 +271,22 @@ export default function Weekly() {
                               x={
                                 ((startday - weekstart) / 86400000) * 14.3 + "%"
                               }
-                              y={28 + value.id * 40}
+                              y={28 + +value.id * 40}
                               width="10"
                               height="25"
                               rx="3"
                               ry="3"
-                              id={value.id.toString()}
+                              id={value.id}
                               className={classes.handle_left}
                             />
                             <rect
                               x={((endday - weekstart) / 86400000) * 14.2 + "%"}
-                              y={28 + value.id * 40}
+                              y={28 + +value.id * 40}
                               width="10"
                               height="25"
                               rx="3"
                               ry="3"
-                              id={value.id.toString()}
+                              id={value.id}
                               className={classes.handle_right}
                             />
                           </g>

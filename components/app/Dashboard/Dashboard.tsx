@@ -25,6 +25,7 @@ import Deposits from './graph/Deposits';
 import Orders from './graph/Orders';
 import {element, func, number} from "prop-types";
 
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -39,24 +40,6 @@ function Copyright() {
 }
 
 const drawerWidth = 240;
-// const useStyles = makeStyles((theme: Theme) =>
-//     createStyles({
-//         root: {
-//             display: 'flex',
-//             height: '100%'
-//         },
-//         contentLeft: {
-//             flex: 1,
-//             overflow: 'auto',
-//             paddingRight: theme.spacing(2)
-//         },
-//         contentRight: {
-//             flex: 1,
-//             overflow: 'auto',
-//             paddingLeft: theme.spacing(2)
-//         },
-//     }),
-// );
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -148,10 +131,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export type Patients = {
-    date: string,
-    data: Array<any>
-};
 const JsonData = {
     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
     "data": {
@@ -219,10 +198,9 @@ const JsonData = {
     }
 }
 
-function createData(time: Date, amount: string | number) {
-    return { time, amount };
+function createData(time: Date , amount: string | number) {
+    return { time ,amount };
 }
-
 
 export default function Dashboard() {
     const classes = useStyles();
@@ -265,77 +243,74 @@ export default function Dashboard() {
     console.log(data)
     console.log(allData)
 
-    function graph(index){
-        return <Grid item xs={12} md={6} lg={6}><Paper className={fixedHeightPaper}><Chart title={nameArray[index]} graphData={allData[index]}/></Paper></Grid>
+    var graphList = [];
+
+    for (let index = 0; index < Object.keys(JsonData.data.statistics).length; index++) {
+        graphList.push(<Grid item xs={12} md={6} lg={6}><Paper className={fixedHeightPaper}><Chart title={nameArray[index]} graphData={allData[index]}/></Paper></Grid>)
     }
+
 
 
     return (
         <div>
 
-        <div className={classes.root}>
-            <CssBaseline />
-            <main className={classes.content}>
+            <div className={classes.root}>
+                <CssBaseline />
+                <main className={classes.content}>
 
-                {/*<div className={classes.appBarSpacer} />*/}
-                <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/*GanttChart*/}
-                        {/*<Grid item xs={12} md={12} lg={12}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <GanttChart/>*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {
-                            graph(0)
-                        }
-                        {
-                            graph(1)
-                        }
-
-                        {/* Chart */}
-                        {/*<Grid item xs={12} md={12} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        /!* 子に渡す値を設定 *!/*/}
-                        {/*        <Chart title={nameArray[0]} graphData={allData[0]}/>*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} md={6} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Chart title={nameArray[1]} graphData={allData[1]}/>*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/* Recent Deposits */}
-                        {/*<Grid item xs={12} md={6} lg={4}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Deposits />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*Test Add*/}
-                        {/*<Grid item xs={12} md={6} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Chart />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*/!*Test Add*!/*/}
-                        {/*<Grid item xs={12} md={6} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Chart />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*/!* Recent Orders *!/*/}
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <Paper className={classes.paper}>*/}
-                        {/*        <Orders />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                    </Grid>
-                    <Box pt={4}>
-                        <Copyright />
-                    </Box>
-                </Container>
-            </main>
-        </div>
+                    {/*<div className={classes.appBarSpacer} />*/}
+                    <Container maxWidth="lg" className={classes.container}>
+                        <Grid container spacing={3}>
+                            {/*GanttChart*/}
+                            {/*<Grid item xs={12} md={12} lg={12}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <GanttChart/>*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/* Chart */}
+                            {graphList}
+                            {/*<Grid item xs={12} md={12} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        /!* 子に渡す値を設定 *!/*/}
+                            {/*        <Chart title={nameArray[0]} graphData={allData[0]}/>*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*<Grid item xs={12} md={6} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Chart title={nameArray[1]} graphData={allData[1]}/>*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/* Recent Deposits */}
+                            {/*<Grid item xs={12} md={6} lg={4}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Deposits />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*Test Add*/}
+                            {/*<Grid item xs={12} md={6} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Chart />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*/!*Test Add*!/*/}
+                            {/*<Grid item xs={12} md={6} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Chart />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*/!* Recent Orders *!/*/}
+                            {/*<Grid item xs={12}>*/}
+                            {/*    <Paper className={classes.paper}>*/}
+                            {/*        <Orders />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                        </Grid>
+                        <Box pt={4}>
+                            <Copyright />
+                        </Box>
+                    </Container>
+                </main>
+            </div>
         </div>
     );
 }
