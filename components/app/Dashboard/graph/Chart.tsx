@@ -91,6 +91,62 @@ export default function Chart(props) {
         }
     })();
 
+
+    // const temp = {
+    //     data: [
+    //         {
+    //             outcomeId: "testsample1",
+    //             value: 5,
+    //             checkInDateTime: new Date(2021, 9, 9),
+    //         },
+    //         {
+    //             outcomeId: "testsample1",
+    //             value: 5,
+    //             checkInDateTime: new Date(2021, 9, 8),
+    //         },
+    //         {
+    //             outcomeId: "testsample1",
+    //             value: 5,
+    //             checkInDateTime: new Date(2021, 9, 7),
+    //         },
+    //         {
+    //             outcomeId: "testsample1",
+    //             value: 5,
+    //             checkInDateTime: new Date(2021, 9, 6),
+    //         },
+    //         {
+    //             outcomeId: "testsample1",
+    //             value: 5,
+    //             checkInDateTime: new Date(2021, 9, 5),
+    //         },
+    //         {
+    //             outcomeId: "testsample2",
+    //             value: 10,
+    //             checkInDateTime: new Date(2021, 9, 9),
+    //         },
+    //         {
+    //             outcomeId: "testsample2",
+    //             value: 10,
+    //             checkInDateTime: new Date(2021, 9, 8),
+    //         },
+    //         {
+    //             outcomeId: "testsample2",
+    //             value: 10,
+    //             checkInDateTime: new Date(2021, 9, 7),
+    //         },
+    //         {
+    //             outcomeId: "testsample2",
+    //             value: 10,
+    //             checkInDateTime: new Date(2021, 9, 6),
+    //         },
+    //         {
+    //             outcomeId: "testsample2",
+    //             value: 10,
+    //             checkInDateTime: new Date(2021, 9, 5),
+    //         },
+    //     ]
+    // }
+
     // console.log("sampleGraph")
     // var allData = []
     // var data = []
@@ -167,7 +223,7 @@ export default function Chart(props) {
                             position="left"
                             style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
                         >
-                            Sales ($)
+                            {props.unitName}
                         </Label>
                     </YAxis>
                     <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false} />
