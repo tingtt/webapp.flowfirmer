@@ -132,8 +132,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-let graphList = [];
-
 type GraphData = { time: string, amount: string }
 type GraphObject = {
     targetId: string,
@@ -144,8 +142,8 @@ type GraphObject = {
     data: GraphData[],
     dataTotal: GraphData[],
 }
-let Res: GraphObject[]
-axios.post('/api/getOutcomeArciveByUserId')
+let Res: GraphObject[];
+axios.post('/api/getOutcomeArchiveByUserId')
     .then( (res) => {
         Res = (res.data as GraphObject[]).map(outcome => {
             outcome.data = outcome.data.map(data => {
@@ -165,43 +163,42 @@ axios.post('/api/getOutcomeArciveByUserId')
             return outcome;
         })
     })
-// const Response = [
-//     {
-//         targetId: 1,
-//         outcomeId: 1,
-//         title: "スクワット",
-//         unitName: "回",
-//         totalFlg: false,
-//         data: [
-//             { time: new Date(2021, 9, 9, 12), amount: 100 },
-//             { time: new Date(2021, 9, 10, 12), amount: 200 },
-//             { time: new Date(2021, 9, 11, 12), amount: 150 },
-//         ],
-//         dataTotal: [
-//             { time: new Date(2021, 9, 9, 12), amount: 100 },
-//             { time: new Date(2021, 9, 10, 12), amount: 300 },
-//             { time: new Date(2021, 9, 11, 12), amount: 450 },
-//         ]
-//     },
-//     {
-//         targetId: 2,
-//         outcomeId: 2,
-//         title: "腹筋",
-//         unitName: "回",
-//         totalFlg: false,
-//         data: [
-//             { time: new Date(2021, 9, 9, 12), amount: 100 },
-//             { time: new Date(2021, 9, 10, 12), amount: 200 },
-//             { time: new Date(2021, 9, 11, 12), amount: 500 },
-//         ],
-//         dataTotal: [
-//             { time: new Date(2021, 9, 9, 12), amount: 100 },
-//             { time: new Date(2021, 9, 10, 12), amount: 200 },
-//             { time: new Date(2021, 9, 11, 12), amount: 500 },
-//         ]
-//     },
-// ]
-
+const Res2 = [
+    {
+        targetId: 1,
+        outcomeId: 1,
+        title: "スクワット",
+        unitName: "回",
+        totalFlg: false,
+        data: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 200 },
+            { time: new Date(2021, 9, 11, 12), amount: 150 },
+        ],
+        dataTotal: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 300 },
+            { time: new Date(2021, 9, 11, 12), amount: 450 },
+        ]
+    },
+    {
+        targetId: 2,
+        outcomeId: 2,
+        title: "腹筋",
+        unitName: "回",
+        totalFlg: false,
+        data: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 200 },
+            { time: new Date(2021, 9, 11, 12), amount: 500 },
+        ],
+        dataTotal: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 200 },
+            { time: new Date(2021, 9, 11, 12), amount: 500 },
+        ]
+    },
+]
 
 
 export default function Dashboard() {
@@ -215,8 +212,10 @@ export default function Dashboard() {
     // };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    let graphList: {} | null | undefined = [];
     //大幅変更後
-    Res.forEach(key =>{
+    //Res => Backend, Res2 => testData
+    Res2.forEach(key =>{
         console.log("title" + key.title);
         console.log("targetId" + key.targetId);
         console.log("data" + key.data);
@@ -247,7 +246,7 @@ export default function Dashboard() {
                             {/*    </Paper>*/}
                             {/*</Grid>*/}
                             {/* Chart */}
-                            {/*{graphList}*/}
+                            {graphList}
                             {/*<Grid item xs={12} md={12} lg={6}>*/}
                             {/*    <Paper className={fixedHeightPaper}>*/}
                             {/*        /!* 子に渡す値を設定 *!/*/}
@@ -260,11 +259,11 @@ export default function Dashboard() {
                             {/*    </Paper>*/}
                             {/*</Grid>*/}
                             {/* Recent Deposits */}
-                            <Grid item xs={12} md={6} lg={4}>
-                                <Paper className={fixedHeightPaper}>
-                                    <Deposits />
-                                </Paper>
-                            </Grid>
+                            {/*<Grid item xs={12} md={6} lg={4}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Deposits />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
                             {/*Test Add*/}
                             {/*<Grid item xs={12} md={6} lg={6}>*/}
                             {/*    <Paper className={fixedHeightPaper}>*/}
