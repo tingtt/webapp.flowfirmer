@@ -1,14 +1,11 @@
+import axios from "axios";
 import { GetServerSideProps } from "next";
 import Layout from "../../components/app/Layout";
 import AppDataManager from "../../lib/app/appDataManager";
 
-interface ServerSideIndexProps{
-    token: string
-}
-
-const appIndex = ({ token }: ServerSideIndexProps) => {
+const appIndex = () => {
     try {
-        AppDataManager.generateInstance(token);
+        AppDataManager.generateInstance();
     } catch (e) {
         AppDataManager.getInstance();
     }
@@ -17,22 +14,33 @@ const appIndex = ({ token }: ServerSideIndexProps) => {
     );
 }
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//     var token: string = "";
-//     if (context.res) {
-//         // Without token makes page redirection.
-//         if ((context.query.token == undefined || context.query.token == "") && (context.req.headers.cookie == undefined || context.req.headers.cookie == "" || !context.req.headers.cookie.includes("token="))) {
-//             context.res.statusCode = 302;
-//             context.res.setHeader('location', '/login');
-//             context.res.end();
-//         } else {
-//             token = typeof context.query.token === "string" && context.query.token != "" ?
-//                 context.query.token
-//                 :
-//                 context.req.headers.cookie!.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1];
-//         }
-//     }
-//     return { props: { token } };
-// }
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    var token = "";
+    if (context.query.token == undefined || typeof context.query.token != 'string') {
+        if (context.req.cookies.token == undefined) {
+            context.res.statusCode = 302;
+            context.res.setHeader('location', '/login');
+            context.res.end();
+            return { props: {} };
+        } else {
+            token = context.req.cookies.token;
+        }
+    } else {
+        token = context.query.token;
+    }
+
+    context.res.setHeader('set-cookie', [`token=${token}; HttpOnly; Path=/;`])
+    console.log(context.res.getHeaders());
+
+    await axios.post('/api/tokenCheck').then((res) => {
+        if (res.data.status != '200') {
+            context.res.statusCode = 302;
+            context.res.setHeader('location', '/login');
+            context.res.end();
+        }
+        context.res.setHeader('Cookie', [res.data.token])
+    });
+    return { props: {} };
+}
 
 export default appIndex
