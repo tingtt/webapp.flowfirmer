@@ -32,7 +32,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     context.res.setHeader('set-cookie', [`token=${token}; HttpOnly; Path=/;`])
     console.log(context.res.getHeaders());
 
-    await axios.post('/api/tokenCheck').then((res) => {
+    await axios.post('http://nginx/api/tokenCheck', { bodyFlag: true, token: token }).then((res) => {
         if (res.data.status != '200') {
             context.res.statusCode = 302;
             context.res.setHeader('location', '/login');
