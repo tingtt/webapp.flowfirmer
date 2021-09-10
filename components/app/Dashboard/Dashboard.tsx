@@ -3,27 +3,13 @@ import React from 'react';
 import clsx from 'clsx';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './graph/listItems';
 import Chart from './graph/Chart';
-import Deposits from './graph/Deposits';
-import Orders from './graph/Orders';
-import {element, func, number} from "prop-types";
 import axios from "axios";
 
 
@@ -132,38 +118,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-type GraphData = { time: string, amount: string }
+type GraphData = { time: string, amount: number }
 type GraphObject = {
-    targetId: string,
-    outcomeId: string,
+    //string number　どっちかきく ///////////////////////////
+    targetId: number,
+    outcomeId: number,
     title: string,
     unitName: string,
     totalFlg: boolean,
     data: GraphData[],
     dataTotal: GraphData[],
 }
+
+type GraphDataRaw = { time: Date, amount: number }
+type GraphObjectRaw = {
+    targetId: number,
+    outcomeId: number,
+    title: string,
+    unitName: string,
+    totalFlg: boolean,
+    data: GraphDataRaw[],
+    dataTotal: GraphDataRaw[],
+}
 let Res: GraphObject[];
-axios.post('/api/getOutcomeArchiveByUserId')
-    .then( (res) => {
-        Res = (res.data as GraphObject[]).map(outcome => {
-            outcome.data = outcome.data.map(data => {
-                const timeStr = new Date(data.time).toString()
-                return {
-                    time: timeStr,
-                    amount: data.amount
-                }
-            })
-            outcome.dataTotal = outcome.dataTotal.map(data => {
-                const timeStr = new Date(data.time).toString()
-                return {
-                    time: timeStr,
-                    amount: data.amount
-                }
-            })
-            return outcome;
-        })
-    })
-const Res2 = [
+const ResTest: GraphObjectRaw[] = [
     {
         targetId: 1,
         outcomeId: 1,
@@ -198,8 +176,48 @@ const Res2 = [
             { time: new Date(2021, 9, 11, 12), amount: 500 },
         ]
     },
+    {
+        targetId: 3,
+        outcomeId: 3,
+        title: "腕立て伏せ",
+        unitName: "回",
+        totalFlg: false,
+        data: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 90 },
+            { time: new Date(2021, 9, 11, 12), amount: 110 },
+        ],
+        dataTotal: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 90 },
+            { time: new Date(2021, 9, 11, 12), amount: 110 },
+        ]
+    },
 ]
-
+axios.post('/api/getOutcomeArchiveByUserId')
+.then( (res) => {
+    console.log("axios post getOutcomeArchiveByUserId 成功");
+    Res = (res.data as GraphObject[]).map(outcome => {
+        outcome.data = outcome.data.map(data => {
+            const timeStr = new Date(data.time).toString()
+            return {
+                time: timeStr,
+                amount: data.amount
+            }
+        })
+        outcome.dataTotal = outcome.dataTotal.map(data => {
+            const timeStr = new Date(data.time).toString()
+            return {
+                time: timeStr,
+                amount: data.amount
+            }
+        })
+        return outcome;
+    });
+})
+.catch(err => {
+    console.log('err:', err);
+});
 
 export default function Dashboard() {
     const classes = useStyles();
@@ -212,22 +230,17 @@ export default function Dashboard() {
     // };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    let graphList: {} | null | undefined = [];
+    let graphList = [];
     //大幅変更後
-    //Res => Backend, Res2 => testData
-    Res2.forEach(key =>{
-        console.log("title" + key.title);
-        console.log("targetId" + key.targetId);
-        console.log("data" + key.data);
+    ResTest.map(value => {
         graphList.push(
             <Grid item xs={12} md={6} lg={6}>
                 <Paper className={fixedHeightPaper}>
-                    <Chart title={key.title} unitName={key.unitName} graphData={key.data} />
+                    <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
                 </Paper>
             </Grid>
         )
     });
-
 
     return (
         <div>
