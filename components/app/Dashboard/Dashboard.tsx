@@ -197,7 +197,7 @@ const ResTest: GraphObjectRaw[] = [
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
     console.log("axios post getOutcomeArchiveByUserId 成功");
-    Res = (res.data as GraphObject[]).map(outcome => {
+    Res = (res.data.data as GraphObject[]).map(outcome => {
         outcome.data = outcome.data.map(data => {
             const timeStr = new Date(data.time).toString()
             return {
