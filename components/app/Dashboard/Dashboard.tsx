@@ -196,6 +196,12 @@ const ResTest: GraphObjectRaw[] = [
 ]
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
+    // statusのチェック
+    if (res.data.status != 200) {
+        console.log(`err: Failed to fetch OutcomeArchive. ${res.data.message}`);
+        return;
+    }
+
     console.log("axios post getOutcomeArchiveByUserId 成功");
     Res = (res.data.data as GraphObject[]).map(outcome => {
         outcome.data = outcome.data.map(data => {
