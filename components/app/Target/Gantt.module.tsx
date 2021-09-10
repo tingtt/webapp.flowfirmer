@@ -10,7 +10,7 @@ export const useStyles = makeStyles(() =>
       fontSize: 12,
       overflow: "auto",
       width: "100%",
-      maxHeight: 219,
+      maxHeight: 260,
     },
     // ガントチャート
     gantt: {
