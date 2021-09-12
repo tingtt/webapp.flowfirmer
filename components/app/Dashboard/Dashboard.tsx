@@ -196,16 +196,28 @@ const ResTest: GraphObjectRaw[] = [
 ]
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
+    // statusのチェック
+    if (res.data.status != 200) {
+        console.log(`err: Failed to fetch OutcomeArchive. ${res.data.message}`);
+        return;
+    }
+
     console.log("axios post getOutcomeArchiveByUserId 成功");
-    Res = (res.data as GraphObject[]).map(outcome => {
+
+    // dataをグラフ用のオブジェクトに変換
+    Res = (res.data.data as GraphObject[]).map(outcome => {
+        // 通常グラフのデータを整形
         outcome.data = outcome.data.map(data => {
+            // 日時情報をグラフで扱える形式に変換
             const timeStr = new Date(data.time).toString()
             return {
                 time: timeStr,
                 amount: data.amount
             }
         })
+        // 加算グラフのデータを整形
         outcome.dataTotal = outcome.dataTotal.map(data => {
+            // 日時情報をグラフで扱える形式に変換
             const timeStr = new Date(data.time).toString()
             return {
                 time: timeStr,
@@ -221,25 +233,18 @@ axios.post('/api/getOutcomeArchiveByUserId')
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-    // const handleDrawerClose = () => {
-    //     setOpen(false);
-    // };
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    let graphList = [];
-    //大幅変更後
-    ResTest.map(value => {
-        graphList.push(
+    // グラフの作成
+    let graphList = ResTest.map(value => {
+        return (
             <Grid item xs={12} md={6} lg={6}>
                 <Paper className={fixedHeightPaper}>
                     <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
                 </Paper>
             </Grid>
-        )
+        );
     });
 
     return (
