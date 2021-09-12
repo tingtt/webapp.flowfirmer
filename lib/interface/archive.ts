@@ -21,9 +21,6 @@ export type Archive = {
         refType: 'undefined'
     }
 
-    // to-doを完了した日時
-    checkInDateTime: Date
-
     targets?: Target[]
 
     // 成果リスト

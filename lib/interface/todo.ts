@@ -29,5 +29,8 @@ export type ToDo = {
 
     completed: boolean
 
+    // to-doを完了した日時
+    checkInDatetime?: Date
+
     archived: boolean
 }

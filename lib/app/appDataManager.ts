@@ -104,6 +104,7 @@ export default class AppDataManager {
                         targetList: string[] | null;
                         term: string | null,
                         completed: boolean;
+                        checkInDatetime: Date;
                         archived: boolean;
                     }) => {
                         const todo:ToDo = {
@@ -124,6 +125,9 @@ export default class AppDataManager {
                             term: value.term != null ? this.terms?.find(term => term.id == value.term) : undefined,
 
                             completed: value.completed,
+
+                            checkInDatetime: new Date(value.checkInDatetime),
+
                             archived: value.archived
                         }
                         return todo;
@@ -263,6 +267,7 @@ export default class AppDataManager {
                     targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
                     term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
                     completed: completed,
+                    checkInDatetime: undefined,
                     archived: false,
                 };
                 // 新規Targetを追加
@@ -302,6 +307,7 @@ export default class AppDataManager {
                             "targetList": updatedValue.targetList != undefined ? updatedValue.targetList.map(target => target.id) : [],
                             "term": updatedValue.term?.id,
                             "completed": updatedValue.completed,
+                            "checkInDatetime": updatedValue.checkInDatetime,
                             "archived": updatedValue.archived,
                         }
                     }).then((res) => {
@@ -348,6 +354,9 @@ export default class AppDataManager {
             this.todos = this.todos.map(value => {
                 if (value.id == id) {
                     value.completed = !value.completed;
+                    // 完了日時情報
+                    value.checkInDatetime = value.completed ? new Date() : undefined;
+
                     // 完了状態更新ログ
                     this.todoCompletionStateToggledTodoIds.push(value.id);
                     // リピート設定をしているToDoを完了にしたときに次のToDoを登録する
@@ -469,6 +478,7 @@ export default class AppDataManager {
             const todo = this.todos.find(value => value.id == this.todoCompletionStateToggledTodoIds[this.todoCompletionStateToggledTodoIds.length - 1])
             if (todo != undefined) {
                 todo.completed = !todo.completed;
+                todo.checkInDatetime = todo.completed ? new Date() : undefined;
                 this.updateTodo(todo);
             }
         }
@@ -526,6 +536,7 @@ export default class AppDataManager {
                         "targetList": poppedTodo.targetList?.map(target => target.id),
                         "term": poppedTodo.term?.id,
                         "completed": poppedTodo.completed,
+                        "checkInDatetime": poppedTodo.checkInDatetime,
                         "archived": poppedTodo.archived,
                     }
                 }).then((res) => {
