@@ -20,7 +20,6 @@ export const useStyles = makeStyles(() =>
     grid_row: {
       position: "relative",
       fill: "#f9f9f9",
-      // stroke: "#cccccc"
     },
     // 今日の日付
     today_highlight: {
@@ -45,6 +44,7 @@ export const useStyles = makeStyles(() =>
       position: "relative",
       strokeWidth: 0.2,
     },
+    //週の場合のテキスト
     weekly_text: {
       fill: "#333",
       fontSize: 12,
@@ -64,6 +64,7 @@ export const useStyles = makeStyles(() =>
       fontSize: 12,
       textAnchor: "middle",
     },
+    //termのcss
     bar: {
       fill: "#FFF",
       stroke: "#000",
@@ -80,24 +81,9 @@ export const useStyles = makeStyles(() =>
     bar_label: {
       fill: "#000",
       dominantBaseline: "central",
-      // textAnchor: "middle",
       zIndex: 10,
       fontSize: 12,
       fontWeight: "lighter",
-    },
-    handle_right: {
-      fill: "#ddd",
-      cursor: "ew-resize",
-      opacity: 0,
-      visibility: "hidden",
-      transition: "opacity .3s ease",
-    },
-    handle_left: {
-      fill: "#ddd",
-      cursor: "ew-resize",
-      opacity: 0,
-      visibility: "hidden",
-      transition: "opacity .3s ease",
     },
   })
 );

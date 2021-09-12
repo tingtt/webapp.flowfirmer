@@ -1,14 +1,15 @@
 import React from "react";
 import { useStyles } from "./Gantt.module";
 import { Gantt } from "../../../lib/interface/gantt";
-// import { Term } from '../../../lib/interface';
 import AppDataManager from "../../../lib/app/appDataManager";
 
+//targetのIDを取得
 type Props = {
   targetId: string;
 };
 
 export default function GanttChart(props: Props) {
+  //token処理
   const appDataManager: AppDataManager = (() => {
     try {
       return AppDataManager.generateInstance(
@@ -41,12 +42,12 @@ export default function GanttChart(props: Props) {
   const [LastWeek, setLastWeek] = React.useState({
     start: new Date(),
     end: new Date(),
-  });
+  }); //表示する週の初めと終わり
 
   let countMonth = -1;
   const [SelectNum, setSelectNum] = React.useState(1); //svg描画距離の一時保存
-  const [SelectView, setSelectview] = React.useState([0]);
-  const [Days, setDays] = React.useState(0);
+  const [SelectView, setSelectview] = React.useState([0]); //月の保持
+  const [Days, setDays] = React.useState(0); //表示する月日の総数
   const strMonth = [
     "January",
     "February",
@@ -60,8 +61,9 @@ export default function GanttChart(props: Props) {
     "October",
     "November",
     "December",
-  ];
+  ]; //月を文字に変換する配列
 
+  //カレンダー表示の変更時に行う処理
   const viewcalendar = (
     timeUnit: string,
     setNumber: number,
@@ -70,10 +72,11 @@ export default function GanttChart(props: Props) {
     let arrayday: number[] = []; //月の日付数の仮置き
     let total: number = 0; //総日付数の仮置き
     let view: number[] = []; //表示の数
-    let yearlen: number[] = [];
+    let yearlen: number[] = []; //年の総数
     let container = document.getElementById("container"); //svgを表示させる大枠
 
     if (timeUnit == "month") {
+      //表示させたい月の分だけ日数と年と月
       [...Array(ChangeNum + 2)].map((_: undefined, idx: number) => {
         arrayday.push(new Date(Year, setNumber + idx, 0).getDate());
         yearlen.push(new Date(Year, setNumber + idx, 0).getFullYear());
@@ -88,12 +91,10 @@ export default function GanttChart(props: Props) {
         setendall(
           container!!.clientWidth * 3 //画面最大の表示を表示したい日にちで割り前後１ヶ月を含んで元に戻す
         );
-        container!!.scrollLeft = container!!.clientWidth;
       } else {
         setendall(
           (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい日にちで割り前後１ヶ月を含んで元に戻す
         );
-        container!!.scrollLeft = container!!.clientWidth / ChangeNum;
       }
     } else if (timeUnit == "week") {
       let weekNumber = Math.floor((Today.getDate() - Today.getDay() + 12) / 7); //今週が何番目
@@ -110,13 +111,10 @@ export default function GanttChart(props: Props) {
         setendall(
           (container!!.clientWidth / 7) * 21 //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
         );
-        container!!.scrollLeft =
-          (container!!.clientWidth / (7 * ChangeNum)) * 7;
       } else {
         setendall(
           (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
         );
-        container!!.scrollLeft = container!!.clientWidth / ChangeNum;
       }
     } else if (timeUnit == "year") {
       let LastYear = Year - 1;
@@ -132,16 +130,32 @@ export default function GanttChart(props: Props) {
         setendall(
           container!!.clientWidth * 3 //表示を表示したい年数を３年で固定
         );
-        container!!.scrollLeft = container!!.clientWidth;
       } else {
         setendall(
           (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい年数で割り前後１年を含んで元に戻す
         );
-        container!!.scrollLeft = container!!.clientWidth / ChangeNum;
       }
     }
 
     setSelectNum(ChangeNum); //画面表示する数を入れる
+  };
+
+  //初期スクロールの設定
+  const scrollleft = (ChangeNum: number, timeUnit: string) => {
+    let container = document.getElementById("container"); //svgを表示させる大枠
+
+    if (container != null) {
+      if (ChangeNum == 1) {
+        if (timeUnit == "week") {
+          container.scrollLeft = (container.clientWidth / (7 * ChangeNum)) * 7;
+        } else {
+          container.scrollLeft = container.clientWidth;
+          console.log(container.scrollLeft);
+        }
+      } else {
+        container.scrollLeft = container.clientWidth / ChangeNum;
+      }
+    }
   };
 
   //ガントチャート描画距離の指定
@@ -150,6 +164,7 @@ export default function GanttChart(props: Props) {
     numSelecter: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
   });
 
+  //表示する単位を変更したとき
   const selectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     let select = e.target.value;
 
@@ -168,12 +183,13 @@ export default function GanttChart(props: Props) {
     }
   };
 
+  //calendarstateが変更したときに動かす
   React.useEffect(() => {
-    //calendarstateが変更したときに動かす
     let target = document.getElementById(
       calendarState.name
     ) as HTMLSelectElement;
     viewcalendar(calendarState.name, Month, +target.value);
+    console.log("calnedar");
   }, [calendarState]);
 
   //数字が動いたときに再描画させたい
@@ -189,6 +205,7 @@ export default function GanttChart(props: Props) {
   );
 
   function setdrawig(state: string) {
+    console.log("set");
     //月の表示
     if (state == "month") {
       //日付カウントアップ
@@ -404,14 +421,15 @@ export default function GanttChart(props: Props) {
                       <rect
                         key={value.id}
                         x={
-                          ((StartMonth % 12) +
+                          (((StartMonth % 12) +
                             (StartYear - Year) * 12 -
                             (Month - 1)) *
                             (endall / 3) +
-                          (StartDate - 1) * (endall / Days)|0
+                            (StartDate - 1) * (endall / Days)) |
+                          0
                         }
                         y={28 + (index + 1) * 40}
-                        width={(Time + 1) * (endall / Days)|0}
+                        width={((Time + 1) * (endall / Days)) | 0}
                         height="25"
                         rx="3"
                         ry="3"
@@ -450,14 +468,15 @@ export default function GanttChart(props: Props) {
                       <rect
                         key={value.id}
                         x={
-                          ((StartMonth % 12) +
+                          (((StartMonth % 12) +
                             (StartYear - Year) * 12 -
                             (Month - 1)) *
-                            (endall / (SelectNum + 2))|0 +
-                          (StartDate - 1) * (endall / Days)|0
+                            (endall / (SelectNum + 2))) |
+                          (0 + (StartDate - 1) * (endall / Days)) |
+                          0
                         }
                         y={28 + (index + 1) * 40}
-                        width={(Time + 1) * (endall / Days)|0}
+                        width={((Time + 1) * (endall / Days)) | 0}
                         height="25"
                         rx="3"
                         ry="3"
@@ -497,6 +516,7 @@ export default function GanttChart(props: Props) {
           </g>
         </svg>
       );
+      //週の表示
     } else if (state == "week") {
       let week: number = 7 * (SelectNum + 2);
       let changeDate = new Date(LastWeek.start);
@@ -509,17 +529,16 @@ export default function GanttChart(props: Props) {
           LastWeek.start <= value.endDatetimeScheduled
       );
 
-      //週の表示
       return (
         <svg id="gantt" height={termlength!!.length * 40 + 60} width={endall}>
           <g id="chart">
             {/* ガントチャートの表を作成 */}
             {React.Children.toArray(
-              termlength?.map((value) => (
+              termlength?.map((value,index) => (
                 <rect
                   key={value.name + "row"}
                   x="0"
-                  y={+value.id * 40 + 59}
+                  y={index * 40 + 59}
                   width={endall}
                   height="40"
                   className={classes.grid_row}
@@ -671,7 +690,8 @@ export default function GanttChart(props: Props) {
                               LastWeek.start.getDate()) +
                             (StartMonth - Month) *
                               new Date(Year, StartMonth, 0).getDate() +
-                            StartDate) *
+                            StartDate -
+                            LastWeek.start.getDate()) *
                             endall) /
                           week
                         }
@@ -692,7 +712,8 @@ export default function GanttChart(props: Props) {
                                 LastWeek.start.getDate()) +
                               (StartMonth - Month) *
                                 new Date(Year, StartMonth, 0).getDate() +
-                              StartDate) *
+                              StartDate -
+                              LastWeek.start.getDate()) *
                               endall) /
                             week
                           }
@@ -719,6 +740,8 @@ export default function GanttChart(props: Props) {
           </g>
         </svg>
       );
+
+      //年の表示
     } else if (state == "year") {
       let TotalYear = 4 * (SelectNum + 2); //表示したい数
       let Firstcount = 0; //一年表示時のカウントアップ
@@ -731,17 +754,16 @@ export default function GanttChart(props: Props) {
           Year + SelectNum >= value.startDatetimeScheduled.getFullYear()
       );
 
-      //週の表示
       return (
         <svg id="gantt" height={termlength!!.length * 40 + 60} width={endall}>
           <g id="chart">
             {/* ガントチャートの表を作成 */}
             {React.Children.toArray(
-              termlength?.map((value) => (
+              termlength?.map((value,index) => (
                 <rect
                   key={value.name + "row"}
                   x="0"
-                  y={+value.id * 40 + 59}
+                  y={index * 40 + 59}
                   width={endall}
                   height="40"
                   className={classes.grid_row}
@@ -809,7 +831,7 @@ export default function GanttChart(props: Props) {
                       [...Array(4)].map((_: undefined, idx: number) =>
                         idx == 0 ? (
                           <g className={value.toString()}>
-                            {/* 日付を書く場所 */}
+                            {/* 年を書く場所 */}
                             <text
                               key={Datelen.index[Yearcount] + 1}
                               x={
@@ -1015,6 +1037,7 @@ export default function GanttChart(props: Props) {
           {setdrawig(calendarState.name)}
         </div>
       </div>
+      {scrollleft(SelectNum, calendarState.name)}
     </main>
   );
 }
