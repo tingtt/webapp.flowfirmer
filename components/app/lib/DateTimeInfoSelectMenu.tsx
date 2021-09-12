@@ -95,10 +95,13 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
     useHotkeys('command+\\', () =>props.menuAnchorElSetter(null))
 
+    type SetDateProp = { target: { value: string } };
+
     // 日付指定
-    const setDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // TextFieldの値を更新
+    const setDate = (e: React.ChangeEvent<HTMLInputElement> | SetDateProp) => {
+         // TextFieldの値を更新
         props.dateStrSetter(e.target.value);
+        console.log(`start: ${e.target.value}`);
 
         if (e.target.value == "") {
             // 初期化
@@ -111,22 +114,34 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
         // 文字列を分解してnumber[]に
         const splited = e.target.value.split(/[-/]/).map(value => +value);
-
-        // 得た数値からDate型の値を生成してStateの日付情報を更新
-        props.dateSetter(current => {
-            if (current != null) {
+        const date = props.date != null
+            ? (() => {
+                const current = props.date;
                 current.setFullYear(splited[0]);
                 current.setMonth((splited[1] - 1));
                 current.setDate(splited[2]);
                 return current;
-            }
+            })()
+            : new Date(splited[0], splited[1] - 1, splited[2])
 
-            return new Date(splited[0], splited[1] - 1, splited[2]);
-        });
+        // 得た数値からDate型の値を生成してStateの日付情報を更新
+        props.dateSetter(date);
+
+        // `e`がReact.ChangeEvent型のときのみ終了日時の自動設定
+        if (e.hasOwnProperty('currentTarget')) {
+            if (props.endDate == null) {
+                // 2週間になるように指定
+                // TODO: デフォルトの間隔をユーザー設定から取得
+                setEndDate({ target: { value: `${splited[0]}-${`0${splited[1]}`.slice(-2)}-${`0${splited[2] + 13}`.slice(-2)}` }});
+            } else if (props.endDate < date) {
+                // 同日を指定
+                setEndDate({ target: { value: e.target.value }});
+            }
+        }
 
         // Monthlyの場合に繰り返す日付を更新
         if (props.repeatPattern?.interval == 'Monthly') {
-            props.repeatPatternSetter({ interval: 'Monthly', repeatDate: (new Date(splited[0], splited[1] - 1, splited[2])).getDate() })
+            props.repeatPatternSetter({ interval: 'Monthly', repeatDate: date.getDate() })
         }
     };
 
@@ -160,9 +175,10 @@ export default function DateTimeInfoSelectMenu(props: Props) {
     };
 
     // 終了日
-    const setEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const setEndDate = (e: React.ChangeEvent<HTMLInputElement> | SetDateProp) => {
         // TextFieldの値を更新
         props.endDateStrSetter(e.target.value);
+        console.log(`end: ${e.target.value}`);
 
         if (e.target.value == "") {
             // 初期化
@@ -172,18 +188,30 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
         // 文字列を分解してnumber[]に
         const splited = e.target.value.split(/[-/]/).map(value => +value);
-
-        // 得た数値からDate型の値を生成してStateの日付情報を更新
-        props.endDateSetter(current => {
-            if (current != null) {
+        const date = props.endDate != null
+            ? (() => {
+                const current = props.endDate;
                 current.setFullYear(splited[0]);
                 current.setMonth((splited[1] - 1));
                 current.setDate(splited[2]);
                 return current;
-            }
+            })()
+            : new Date(splited[0], splited[1] - 1, splited[2])
 
-            return new Date(splited[0], splited[1] - 1, splited[2]);
-        });
+        // 得た数値からDate型の値を生成してStateの日付情報を更新
+        props.endDateSetter(date);
+
+        // `e`がReact.ChangeEvent型のときのみ開始日時の自動設定
+        if (e.hasOwnProperty('currentTarget')) {
+            if (props.date == null) {
+                // 2週間になるように指定
+                // TODO: デフォルトの間隔をユーザー設定から取得
+                setDate({ target: { value: `${splited[0]}-${`0${splited[1]}`.slice(-2)}-${`0${splited[2] - 13}`.slice(-2)}` }});
+            } else if (props.date > date) {
+                // 同日を指定
+                setDate({ target: { value: e.target.value }});
+            }
+        }
     }
 
     const [repeatPatternMenuAnchorEl, setRepeatPatternMenuAnchorEl] = React.useState<null | HTMLElement>(null);
