@@ -104,6 +104,7 @@ export default class AppDataManager {
                         targetList: string[] | null;
                         term: string | null,
                         completed: boolean;
+                        checkInDatetime: Date;
                         archived: boolean;
                     }) => {
                         const todo:ToDo = {
@@ -124,6 +125,9 @@ export default class AppDataManager {
                             term: value.term != null ? this.terms?.find(term => term.id == value.term) : undefined,
 
                             completed: value.completed,
+
+                            checkInDatetime: new Date(value.checkInDatetime),
+
                             archived: value.archived
                         }
                         return todo;
@@ -263,6 +267,7 @@ export default class AppDataManager {
                     targetList: targetIds != undefined && this.targets != undefined ? this.targets.filter(target => targetIds.some(id => id == target.id)) : undefined,
                     term: termId != undefined && this.terms != undefined ? this.terms.find(term => term.id == termId) : undefined,
                     completed: completed,
+                    checkInDatetime: undefined,
                     archived: false,
                 };
                 // 新規Targetを追加
@@ -302,6 +307,7 @@ export default class AppDataManager {
                             "targetList": updatedValue.targetList != undefined ? updatedValue.targetList.map(target => target.id) : [],
                             "term": updatedValue.term?.id,
                             "completed": updatedValue.completed,
+                            "checkInDatetime": updatedValue.checkInDatetime,
                             "archived": updatedValue.archived,
                         }
                     }).then((res) => {
@@ -348,6 +354,9 @@ export default class AppDataManager {
             this.todos = this.todos.map(value => {
                 if (value.id == id) {
                     value.completed = !value.completed;
+                    // 完了日時情報
+                    value.checkInDatetime = value.completed ? new Date() : undefined;
+
                     // 完了状態更新ログ
                     this.todoCompletionStateToggledTodoIds.push(value.id);
                     // リピート設定をしているToDoを完了にしたときに次のToDoを登録する
@@ -469,6 +478,7 @@ export default class AppDataManager {
             const todo = this.todos.find(value => value.id == this.todoCompletionStateToggledTodoIds[this.todoCompletionStateToggledTodoIds.length - 1])
             if (todo != undefined) {
                 todo.completed = !todo.completed;
+                todo.checkInDatetime = todo.completed ? new Date() : undefined;
                 this.updateTodo(todo);
             }
         }
@@ -526,6 +536,7 @@ export default class AppDataManager {
                         "targetList": poppedTodo.targetList?.map(target => target.id),
                         "term": poppedTodo.term?.id,
                         "completed": poppedTodo.completed,
+                        "checkInDatetime": poppedTodo.checkInDatetime,
                         "archived": poppedTodo.archived,
                     }
                 }).then((res) => {
@@ -686,6 +697,8 @@ export default class AppDataManager {
             refType: 'undefined';
         } = { refType: 'undefined' }
     ) {
+        const date = new Date();
+
         // 既にArchiveされているToDoの場合
         if (refInfo.refType == 'ToDo' && this.archives?.some(value => value.refInfo.refType == 'ToDo' && value.refInfo.ref.id == refInfo.ref.id)) {
             // update
@@ -693,12 +706,11 @@ export default class AppDataManager {
                 if (value.refInfo.refType == 'ToDo' && value.refInfo.ref.id == refInfo.ref.id) {
                     var newArchive = value;
                     newArchive.refInfo = refInfo;
-                    newArchive.checkInDateTime = new Date();
                     newArchive.targets = targets;
                     newArchive.outcomes = outcomes;
                     newArchive.text = text;
                     newArchive.feelingList = feelingList;
-                    newArchive.recordingDateTime = new Date();
+                    newArchive.recordingDateTime = date;
                     console.log(newArchive);
                     return newArchive;
                 }
@@ -707,8 +719,6 @@ export default class AppDataManager {
 
             // call api
             if (refInfo.refType == 'ToDo') {
-                const date = new Date();
-
                 const [positivePercent, negativePercent] = (() => {
                     if (feelingList == undefined) return [0,0];
                     return feelingList.reduce((prev, curr) => {
@@ -716,29 +726,24 @@ export default class AppDataManager {
                     }, [0,0]).map(val => val / feelingList.length)
                 })();
 
-                var statistics: {[key: string]: any} = {}
-                outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
-                    statistics[val.scheme.id.toString()] = [{
-                        "targetId": val.scheme.target_id,
-                        "name": val.scheme.name,
-                        "unitname": val.scheme.unitName,
-                        "statisticsRule": val.scheme.statisticsRule,
-                        "defaultValue": val.scheme.defaultValue,
-                        "value": val.value,
-                        "feelingText": text,
-                        "feelingName": undefined,
-                        "positivePercent": positivePercent,
-                        "negativePercent": negativePercent,
-                        "recordingDateTime": date
-                    }]
-                })
-
-                axios.post('/api/saveTodoArchive', {
+                axios.post('/api/saveArchive', {
                     "data": {
-                        "todoId": refInfo.ref.id,
-                        "checkInDateTime": date,
-                        "targets": targets?.map(target => target.id),
-                        "statistics": statistics
+                        refType: refInfo.refType,
+                        refId: refInfo.ref.id,
+                        checkInDatetime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime : date,
+                        feelingAndDiary: {
+                            diaryFlag: text != undefined && text != "",
+                            feelingFlag: feelingList != undefined && feelingList.length != 0,
+                            textForDiary: text,
+                            positiveValue: positivePercent,
+                            negativeValue: -negativePercent
+                        },
+                        outcomes: outcomes?.filter(outcome => outcome.scheme.statisticsRule != "String").map(outcome => {
+                            return {
+                                outcomeId: outcome.scheme.id,
+                                value: outcome.value
+                            };
+                        })
                     }
                 }).then((res) => {
                     if (res.data.status == 200) {
@@ -754,8 +759,6 @@ export default class AppDataManager {
 
             // call api
             if (refInfo.refType == 'ToDo') {
-                const date = new Date();
-
                 const [positivePercent, negativePercent] = (() => {
                     if (feelingList == undefined) return [0,0];
                     return feelingList.reduce((prev, curr) => {
@@ -763,29 +766,24 @@ export default class AppDataManager {
                     }, [0,0]).map(val => val / feelingList.length)
                 })();
 
-                var statistics: {[key: string]: any} = {}
-                outcomes?.filter(val => val.scheme.statisticsRule != "String").forEach(val => {
-                    statistics[val.scheme.id.toString()] = [{
-                        "targetId": val.scheme.target_id,
-                        "name": val.scheme.name,
-                        "unitname": val.scheme.unitName,
-                        "statisticsRule": val.scheme.statisticsRule,
-                        "defaultValue": val.scheme.defaultValue,
-                        "value": val.value,
-                        "feelingText": text,
-                        "feelingName": undefined,
-                        "positivePercent": positivePercent,
-                        "negativePercent": negativePercent,
-                        "recordingDateTime": date
-                    }]
-                })
-
-                axios.post('/api/saveTodoArchive', {
+                axios.post('/api/saveArchive', {
                     "data": {
-                        "todoId": refInfo.ref.id,
-                        "checkInDateTime": date,
-                        "targets": targets?.map(target => target.id),
-                        "statistics": statistics
+                        refType: refInfo.refType,
+                        refId: refInfo.ref.id,
+                        checkInDatetime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime : date,
+                        feelingAndDiary: {
+                            diaryFlag: text != undefined && text != "",
+                            feelingFlag: feelingList != undefined && feelingList.length != 0,
+                            textForDiary: text,
+                            positiveValue: positivePercent,
+                            negativeValue: -negativePercent
+                        },
+                        outcomes: outcomes?.filter(outcome => outcome.scheme.statisticsRule != "String").map(outcome => {
+                            return {
+                                outcomeId: outcome.scheme.id,
+                                value: outcome.value
+                            };
+                        })
                     }
                 }).then((res) => {
                     if (res.data.status == 200) {
@@ -794,12 +792,11 @@ export default class AppDataManager {
                         const newArchive: Archive = {
                             id: res.data.objectId,
                             refInfo: refInfo,
-                            checkInDateTime: new Date(),
                             targets: targets,
                             outcomes: outcomes,
                             text: text,
                             feelingList: feelingList,
-                            recordingDateTime: new Date()
+                            recordingDateTime: date
                         }
 
                         console.log(newArchive);
