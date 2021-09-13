@@ -674,6 +674,10 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 <Button
                     color="primary"
                     onClick={() => {
+                        if (props.todo?.archived) {
+                            props.close();
+                            return;
+                        }
                         appDataManager.registerArchive(
                             props.todo?.targetList,
                             resultOutcomes,
