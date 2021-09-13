@@ -248,6 +248,16 @@ export default function GanttChart(props: Props) {
               ))
             )}
           </g>
+
+          {/* 日付を表示する土台 */}
+          <rect
+            x="0"
+            y="0"
+            width={endall}
+            height="60"
+            className={classes.grid_header}
+          />
+
           <g id="Today">
             {/*今日の日付をオレンジ色にする  */}
             {React.Children.toArray(
@@ -259,9 +269,9 @@ export default function GanttChart(props: Props) {
                         (Datelen.index[0] + Today.getDate() - 1) *
                         (endall / Days)
                       }
-                      y="0"
+                      y="60"
                       width={endall / Days}
-                      height={(termlength!!.length + 1) * 40 + 19}
+                      height={termlength!!.length * 40}
                       className={classes.today_highlight}
                     />
                   );
@@ -269,15 +279,6 @@ export default function GanttChart(props: Props) {
               })
             )}
           </g>
-
-          {/* 日付を表示する土台 */}
-          <rect
-            x="0"
-            y="0"
-            width={endall}
-            height="60"
-            className={classes.grid_header}
-          />
 
           {/* ガントチャートの枠組み */}
           <path d="M 0 59 v 190" className={classes.tick_thick} />
@@ -534,7 +535,7 @@ export default function GanttChart(props: Props) {
           <g id="chart">
             {/* ガントチャートの表を作成 */}
             {React.Children.toArray(
-              termlength?.map((value,index) => (
+              termlength?.map((value, index) => (
                 <rect
                   key={value.name + "row"}
                   x="0"
@@ -546,16 +547,6 @@ export default function GanttChart(props: Props) {
               ))
             )}
           </g>
-          <g id="Today">
-            {/*今日の日付をオレンジ色にする  */}
-            <rect
-              x={((7 + Today.getDay()) * endall) / week}
-              y="0"
-              width={endall / week}
-              height={(termlength!!.length + 1) * 40 + 19}
-              className={classes.today_highlight}
-            />
-          </g>
 
           {/* 日付を表示する土台 */}
           <rect
@@ -565,6 +556,17 @@ export default function GanttChart(props: Props) {
             height="60"
             className={classes.grid_header}
           />
+
+          <g id="Today">
+            {/*今日の日付をオレンジ色にする  */}
+            <rect
+              x={((7 + Today.getDay()) * endall) / week}
+              y="60"
+              width={endall / week}
+              height={termlength!!.length * 40}
+              className={classes.today_highlight}
+            />
+          </g>
 
           {/* ガントチャートの枠組み */}
           <path d="M 0 59 v 190" className={classes.tick_thick} />
@@ -759,7 +761,7 @@ export default function GanttChart(props: Props) {
           <g id="chart">
             {/* ガントチャートの表を作成 */}
             {React.Children.toArray(
-              termlength?.map((value,index) => (
+              termlength?.map((value, index) => (
                 <rect
                   key={value.name + "row"}
                   x="0"
@@ -771,16 +773,6 @@ export default function GanttChart(props: Props) {
               ))
             )}
           </g>
-          <g id="Today">
-            {/*今日の日付をオレンジ色にする  */}
-            <rect
-              x={(endall / TotalYear) * (4 + Math.floor((Month + 1) / 3))}
-              y="0"
-              width={20}
-              height={(termlength!!.length + 1) * 40 + 19}
-              className={classes.today_highlight}
-            />
-          </g>
 
           {/* 日付を表示する土台 */}
           <rect
@@ -790,6 +782,17 @@ export default function GanttChart(props: Props) {
             height="60"
             className={classes.grid_header}
           />
+
+          <g id="Today">
+            {/*今日の日付をオレンジ色にする  */}
+            <rect
+              x={(endall / (TotalYear * 3)) * (12 + Month) + Today.getDate()}
+              y="60"
+              width={20}
+              height={termlength!!.length * 40}
+              className={classes.today_highlight}
+            />
+          </g>
 
           {/* ガントチャートの枠組み */}
           <path d="M 0 59 v 190" className={classes.tick_thick} />
