@@ -118,11 +118,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const dateToTimeStr = (date: Date) => {
+    return `${date.getMonth()}:${date.getDate()}`;
+}
+
 type GraphData = { time: string, amount: number }
 type GraphObject = {
     //string number　どっちかきく ///////////////////////////
-    targetId: number,
-    outcomeId: number,
+    targetId: string,
+    outcomeId: string,
     title: string,
     unitName: string,
     totalFlg: boolean,
@@ -132,8 +136,8 @@ type GraphObject = {
 
 type GraphDataRaw = { time: Date, amount: number }
 type GraphObjectRaw = {
-    targetId: number,
-    outcomeId: number,
+    targetId: string,
+    outcomeId: string
     title: string,
     unitName: string,
     totalFlg: boolean,
@@ -143,8 +147,8 @@ type GraphObjectRaw = {
 let Res: GraphObject[];
 const ResTest: GraphObjectRaw[] = [
     {
-        targetId: 1,
-        outcomeId: 1,
+        targetId: "1",
+        outcomeId: "1",
         title: "スクワット",
         unitName: "回",
         totalFlg: false,
@@ -160,8 +164,8 @@ const ResTest: GraphObjectRaw[] = [
         ]
     },
     {
-        targetId: 2,
-        outcomeId: 2,
+        targetId: "2",
+        outcomeId: "2",
         title: "腹筋",
         unitName: "回",
         totalFlg: false,
@@ -177,8 +181,8 @@ const ResTest: GraphObjectRaw[] = [
         ]
     },
     {
-        targetId: 3,
-        outcomeId: 3,
+        targetId: "3",
+        outcomeId: "3",
         title: "腕立て伏せ",
         unitName: "回",
         totalFlg: false,
@@ -194,6 +198,29 @@ const ResTest: GraphObjectRaw[] = [
         ]
     },
 ]
+
+Res = ResTest.map(value => {
+    return {
+        targetId: value.targetId,
+        outcomeId: value.outcomeId,
+        title: value.title,
+        unitName: value.unitName,
+        totalFlg: value.totalFlg,
+        data: value.data.map(row => {
+            return {
+                time: dateToTimeStr(row.time),
+                amount: row.amount
+            } as GraphData;
+        }),
+        dataTotal: value.data.map(row => {
+            return {
+                time: dateToTimeStr(row.time),
+                amount: row.amount
+            } as GraphData;
+        })
+    } as GraphObject
+})
+
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
     // statusのチェック
@@ -209,7 +236,7 @@ axios.post('/api/getOutcomeArchiveByUserId')
         // 通常グラフのデータを整形
         outcome.data = outcome.data.map(data => {
             // 日時情報をグラフで扱える形式に変換
-            const timeStr = new Date(data.time).toString()
+            const timeStr = dateToTimeStr(new Date(data.time));
             return {
                 time: timeStr,
                 amount: data.amount
@@ -218,7 +245,7 @@ axios.post('/api/getOutcomeArchiveByUserId')
         // 加算グラフのデータを整形
         outcome.dataTotal = outcome.dataTotal.map(data => {
             // 日時情報をグラフで扱える形式に変換
-            const timeStr = new Date(data.time).toString()
+            const timeStr = dateToTimeStr(new Date(data.time));
             return {
                 time: timeStr,
                 amount: data.amount
@@ -237,7 +264,7 @@ export default function Dashboard() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     // グラフの作成
-    let graphList = ResTest.map(value => {
+    let graphList = Res.map(value => {
         return (
             <Grid item xs={12} md={6} lg={6}>
                 <Paper className={fixedHeightPaper}>
