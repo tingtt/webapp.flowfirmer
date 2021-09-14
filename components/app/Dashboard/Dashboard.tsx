@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Chart from './graph/Chart';
-// import FeelingChart from './graph/FeelingChart';
+import ChartFeeling from './graph/ChartFeeling';
 import axios from "axios";
 
 
@@ -275,29 +275,30 @@ axios.post('/api/getOutcomeArchiveByUserId')
 type FeelingGraphObject = {
     positive: number, // 0 - 100
     negative: number, // -100 - 0
-    time: string
+    time: number
 }[]
 
+// { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
 const sampleFeelings: FeelingGraphObject = [
     {
         positive: 80,
         negative: 0,
-        time: dateToTimeStr((new Date(2021, 7, 13, 7)))
+        time: new Date(2021, 7, 13, 7).getTime()
     },
     {
         positive: 90,
         negative: 0,
-        time: dateToTimeStr((new Date(2021, 7, 13, 9)))
+        time: new Date(2021, 7, 13, 9).getTime()
     },
     {
         positive: 0,
         negative: -20,
-        time: dateToTimeStr((new Date(2021, 7, 13, 11)))
+        time: new Date(2021, 7, 13, 11).getTime()
     },
     {
         positive: 80,
         negative: 0,
-        time: dateToTimeStr((new Date(2021, 7, 13, 13)))
+        time: new Date(2021, 7, 13, 13).getTime()
     },
 ]
 
@@ -376,6 +377,12 @@ export default function Dashboard() {
                             {/* Chart */}
                             {graphListSample}
                             {graphList}
+                            
+                            <Grid item xs={12} md={12} lg={6}>
+                                <Paper className={fixedHeightPaper}>
+                                    <ChartFeeling graphData={sampleFeelings} />
+                                </Paper>
+                            </Grid>
                             {/*<Grid item xs={12} md={12} lg={6}>*/}
                             {/*    <Paper className={fixedHeightPaper}>*/}
                             {/*        /!* 子に渡す値を設定 *!/*/}
