@@ -1,7 +1,6 @@
-import GanttChart from "../Target/Gantt";
 import React from 'react';
 import clsx from 'clsx';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
@@ -10,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Chart from './graph/Chart';
+// import FeelingChart from './graph/FeelingChart';
 import axios from "axios";
 
 
@@ -119,10 +119,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const dateToTimeStr = (date: Date) => {
-    return `${date.getMonth()}:${date.getDate()}`;
+    return date.getTime();
 }
 
-type GraphData = { time: string, amount: number }
+type GraphData = { time: number, amount: number }
 type GraphObject = {
     //string number　どっちかきく ///////////////////////////
     targetId: string,
@@ -134,7 +134,7 @@ type GraphObject = {
     dataTotal: GraphData[],
 }
 
-type GraphDataRaw = { time: Date, amount: number }
+type GraphDataRaw = { time: number, amount: number }
 type GraphObjectRaw = {
     targetId: string,
     outcomeId: string
@@ -144,8 +144,9 @@ type GraphObjectRaw = {
     data: GraphDataRaw[],
     dataTotal: GraphDataRaw[],
 }
-let Res: GraphObject[];
-const ResTest: GraphObjectRaw[] = [
+let Res: GraphObject[]
+
+const ResSample: GraphObjectRaw[] = [
     {
         targetId: "1",
         outcomeId: "1",
@@ -153,14 +154,21 @@ const ResTest: GraphObjectRaw[] = [
         unitName: "回",
         totalFlg: false,
         data: [
-            { time: new Date(2021, 9, 9, 12), amount: 100 },
-            { time: new Date(2021, 9, 10, 12), amount: 200 },
-            { time: new Date(2021, 9, 11, 12), amount: 150 },
+            { time: new Date(2021, 9, 9).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 10).getTime(), amount: 200 },
+            { time: new Date(2021, 9, 11).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 12).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 13).getTime(), amount: 200 },
+            // { time: new Date(2021, 9, 14).getTime(), amount: 100 },
+            // { time: new Date(2021, 9, 15).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 16).getTime(), amount: 300 },
+
         ],
         dataTotal: [
-            { time: new Date(2021, 9, 9, 12), amount: 100 },
-            { time: new Date(2021, 9, 10, 12), amount: 300 },
-            { time: new Date(2021, 9, 11, 12), amount: 450 },
+            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 10, 12).getTime(), amount: 300 },
+            { time: new Date(2021, 9, 11, 12).getTime(), amount: 400 },
+            { time: new Date(2021, 9, 12, 12).getTime(), amount: 500 },
         ]
     },
     {
@@ -170,14 +178,14 @@ const ResTest: GraphObjectRaw[] = [
         unitName: "回",
         totalFlg: false,
         data: [
-            { time: new Date(2021, 9, 9, 12), amount: 100 },
-            { time: new Date(2021, 9, 10, 12), amount: 200 },
-            { time: new Date(2021, 9, 11, 12), amount: 500 },
+            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 10, 12).getTime(), amount: 200 },
+            { time: new Date(2021, 9, 11, 12).getTime(), amount: 500 },
         ],
         dataTotal: [
-            { time: new Date(2021, 9, 9, 12), amount: 100 },
-            { time: new Date(2021, 9, 10, 12), amount: 200 },
-            { time: new Date(2021, 9, 11, 12), amount: 500 },
+            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 10, 12).getTime(), amount: 200 },
+            { time: new Date(2021, 9, 11, 12).getTime(), amount: 500 },
         ]
     },
     {
@@ -187,67 +195,91 @@ const ResTest: GraphObjectRaw[] = [
         unitName: "回",
         totalFlg: false,
         data: [
-            { time: new Date(2021, 9, 9, 12), amount: 100 },
-            { time: new Date(2021, 9, 10, 12), amount: 90 },
-            { time: new Date(2021, 9, 11, 12), amount: 110 },
+            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 10, 12).getTime(), amount: 90 },
+            { time: new Date(2021, 9, 11, 12).getTime(), amount: 110 },
         ],
         dataTotal: [
-            { time: new Date(2021, 9, 9, 12), amount: 100 },
-            { time: new Date(2021, 9, 10, 12), amount: 90 },
-            { time: new Date(2021, 9, 11, 12), amount: 110 },
+            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
+            { time: new Date(2021, 9, 10, 12).getTime(), amount: 90 },
+            { time: new Date(2021, 9, 11, 12).getTime(), amount: 110 },
         ]
     },
 ]
 
-Res = ResTest.map(value => {
-    return {
-        targetId: value.targetId,
-        outcomeId: value.outcomeId,
-        title: value.title,
-        unitName: value.unitName,
-        totalFlg: value.totalFlg,
-        data: value.data.map(row => {
-            return {
-                time: dateToTimeStr(row.time),
-                amount: row.amount
-            } as GraphData;
-        }),
-        dataTotal: value.data.map(row => {
-            return {
-                time: dateToTimeStr(row.time),
-                amount: row.amount
-            } as GraphData;
-        })
-    } as GraphObject
-})
+//サンプルデータ経由
+// Res = ResSample.map(value => {
+//     return {
+//         targetId: value.targetId,
+//         outcomeId: value.outcomeId,
+//         title: value.title,
+//         unitName: value.unitName,
+//         totalFlg: value.totalFlg,
+//         data: value.data.map(row => {
+//             return {
+//                 time: row.time,
+//                 amount: row.amount
+//             } as GraphData;
+//         }),
+//         dataTotal: value.data.map(row => {
+//             return {
+//                 time: row.time,
+//                 amount: row.amount
+//             } as GraphData;
+//         })
+//     } as GraphObject
+// })
 
+// Res = ResSample.map(value => {
+//     return {
+//         targetId: value.targetId,
+//         outcomeId: value.outcomeId,
+//         title: value.title,
+//         unitName: value.unitName,
+//         totalFlg: value.totalFlg,
+//         data: value.data.map(row => {
+//             return {
+//                 time: row.time.toString(),
+//                 amount: row.amount
+//             } as GraphData;
+//         }),
+//         dataTotal: value.data.map(row => {
+//             return {
+//                 time: row.time.toString(),
+//                 amount: row.amount
+//             } as GraphData;
+//         })
+//     } as GraphObject
+// })
+
+//API経由
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
+    // return;
     // statusのチェック
-    if (res.data.status != 200) {
+    if (res.data.status == 200) {
+        console.log("axios post getOutcomeArchiveByUserId 成功");
+    }else{
         console.log(`err: Failed to fetch OutcomeArchive. ${res.data.message}`);
-        return;
     }
-
-    console.log("axios post getOutcomeArchiveByUserId 成功");
 
     // dataをグラフ用のオブジェクトに変換
     Res = (res.data.data as GraphObject[]).map(outcome => {
         // 通常グラフのデータを整形
         outcome.data = outcome.data.map(data => {
             // 日時情報をグラフで扱える形式に変換
-            const timeStr = dateToTimeStr(new Date(data.time));
+            const timeNum = dateToTimeStr(new Date(data.time));
             return {
-                time: timeStr,
+                time: timeNum,
                 amount: data.amount
             }
         })
         // 加算グラフのデータを整形
         outcome.dataTotal = outcome.dataTotal.map(data => {
             // 日時情報をグラフで扱える形式に変換
-            const timeStr = dateToTimeStr(new Date(data.time));
+            const timeNum = dateToTimeStr(new Date(data.time));
             return {
-                time: timeStr,
+                time: timeNum,
                 amount: data.amount
             }
         })
@@ -258,21 +290,84 @@ axios.post('/api/getOutcomeArchiveByUserId')
     console.log('err:', err);
 });
 
+/*
+ * 感情データ 
+ */
+type FeelingGraphObject = {
+    positive: number, // 0 - 100
+    negative: number, // -100 - 0
+    time: string
+}[]
+
+const sampleFeelings: FeelingGraphObject = [
+    {
+        positive: 80,
+        negative: 0,
+        time: dateToTimeStr((new Date(2021, 7, 13, 7)))
+    },
+    {
+        positive: 90,
+        negative: 0,
+        time: dateToTimeStr((new Date(2021, 7, 13, 9)))
+    },
+    {
+        positive: 0,
+        negative: -20,
+        time: dateToTimeStr((new Date(2021, 7, 13, 11)))
+    },
+    {
+        positive: 80,
+        negative: 0,
+        time: dateToTimeStr((new Date(2021, 7, 13, 13)))
+    },
+]
+
+
+let graphList
+let graphListSample
+
 export default function Dashboard() {
     const classes = useStyles();
 
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    // グラフの作成
-    let graphList = Res.map(value => {
+    // グラフの作成 SAMPLE
+    console.log(ResSample)
+
+    graphList = ResSample.map(value => {
         return (
-            <Grid item xs={12} md={6} lg={6}>
+            <Grid item xs={12} md={6} lg={12}>
                 <Paper className={fixedHeightPaper}>
                     <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
                 </Paper>
             </Grid>
         );
     });
+    // グラフの作成 API
+    console.log(Res)
+    graphListSample = Res.map(value => {
+        return (
+            <Grid item xs={12} md={6} lg={6}>
+                <Paper className={fixedHeightPaper}>
+                    <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
+                    {console.log(Res)}
+                </Paper>
+            </Grid>
+        );
+    });
+
+
+    console.log(`graphListの型 ${typeof graphList}`);
+
+    // graphList.push(
+    //     <Grid item xs={12} md={6} lg={6}>
+    //         <Paper className={fixedHeightPaper}>
+    //             <Chart title={"a"} unitName={"b"} key={1} graphData={sampleFeelings} />
+    //         </Paper>
+    //     </Grid>
+    // )
+
 
     return (
         <div>
@@ -291,6 +386,7 @@ export default function Dashboard() {
                             {/*    </Paper>*/}
                             {/*</Grid>*/}
                             {/* Chart */}
+                            {graphListSample}
                             {graphList}
                             {/*<Grid item xs={12} md={12} lg={6}>*/}
                             {/*    <Paper className={fixedHeightPaper}>*/}
