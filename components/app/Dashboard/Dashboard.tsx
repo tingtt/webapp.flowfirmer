@@ -335,7 +335,7 @@ export default function Dashboard() {
     // グラフの作成 SAMPLE
     console.log(ResSample)
 
-    graphList = ResSample.map(value => {
+    graphListSample = ResSample.map(value => {
         return (
             <Grid item xs={12} md={6} lg={12}>
                 <Paper className={fixedHeightPaper}>
@@ -346,7 +346,8 @@ export default function Dashboard() {
     });
     // グラフの作成 API
     console.log(Res)
-    graphListSample = Res.map(value => {
+
+    graphList = Res.map(value => {
         return (
             <Grid item xs={12} md={6} lg={6}>
                 <Paper className={fixedHeightPaper}>
