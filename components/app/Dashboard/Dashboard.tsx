@@ -134,19 +134,20 @@ type GraphObject = {
     dataTotal: GraphData[],
 }
 
-type GraphDataRaw = { time: number, amount: number }
-type GraphObjectRaw = {
-    targetId: string,
-    outcomeId: string
-    title: string,
-    unitName: string,
-    totalFlg: boolean,
-    data: GraphDataRaw[],
-    dataTotal: GraphDataRaw[],
-}
+// type GraphDataRaw = { time: number, amount: number }
+// type GraphObjectRaw = {
+//     targetId: string,
+//     outcomeId: string
+//     title: string,
+//     unitName: string,
+//     totalFlg: boolean,
+//     data: GraphDataRaw[],
+//     dataTotal: GraphDataRaw[],
+// }
 let Res: GraphObject[]
+let ResSample: GraphObject[]
 
-const ResSample: GraphObjectRaw[] = [
+const SampleJson: GraphObject[] = [
     {
         targetId: "1",
         outcomeId: "1",
@@ -207,52 +208,30 @@ const ResSample: GraphObjectRaw[] = [
     },
 ]
 
-//サンプルデータ経由
-// Res = ResSample.map(value => {
-//     return {
-//         targetId: value.targetId,
-//         outcomeId: value.outcomeId,
-//         title: value.title,
-//         unitName: value.unitName,
-//         totalFlg: value.totalFlg,
-//         data: value.data.map(row => {
-//             return {
-//                 time: row.time,
-//                 amount: row.amount
-//             } as GraphData;
-//         }),
-//         dataTotal: value.data.map(row => {
-//             return {
-//                 time: row.time,
-//                 amount: row.amount
-//             } as GraphData;
-//         })
-//     } as GraphObject
-// })
+//サンプルデータ経由　SampleJsonをResSampleに代入
+ResSample = SampleJson.map(value => {
+    return {
+        targetId: value.targetId,
+        outcomeId: value.outcomeId,
+        title: value.title,
+        unitName: value.unitName,
+        totalFlg: value.totalFlg,
+        data: value.data.map(row => {
+            return {
+                time: row.time,
+                amount: row.amount
+            } as GraphData;
+        }),
+        dataTotal: value.data.map(row => {
+            return {
+                time: row.time,
+                amount: row.amount
+            } as GraphData;
+        })
+    } as GraphObject
+})
 
-// Res = ResSample.map(value => {
-//     return {
-//         targetId: value.targetId,
-//         outcomeId: value.outcomeId,
-//         title: value.title,
-//         unitName: value.unitName,
-//         totalFlg: value.totalFlg,
-//         data: value.data.map(row => {
-//             return {
-//                 time: row.time.toString(),
-//                 amount: row.amount
-//             } as GraphData;
-//         }),
-//         dataTotal: value.data.map(row => {
-//             return {
-//                 time: row.time.toString(),
-//                 amount: row.amount
-//             } as GraphData;
-//         })
-//     } as GraphObject
-// })
-
-//API経由
+//API経由　APIから取得した値をResに代入
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
     // return;
@@ -333,6 +312,7 @@ export default function Dashboard() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     // グラフの作成 SAMPLE
+    console.log(`ResSampleの中身`)
     console.log(ResSample)
 
     graphListSample = ResSample.map(value => {
@@ -344,20 +324,27 @@ export default function Dashboard() {
             </Grid>
         );
     });
+    console.log(`graphListSampleの型 ${typeof graphListSample}`);
+
     // グラフの作成 API
+    console.log(`Resの中身`)
     console.log(Res)
 
-    graphList = Res.map(value => {
-        return (
-            <Grid item xs={12} md={6} lg={6}>
-                <Paper className={fixedHeightPaper}>
-                    <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
-                    {console.log(Res)}
-                </Paper>
-            </Grid>
-        );
-    });
-
+    // 型がundefinedの時は実行しない。(APIから値が取得できない時と同じ)
+    if (typeof graphList === 'undefined'){
+        console.log("APIからグラフデータが取得できませんでした。")
+    }else {
+        graphList = Res.map(value => {
+            return (
+                <Grid item xs={12} md={6} lg={6}>
+                    <Paper className={fixedHeightPaper}>
+                        <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
+                        {console.log(Res)}
+                    </Paper>
+                </Grid>
+            );
+        });
+    }
 
     console.log(`graphListの型 ${typeof graphList}`);
 
