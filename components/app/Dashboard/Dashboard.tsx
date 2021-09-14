@@ -378,7 +378,7 @@ export default function Dashboard() {
                             {graphListSample}
                             {graphList}
                             
-                            <Grid item xs={12} md={12} lg={6}>
+                            <Grid item xs={12} md={12} lg={12}>
                                 <Paper className={fixedHeightPaper}>
                                     <ChartFeeling graphData={sampleFeelings} />
                                 </Paper>
