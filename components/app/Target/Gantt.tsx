@@ -23,6 +23,9 @@ export default function GanttChart(props: Props) {
     }
   })();
 
+  //css適応
+  const classes = useStyles();
+
   let Today = new Date(); //今日の日付
   let Year = Today.getFullYear(); //今年
   let Month = Today.getMonth(); //今月
@@ -86,16 +89,6 @@ export default function GanttChart(props: Props) {
       setDatelen({ index: arrayday, year: yearlen });
       setSelectview(view);
       setDays(total);
-
-      if (ChangeNum == 1) {
-        setendall(
-          container!!.clientWidth * 3 //画面最大の表示を表示したい日にちで割り前後１ヶ月を含んで元に戻す
-        );
-      } else {
-        setendall(
-          (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい日にちで割り前後１ヶ月を含んで元に戻す
-        );
-      }
     } else if (timeUnit == "week") {
       let weekNumber = Math.floor((Today.getDate() - Today.getDay() + 12) / 7); //今週が何番目
       let StartDate = new Date(Year, Month, (weekNumber - 2) * 7 + 1); //今週の始め
@@ -106,16 +99,6 @@ export default function GanttChart(props: Props) {
 
       setDatelen({ index: [7 * (ChangeNum + 2)], year: [] }); //日にちの長さ
       setLastWeek({ start: StartDate, end: EndDate }); //先週初め先
-
-      if (ChangeNum == 1) {
-        setendall(
-          (container!!.clientWidth / 7) * 21 //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
-        );
-      } else {
-        setendall(
-          (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい日にちで割り前後１週間を含んで元に戻す
-        );
-      }
     } else if (timeUnit == "year") {
       let LastYear = Year - 1;
 
@@ -125,33 +108,29 @@ export default function GanttChart(props: Props) {
       );
 
       setDatelen({ index: arrayday, year: [] });
+    }
 
-      if (ChangeNum == 1) {
-        setendall(
-          container!!.clientWidth * 3 //表示を表示したい年数を３年で固定
-        );
-      } else {
-        setendall(
-          (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい年数で割り前後１年を含んで元に戻す
-        );
-      }
+    if (ChangeNum == 1) {
+      setendall(
+        container!!.clientWidth * 3 //表示を表示したい数を３で固定
+      );
+    } else {
+      setendall(
+        (container!!.clientWidth / ChangeNum) * (ChangeNum + 2) //画面最大の表示を表示したい数で割り前後１足して元に戻す
+      );
     }
 
     setSelectNum(ChangeNum); //画面表示する数を入れる
   };
 
   //初期スクロールの設定
-  const scrollleft = (ChangeNum: number, timeUnit: string) => {
+  const scrollleft = (ChangeNum: number) => {
     let container = document.getElementById("container"); //svgを表示させる大枠
 
     if (container != null) {
+      container.scrollLeft = 0;
       if (ChangeNum == 1) {
-        if (timeUnit == "week") {
-          container.scrollLeft = (container.clientWidth / (7 * ChangeNum)) * 7;
-        } else {
-          container.scrollLeft = container.clientWidth;
-          console.log(container.scrollLeft);
-        }
+        container.scrollLeft = endall / 3;
       } else {
         container.scrollLeft = container.clientWidth / ChangeNum;
       }
@@ -189,7 +168,6 @@ export default function GanttChart(props: Props) {
       calendarState.name
     ) as HTMLSelectElement;
     viewcalendar(calendarState.name, Month, +target.value);
-    console.log("calnedar");
   }, [calendarState]);
 
   //数字が動いたときに再描画させたい
@@ -197,15 +175,12 @@ export default function GanttChart(props: Props) {
     viewcalendar(calendarState.name, Month, +e.target.value);
   };
 
-  const classes = useStyles();
-
   //tergetidと一致する物だけ
   const targetlist = appDataManager.terms?.filter(
     (v) => v.targetList?.filter((a) => a.id == props.targetId).length != 0
   );
 
   function setdrawig(state: string) {
-    console.log("set");
     //月の表示
     if (state == "month") {
       //日付カウントアップ
@@ -1040,7 +1015,7 @@ export default function GanttChart(props: Props) {
           {setdrawig(calendarState.name)}
         </div>
       </div>
-      {scrollleft(SelectNum, calendarState.name)}
+      {scrollleft(SelectNum)}
     </main>
   );
 }
