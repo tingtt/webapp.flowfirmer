@@ -318,7 +318,7 @@ export default function Dashboard() {
 
     graphListSample = ResSample.map(value => {
         return (
-            <Grid item xs={12} md={6} lg={12}>
+            <Grid item xs={12} md={6} lg={6}>
                 <Paper className={fixedHeightPaper}>
                     <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
                 </Paper>
