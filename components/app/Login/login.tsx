@@ -112,8 +112,6 @@ export default function loginComponent() {
         axios.post(`/api/login`, args)
             .then(function (response) {
                 if (response.data.status == 200 && typeof response.data.token === "string") {
-                    // tokenをブラウザのcookieに保持
-                    document.cookie = `token=${response.data.token}`
                     router.push(
                         {
                             pathname: "/app",

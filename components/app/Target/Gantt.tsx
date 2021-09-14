@@ -3,21 +3,14 @@ import { useStyles } from "./Gantt.module";
 import { Gantt } from "../../../lib/interface/gantt";
 import AppDataManager from "../../../lib/app/appDataManager";
 
-//targetのIDを取得
 type Props = {
-  targetId: string;
+  targetId: string
 };
 
 export default function GanttChart(props: Props) {
-  //token処理
   const appDataManager: AppDataManager = (() => {
     try {
-      return AppDataManager.generateInstance(
-        document.cookie
-          .split("; ")
-          .find((row: string) => row.startsWith("token"))!
-          .split("=")[1]
-      );
+      return AppDataManager.generateInstance();
     } catch (e) {
       return AppDataManager.getInstance();
     }

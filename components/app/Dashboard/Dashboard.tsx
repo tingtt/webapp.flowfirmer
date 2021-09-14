@@ -3,27 +3,15 @@ import React from 'react';
 import clsx from 'clsx';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './graph/listItems';
 import Chart from './graph/Chart';
-import Deposits from './graph/Deposits';
-import Orders from './graph/Orders';
-import {element, func, number} from "prop-types";
+import axios from "axios";
+
 
 function Copyright() {
     return (
@@ -39,24 +27,6 @@ function Copyright() {
 }
 
 const drawerWidth = 240;
-// const useStyles = makeStyles((theme: Theme) =>
-//     createStyles({
-//         root: {
-//             display: 'flex',
-//             height: '100%'
-//         },
-//         contentLeft: {
-//             flex: 1,
-//             overflow: 'auto',
-//             paddingRight: theme.spacing(2)
-//         },
-//         contentRight: {
-//             flex: 1,
-//             overflow: 'auto',
-//             paddingLeft: theme.spacing(2)
-//         },
-//     }),
-// );
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -148,194 +118,222 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export type Patients = {
-    date: string,
-    data: Array<any>
-};
-const JsonData = {
-    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6M30.-RmolK2yznBtDt3jnaLmIdMQEMrqSI9l57yGepBQUIg",
-    "data": {
-        "todoId": "6108dec3999f8d48ab580a19",
-        "checkInDateTime": "2021-12-01T03:24:00",
-        "targets": ["60ef8fc17540ec361fa9a3df"],
-        "statistics":{
-            "6108de34999f8dd93b580a17":[
-                {
-                    "targetId": "1",
-                    "name": "testsample1",
-                    "unitname": "tete",
-                    "statisticsRule": "test",
-                    "defaultValue": 10,
-                    "value": 5,
-                    "feelingText": "testtext",
-                    "feelingName": "testName",
-                    "positivePercent": 10,
-                    "negativePercent": 5,
-                    "recordingDateTime": "2021-12-01T03:24:00"
-                },
-                {
-                    "targetId": "2",
-                    "name": "testsample1",
-                    "unitname": "tete2",
-                    "statisticsRule": "test2",
-                    "defaultValue": 10,
-                    "value": 7,
-                    "feelingText": "testtext2",
-                    "feelingName": "testName2",
-                    "positivePercent": 10,
-                    "negativePercent": 5,
-                    "recordingDateTime": "2021-12-01T03:24:00"
-                }
-            ],
-            "6108de34999f8d83918f580a":[
-                {
-                    "targetId": "11",
-                    "name": "testsample2",
-                    "unitname": "tete3",
-                    "statisticsRule": "test3",
-                    "defaultValue": 10,
-                    "value": 2,
-                    "feelingText": "testtext3",
-                    "feelingName": "testName3",
-                    "positivePercent": 10,
-                    "negativePercent": 5,
-                    "recordingDateTime": "2021-12-01T03:24:00"
-                },
-                {
-                    "targetId": "12",
-                    "name": "testsample2",
-                    "unitname": "tete4",
-                    "statisticsRule": "test4",
-                    "defaultValue": 10,
-                    "value": 5,
-                    "feelingText": "testtext4",
-                    "feelingName": "testName4",
-                    "positivePercent": 10,
-                    "negativePercent": 5,
-                    "recordingDateTime": "2021-12-01T03:24:00"
-                }
-            ]
-        }
+const dateToTimeStr = (date: Date) => {
+    return `${date.getMonth()}:${date.getDate()}`;
+}
+
+type GraphData = { time: string, amount: number }
+type GraphObject = {
+    //string number　どっちかきく ///////////////////////////
+    targetId: string,
+    outcomeId: string,
+    title: string,
+    unitName: string,
+    totalFlg: boolean,
+    data: GraphData[],
+    dataTotal: GraphData[],
+}
+
+type GraphDataRaw = { time: Date, amount: number }
+type GraphObjectRaw = {
+    targetId: string,
+    outcomeId: string
+    title: string,
+    unitName: string,
+    totalFlg: boolean,
+    data: GraphDataRaw[],
+    dataTotal: GraphDataRaw[],
+}
+let Res: GraphObject[];
+const ResTest: GraphObjectRaw[] = [
+    {
+        targetId: "1",
+        outcomeId: "1",
+        title: "スクワット",
+        unitName: "回",
+        totalFlg: false,
+        data: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 200 },
+            { time: new Date(2021, 9, 11, 12), amount: 150 },
+        ],
+        dataTotal: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 300 },
+            { time: new Date(2021, 9, 11, 12), amount: 450 },
+        ]
+    },
+    {
+        targetId: "2",
+        outcomeId: "2",
+        title: "腹筋",
+        unitName: "回",
+        totalFlg: false,
+        data: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 200 },
+            { time: new Date(2021, 9, 11, 12), amount: 500 },
+        ],
+        dataTotal: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 200 },
+            { time: new Date(2021, 9, 11, 12), amount: 500 },
+        ]
+    },
+    {
+        targetId: "3",
+        outcomeId: "3",
+        title: "腕立て伏せ",
+        unitName: "回",
+        totalFlg: false,
+        data: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 90 },
+            { time: new Date(2021, 9, 11, 12), amount: 110 },
+        ],
+        dataTotal: [
+            { time: new Date(2021, 9, 9, 12), amount: 100 },
+            { time: new Date(2021, 9, 10, 12), amount: 90 },
+            { time: new Date(2021, 9, 11, 12), amount: 110 },
+        ]
+    },
+]
+
+Res = ResTest.map(value => {
+    return {
+        targetId: value.targetId,
+        outcomeId: value.outcomeId,
+        title: value.title,
+        unitName: value.unitName,
+        totalFlg: value.totalFlg,
+        data: value.data.map(row => {
+            return {
+                time: dateToTimeStr(row.time),
+                amount: row.amount
+            } as GraphData;
+        }),
+        dataTotal: value.data.map(row => {
+            return {
+                time: dateToTimeStr(row.time),
+                amount: row.amount
+            } as GraphData;
+        })
+    } as GraphObject
+})
+
+axios.post('/api/getOutcomeArchiveByUserId')
+.then( (res) => {
+    // statusのチェック
+    if (res.data.status != 200) {
+        console.log(`err: Failed to fetch OutcomeArchive. ${res.data.message}`);
+        return;
     }
-}
 
-function createData(time: Date, amount: string | number) {
-    return { time, amount };
-}
+    console.log("axios post getOutcomeArchiveByUserId 成功");
 
+    // dataをグラフ用のオブジェクトに変換
+    Res = (res.data.data as GraphObject[]).map(outcome => {
+        // 通常グラフのデータを整形
+        outcome.data = outcome.data.map(data => {
+            // 日時情報をグラフで扱える形式に変換
+            const timeStr = dateToTimeStr(new Date(data.time));
+            return {
+                time: timeStr,
+                amount: data.amount
+            }
+        })
+        // 加算グラフのデータを整形
+        outcome.dataTotal = outcome.dataTotal.map(data => {
+            // 日時情報をグラフで扱える形式に変換
+            const timeStr = dateToTimeStr(new Date(data.time));
+            return {
+                time: timeStr,
+                amount: data.amount
+            }
+        })
+        return outcome;
+    });
+})
+.catch(err => {
+    console.log('err:', err);
+});
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
-    const handleDrawerOpen = () => {
-        setOpen(true);
-    };
-    // const handleDrawerClose = () => {
-    //     setOpen(false);
-    // };
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    //追加
-    console.log("sampleGraph")
-    var nameArray = []
-    var name = ""
-    var allData = []
-    var data = []
-    var tempData = {}
-    // console.log("受けとるJson")
-    // console.log(JsonData)
-    // console.log("空の配列宣言")
-    // console.log(data)
-
-    //["key", "key"]
-    Object.keys(JsonData.data.statistics).forEach(key =>{
-        JsonData.data.statistics[key].forEach(element =>{
-            //tempData["date"] = element.recordingDateTime
-            // tempData["date"] = element.recordingDateTime
-            // tempData["value"] = element.value
-            data.push(createData(element.recordingDateTime,element.value))
-            tempData = {}
-            name = element.name
-        })
-        nameArray.push(name)
-        allData.push(data)
-        data = []
-        name = ""
-    })
-    console.log(data)
-    console.log(allData)
-
-    function graph(index){
-        return <Grid item xs={12} md={6} lg={6}><Paper className={fixedHeightPaper}><Chart title={nameArray[index]} graphData={allData[index]}/></Paper></Grid>
-    }
-
+    // グラフの作成
+    let graphList = Res.map(value => {
+        return (
+            <Grid item xs={12} md={6} lg={6}>
+                <Paper className={fixedHeightPaper}>
+                    <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
+                </Paper>
+            </Grid>
+        );
+    });
 
     return (
         <div>
 
-        <div className={classes.root}>
-            <CssBaseline />
-            <main className={classes.content}>
+            <div className={classes.root}>
+                <CssBaseline />
+                <main className={classes.content}>
 
-                {/*<div className={classes.appBarSpacer} />*/}
-                <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/*GanttChart*/}
-                        {/*<Grid item xs={12} md={12} lg={12}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <GanttChart/>*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {
-                            graph(0)
-                        }
-                        {
-                            graph(1)
-                        }
-
-                        {/* Chart */}
-                        {/*<Grid item xs={12} md={12} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        /!* 子に渡す値を設定 *!/*/}
-                        {/*        <Chart title={nameArray[0]} graphData={allData[0]}/>*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*<Grid item xs={12} md={6} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Chart title={nameArray[1]} graphData={allData[1]}/>*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/* Recent Deposits */}
-                        {/*<Grid item xs={12} md={6} lg={4}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Deposits />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*Test Add*/}
-                        {/*<Grid item xs={12} md={6} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Chart />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*/!*Test Add*!/*/}
-                        {/*<Grid item xs={12} md={6} lg={6}>*/}
-                        {/*    <Paper className={fixedHeightPaper}>*/}
-                        {/*        <Chart />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                        {/*/!* Recent Orders *!/*/}
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <Paper className={classes.paper}>*/}
-                        {/*        <Orders />*/}
-                        {/*    </Paper>*/}
-                        {/*</Grid>*/}
-                    </Grid>
-                    <Box pt={4}>
-                        <Copyright />
-                    </Box>
-                </Container>
-            </main>
-        </div>
+                    {/*<div className={classes.appBarSpacer} />*/}
+                    <Container maxWidth="lg" className={classes.container}>
+                        <Grid container spacing={3}>
+                            {/*GanttChart*/}
+                            {/*<Grid item xs={12} md={12} lg={12}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <GanttChart/>*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/* Chart */}
+                            {graphList}
+                            {/*<Grid item xs={12} md={12} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        /!* 子に渡す値を設定 *!/*/}
+                            {/*        <Chart title={nameArray[0]} graphData={allData[0]}/>*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*<Grid item xs={12} md={6} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Chart title={nameArray[1]} graphData={allData[1]}/>*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/* Recent Deposits */}
+                            {/*<Grid item xs={12} md={6} lg={4}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Deposits />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*Test Add*/}
+                            {/*<Grid item xs={12} md={6} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Chart />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*/!*Test Add*!/*/}
+                            {/*<Grid item xs={12} md={6} lg={6}>*/}
+                            {/*    <Paper className={fixedHeightPaper}>*/}
+                            {/*        <Chart />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                            {/*/!* Recent Orders *!/*/}
+                            {/*<Grid item xs={12}>*/}
+                            {/*    <Paper className={classes.paper}>*/}
+                            {/*        <Orders />*/}
+                            {/*    </Paper>*/}
+                            {/*</Grid>*/}
+                        </Grid>
+                        <Box pt={4}>
+                            <Copyright />
+                        </Box>
+                    </Container>
+                </main>
+            </div>
         </div>
     );
 }

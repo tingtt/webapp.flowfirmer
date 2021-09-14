@@ -134,7 +134,7 @@ export default function ToDoListItem(props: Props) {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
+            return  AppDataManager.generateInstance();
         } catch (e) {
             return  AppDataManager.getInstance();
         }
@@ -151,9 +151,12 @@ export default function ToDoListItem(props: Props) {
             props.snackbarStateSetter({open: true, msg: `${props.todo.name} completed.`, type: 'todoCompleted'});
         }
         // 完了状態を更新
-        appDataManager.toggleTodoCompletionState(props.todo.id);
-        // APIを叩いて値を更新し、stateも更新
-        props.setTodos(appDataManager.todos);
+        appDataManager.toggleTodoCompletionState(props.todo.id).then((res) => {
+            if (res != undefined && res != false) {
+                // state更新
+                props.setTodos(res);
+            }
+        });
     };
 
     const nameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -222,7 +225,7 @@ export default function ToDoListItem(props: Props) {
                                 }
                             }}
                             className={clsx({
-                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()
+                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && ((props.todo.startDatetimeScheduled.getFullYear() * 100 + props.todo.startDatetimeScheduled.getMonth()) * 100 + props.todo.startDatetimeScheduled.getDate() < ((new Date()).getFullYear() * 100 + (new Date()).getMonth()) * 100 + (new Date()).getDate())
                             })}
                             autoComplete="off"
                         />
@@ -232,7 +235,7 @@ export default function ToDoListItem(props: Props) {
                         className={clsx(
                             classes.detailInfoDiv,
                             {
-                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()
+                                [classes.colorRed]: props.todo.startDatetimeScheduled != undefined && ((props.todo.startDatetimeScheduled.getFullYear() * 100 + props.todo.startDatetimeScheduled.getMonth()) * 100 + props.todo.startDatetimeScheduled.getDate() < ((new Date()).getFullYear() * 100 + (new Date()).getMonth()) * 100 + (new Date()).getDate())
                             },
                         )}
                     >

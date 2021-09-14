@@ -5,7 +5,6 @@ type Props = {
 };
 
 export default function Target(props: Props) {
-
     return (
         <div>
             <GanttChart targetId={props.targetId}/>

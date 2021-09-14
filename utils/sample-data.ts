@@ -2,10 +2,9 @@ import { Target, OutcomeScheme, ToDo, Term, HabitRemind, Document, Archive, Feel
 
 export const sampleOutcomeSchemes: OutcomeScheme[] = [
     {
-        id: 0,
-        user_id: 0,
+        id: "0",
 
-        target_id: 0,
+        target_id: "0",
 
         name: "スクワット",
         unitName: "回",
@@ -15,10 +14,9 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         defaultValue: 20
     },
     {
-        id: 1,
-        user_id: 0,
+        id: "1",
 
-        target_id: 0,
+        target_id: "0",
 
         name: "腹筋",
         unitName: "回",
@@ -28,10 +26,9 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
         defaultValue: 20
     },
     {
-        id: 2,
-        user_id: 0,
+        id: "2",
 
-        target_id: 0,
+        target_id: "0",
 
         name: "HIIT",
         unitName: "分",
@@ -45,7 +42,6 @@ export const sampleOutcomeSchemes: OutcomeScheme[] = [
 export const sampleTargets: Target[] = [
     {
         id: "0",
-        user_id: 0,
 
         name: "トレーニング",
         themeColor: {
@@ -61,7 +57,6 @@ export const sampleTargets: Target[] = [
     },
     {
         id: "1",
-        user_id: 0,
 
         name: "Flowfirmer",
         themeColor: {
@@ -74,7 +69,6 @@ export const sampleTargets: Target[] = [
     },
     {
         id: "2",
-        user_id: 0,
 
         name: "IntelliBase",
         themeColor: {
@@ -90,7 +84,6 @@ export const sampleTargets: Target[] = [
 export const sampleDocument: Document[] = [
     {
         id: "0",
-        user_id: 0,
 
         name: "sample document",
         url: new URL("https://www.notion.so/tingtt/API-0401a6a3f8904a5988c9661c04243c4f"),
@@ -99,7 +92,6 @@ export const sampleDocument: Document[] = [
     },
     {
         id: "1",
-        user_id: 0,
 
         name: "設計（UIワイヤーフレーム）",
         url: new URL("https://www.notion.so/tingtt/UI-d0a121463f9e4302b4015197f9165f01"),
@@ -108,7 +100,6 @@ export const sampleDocument: Document[] = [
     },
     {
         id: "2",
-        user_id: 0,
 
         name: "設計（オブジェクトとシナリオ）",
         url: new URL("https://www.notion.so/tingtt/d8466c9cc66745db909a068d58b76401"),
@@ -117,7 +108,6 @@ export const sampleDocument: Document[] = [
     },
     {
         id: "3",
-        user_id: 0,
 
         name: "設計（DB）",
         url: new URL("https://www.notion.so/tingtt/DB-7ee6cf9fdeae4a7198aecb495c324fa2"),
@@ -129,7 +119,6 @@ export const sampleDocument: Document[] = [
 export const sampleTerms: Term[] = [
     {
         id: "0",
-        user_id: 0,
 
         name: "スクワットと腹筋の習慣化",
         description: "腹筋割るぞ−",
@@ -148,7 +137,6 @@ export const sampleTerms: Term[] = [
     },
     {
         id: "1",
-        user_id: 0,
 
         name: "ToDay画面",
 
@@ -166,7 +154,6 @@ export const sampleTerms: Term[] = [
     },
     {
         id: "2",
-        user_id: 0,
 
         name: "Weekly画面",
 
@@ -184,7 +171,6 @@ export const sampleTerms: Term[] = [
     },
     {
         id: "3",
-        user_id: 0,
 
         name: "データ管理クラス",
 
@@ -202,7 +188,6 @@ export const sampleTerms: Term[] = [
     },
     {
         id: "4",
-        user_id: 0,
 
         name: "プロパティ更新実装",
 
@@ -220,7 +205,6 @@ export const sampleTerms: Term[] = [
     },
     {
         id: "5",
-        user_id: 0,
 
         name: "ToDo, Term詳細モーダル",
 
@@ -241,7 +225,6 @@ export const sampleTerms: Term[] = [
 export const sampleToDos: ToDo[] = [
     {
         id: "0",
-        user_id: 0,
 
         name: "1セット",
 
@@ -261,7 +244,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "1",
-        user_id: 0,
 
         name: "1セット",
 
@@ -281,7 +263,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "2",
-        user_id: 0,
 
         name: "1セット",
         description: "スクワットと腹筋",
@@ -302,7 +283,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "3",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -322,7 +302,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "4",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -342,7 +321,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "5",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -362,7 +340,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "6",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -382,7 +359,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "7",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -402,7 +378,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "8",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -422,7 +397,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "9",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -442,7 +416,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "10",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -462,7 +435,6 @@ export const sampleToDos: ToDo[] = [
     },
     {
         id: "11",
-        user_id: 0,
 
         name: "朝HIIT",
         description: "バーピー, マウンテンクライマー, スクワットスラスト, ジャンピングジャック",
@@ -485,7 +457,6 @@ export const sampleToDos: ToDo[] = [
 export const sampleHabitReminds: HabitRemind[] = [
     {
         id: "0",
-        user_id: 0,
 
         name: "トレーニングが終わったら水分補給をする",
 
@@ -496,7 +467,6 @@ export const sampleHabitReminds: HabitRemind[] = [
 export const sampleFeelingTypes: FeelingType[] = [
     {
         id: 24,
-        user_id: 0,
 
         name: "スッキリ",
 
@@ -508,7 +478,6 @@ export const sampleFeelingTypes: FeelingType[] = [
 export const sampleArchives: Archive[] = [
     {
         id: "0",
-        user_id: 0,
 
         refInfo: {
             startDateTime: sampleToDos[0].startDatetimeScheduled!,
@@ -545,7 +514,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "1",
-        user_id: 0,
 
         refInfo: {
             refType: 'HabitRemind',
@@ -580,7 +548,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "2",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -616,7 +583,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "3",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -641,7 +607,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "4",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -666,7 +631,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "5",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -691,7 +655,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "6",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -716,7 +679,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "7",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -741,7 +703,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "8",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
@@ -766,7 +727,6 @@ export const sampleArchives: Archive[] = [
     },
     {
         id: "9",
-        user_id: 0,
 
         refInfo: {
             refType: 'ToDo',
