@@ -41,7 +41,7 @@ export default function Chart(props) {
                             position="left"
                             style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
                         >
-                            {props.unitName}
+                            {props.unitName == undefined ? "" : props.unitName}
                         </Label>
                     </YAxis>
                     <Tooltip
@@ -51,7 +51,7 @@ export default function Chart(props) {
 
                         // mountに単位(unitName)を付加
                         formatter={function(value, name) {
-                        return `${value} ${props.unitName}`;
+                        return `${value} ${props.unitName == undefined ? "" : props.unitName}`;
                         }}
 
                         // 日付を読みやすい形に変更
