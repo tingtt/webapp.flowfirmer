@@ -1,5 +1,6 @@
 import React from "react";
 import AppDataManager from "../../../lib/app/appDataManager";
+import { sampleToDos } from "../../../utils/sample-data";
 import ToDoBox from "./Todobox";
 import { useStyles } from "./Weekly.module";
 
@@ -11,7 +12,7 @@ export default function Weekly() {
   //termの取得するための関数
   const appDataManager: AppDataManager = (() => {
     try {
-      return AppDataManager.generateInstance();;
+      return AppDataManager.generateInstance();
     } catch (e) {
       return AppDataManager.getInstance();
     }
@@ -73,12 +74,17 @@ export default function Weekly() {
   // };
 
   //termの数
-  const termlength = appDataManager.terms?.filter(
+  let termlength = appDataManager.terms?.filter(
     (value) =>
       (value.startDatetimeScheduled.getTime() -
         value.endDatetimeScheduled.getTime()) /
-        86400000 != 0
+        86400000 !=
+      0
   ).length;
+
+  if(termlength == 0){
+    termlength += 4
+  }
 
   return (
     <div>
@@ -101,19 +107,16 @@ export default function Weekly() {
       {/* １週間のガントチャートの記述 */}
       <div className={classes.gantt_warp}>
         <div id="container" className={classes.gantt_container}>
-          <svg
-            className={classes.gantt}
-            height={termlength!! * 40 + 60}
-          >
+          <svg className={classes.gantt} height={termlength!! * 40 + 60}>
             <g>
               {/* ガントチャートの表を作成 */}
               {React.Children.toArray(
-                appDataManager.terms?.map((value) =>
-                  ((startday = value.startDatetimeScheduled), //termの開始日
-                  (endday = value.endDatetimeScheduled), //termの終了日
-                  (termDay = (endday - startday) / 86400000),
-                  (startmonth = value.startDatetimeScheduled.getMonth()), //termの開始月
-                  (endmonth = value.endDatetimeScheduled.getMonth()), //termの終了月
+                appDataManager.terms?.map((value) => {
+                  startday = value.startDatetimeScheduled; //termの開始日
+                  endday = value.endDatetimeScheduled; //termの終了日
+                  termDay = (endday - startday) / 86400000;
+                  startmonth = value.startDatetimeScheduled.getMonth(); //termの開始月
+                  endmonth = value.endDatetimeScheduled.getMonth(); //termの終了月
                   () => {
                     if (
                       (startmonth == weekstart.getMonth() ||
@@ -123,28 +126,17 @@ export default function Weekly() {
                       return (
                         <rect
                           x="0"
-                          y={i++ * 40 + 59}
+                          y={i++ * 40 + 60}
                           width="100%"
                           height="40"
                           className={classes.grid_row}
                         />
                       );
                     }
-                  })()
-                )
+                  };
+                })
               )}
             </g>
-
-              {/*今日の日付をオレンジ色にする  */}
-              {changeDate.getMonth() == today.getMonth() && (
-                <rect
-                  x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
-                  y="59"
-                  width="14.3%"
-                  height={termlength!! * 40 + 59}
-                  className={classes.today_highlight}
-                />
-              )}
 
             {/* 日付を表示する土台 */}
             <rect
@@ -155,15 +147,31 @@ export default function Weekly() {
               className={classes.grid_header}
             />
 
+            {/*今日の日付をオレンジ色にする  */}
+            <g id="today">
+            {changeDate.getMonth() == today.getMonth() && (
+              <rect
+                x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
+                y="60"
+                width="14.3%"
+                height={termlength!! * 40}
+                className={classes.today_highlight}
+              />
+            )}
+            </g>
+
+            {console.log(changeDate.getMonth(),today.getMonth())}
+            
+
             {/* ガントチャートの枠組み */}
-            <path d="M 0 59 v 190" className={classes.tick_thick} />
+            <path d="M 0 60 v 190" className={classes.tick_thick} />
 
             {/* ガントチャートの縦線を作る */}
             {React.Children.toArray(
               [...Array(6)].map((_: undefined, idx: number) => (
                 <line
                   x1={(idx + 1) * 14.3 + "%"}
-                  y1="59"
+                  y1="60"
                   x2={(idx + 1) * 14.3 + "%"}
                   y2="300"
                   className={classes.tick}
@@ -174,8 +182,7 @@ export default function Weekly() {
             {/* 日付の表示 */}
             {React.Children.toArray(
               [...Array(7)].map((_: undefined, idx: number) =>
-                (
-                () => {
+                (() => {
                   if (idx == 0) {
                     //今月の表示
                     return (
@@ -190,7 +197,7 @@ export default function Weekly() {
                     );
                   } else if (changeDate.getDate() == 1) {
                     // １週間の表示中に月が変わった場合
-                    changeDate.setDate(changeDate.getDate() + 1)
+                    changeDate.setDate(changeDate.getDate() + 1);
                     return (
                       <text
                         key={idx}
@@ -203,7 +210,7 @@ export default function Weekly() {
                     );
                   } else {
                     //それ以外
-                    changeDate.setDate(changeDate.getDate() + 1)
+                    changeDate.setDate(changeDate.getDate() + 1);
                     return (
                       <text
                         key={idx}
@@ -222,12 +229,12 @@ export default function Weekly() {
             {/* termの内容を表示 */}
             <g>
               {React.Children.toArray(
-                appDataManager.terms?.map((value) =>
-                  ((startday = value.startDatetimeScheduled), //termの開始日
-                  (endday = value.endDatetimeScheduled), //termの終了日
-                  (termDay = (endday - startday) / 86400000),
-                  (startmonth = value.startDatetimeScheduled.getMonth()), //termの開始月
-                  (endmonth = value.endDatetimeScheduled.getMonth()), //termの終了月
+                appDataManager.terms?.map((value) => {
+                  startday = value.startDatetimeScheduled; //termの開始日
+                  endday = value.endDatetimeScheduled; //termの終了日
+                  termDay = (endday - startday) / 86400000;
+                  startmonth = value.startDatetimeScheduled.getMonth(); //termの開始月
+                  endmonth = value.endDatetimeScheduled.getMonth(); //termの終了月
                   () => {
                     if (
                       (startmonth == weekstart.getMonth() ||
@@ -293,8 +300,8 @@ export default function Weekly() {
                         </g>
                       );
                     }
-                  })()
-                )
+                  };
+                })
               )}
             </g>
           </svg>
@@ -305,18 +312,18 @@ export default function Weekly() {
         {React.Children.toArray(
           [...Array(7)].map((_: undefined, idx: number) => (
             <div className={classes.todobox}>
-              {appDataManager.todos
-                ?.filter(
-                  (value) =>
-                    value.startDatetimeScheduled!!.getDate() -
-                      weekstart.getDate() ==
-                      idx &&
-                    value.startDatetimeScheduled!!.getMonth() ==
-                      weekstart.getMonth()
-                )
-                .map((value) => (
-                  <ToDoBox todo={value} key={value.id} />
-                ))}
+              {appDataManager.todos &&
+                appDataManager.todos
+                  .filter(
+                    (value) =>
+                      value.startDatetimeScheduled &&
+                      value.startDatetimeScheduled.getDate() -
+                        weekstart.getDate() ==
+                        idx &&
+                      value.startDatetimeScheduled.getMonth() ==
+                        weekstart.getMonth()
+                  )
+                  .map((value) => <ToDoBox todo={value} key={value.id} />)}
             </div>
           ))
         )}

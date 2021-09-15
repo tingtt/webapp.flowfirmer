@@ -32,7 +32,7 @@ export const useStyles = makeStyles(() =>
       fontSize: 12,
       overflowY: "auto",
       width: "100%",
-      height: 219,
+      height: 224,
     },
     // ガントチャート
     gantt: {
@@ -44,13 +44,9 @@ export const useStyles = makeStyles(() =>
       fill: "#f9f9f9",
       // stroke: "#cccccc"
     },
-    // 横線の色
-    row_line: {
-      stroke: "#ebeff2",
-    },
     // 今日の日付
     today_highlight: {
-      fill: "#f60",
+      fill: "#f0600080",
       opacity: 0.5,
     },
     //日付表示
