@@ -671,6 +671,73 @@ export default class AppDataManager {
     }
 
     /**
+     * @param name string
+     * @param unitName string
+     * @param statisticsRule 'String' | 'Sum' | 'Max' | 'Min'
+     * @param defaultValue string | number
+     * @param targetValue number
+     * @param targetId string
+     * @returns Promise<Target[] | false>
+     */
+    public async registerOutcomeScheme(
+        name : string,
+        targetId: string,
+        statisticsRule : 'String' | 'Sum' | 'Max' | 'Min',
+        defaultValue? : string | number,
+        targetValue?: number,
+        unitName? : string,
+    ): Promise<OutcomeScheme | false> {
+        if (this.targets == undefined || this.targets.length == 0) {
+            console.log("Err: Target does not exist.");
+            return false;
+        }
+        const targetIdx = this.targets.findIndex(target => target.id == targetId);
+        const target = this.targets[targetIdx];
+
+        const outcomeSchemes = target.outcomeSchemes == undefined ? [] : target.outcomeSchemes;
+
+        let ret: OutcomeScheme | false = false;
+
+        await axios.post('/api/saveOutcomeScheme', {
+            targetId: target.id,
+            outcome: {
+                name: name,
+                unitName: unitName,
+                statisticsRule: statisticsRule,
+                targetValue: targetValue,
+                defaultValue: defaultValue
+            }
+        }).then(res => {
+            if (this.targets == undefined || this.targets.length == 0) {
+                console.log("Err: Target does not exist.");
+                return;
+            }
+            if (res.data.status != 200) {
+                console.log(res.data.message);
+                return;
+            }
+            console.log(res);
+            const newOutcomeScheme: OutcomeScheme = {
+                id: res.data.objectId,
+                target_id: targetId,
+                name: name,
+                unitName: unitName,
+                statisticsRule: statisticsRule,
+                targetValue: targetValue,
+                defaultValue: defaultValue
+            }
+            outcomeSchemes.push(newOutcomeScheme)
+            this.targets[targetIdx].outcomeSchemes = outcomeSchemes;
+            console.log(newOutcomeScheme);
+            ret = newOutcomeScheme;
+        }).catch(err => {
+            console.log(err);
+        })
+
+        return ret;
+    }
+
+    /**
      * registerArchive
      */
     public registerArchive(
@@ -730,7 +797,7 @@ export default class AppDataManager {
                     "data": {
                         refType: refInfo.refType,
                         refId: refInfo.ref.id,
-                        checkInDatetime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime : date,
+                        checkInDateTime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime != undefined ? refInfo.ref.checkInDatetime : date : date,
                         feelingAndDiary: {
                             diaryFlag: text != undefined && text != "",
                             feelingFlag: feelingList != undefined && feelingList.length != 0,
@@ -770,7 +837,7 @@ export default class AppDataManager {
                     "data": {
                         refType: refInfo.refType,
                         refId: refInfo.ref.id,
-                        checkInDatetime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime : date,
+                        checkInDateTime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime : date,
                         feelingAndDiary: {
                             diaryFlag: text != undefined && text != "",
                             feelingFlag: feelingList != undefined && feelingList.length != 0,

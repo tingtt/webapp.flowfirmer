@@ -1,11 +1,12 @@
-import { Button, Chip, createStyles, Divider, Input, makeStyles, TextField, Theme } from "@material-ui/core";
+import { Button, Checkbox, Chip, createStyles, Divider, Input, InputLabel, List, ListItem, ListItemIcon, ListItemText, ListSubheader, makeStyles, Menu, TextField, Theme } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
-import { ToDo } from "../../../../lib/interface";
+import { OutcomeScheme, ToDo } from "../../../../lib/interface";
 import { Add, SettingsBackupRestore } from "@material-ui/icons";
 import { defaultFeeingTypes } from "../../../../utils/defaultFeelings";
 import { Percentage } from "../../../../lib/interface/archive";
 import AppDataManager from "../../../../lib/app/appDataManager";
+import SelectOutcomeSchemesMenu from "./SelectOutcomeSchemes";
 
 type Props = {
     todo?: ToDo,
@@ -296,7 +297,49 @@ export default function ArchiveExpressiveDiary(props: Props) {
         }
     });
 
+    const defaultOutcomesGroupedInTargets = (() => {
+        if (props.todo.targetList == undefined || props.todo.targetList.filter(target => target.outcomeSchemes != undefined).length == 0) {
+            return [];
+        }
+        return props.todo.targetList.map(target => {
+            return {
+                targetId: target.id,
+                name: target.name,
+                themeColor: target.themeColor,
+                outcomes: target.outcomeSchemes == undefined ? [] : target.outcomeSchemes.map(scheme => {
+                    return {
+                        scheme: scheme,
+                        enable: false,
+                        value: (() => {
+                            // デフォルト値で初期化
+                            var defaultValue = scheme.defaultValue;
+                            // アーカイブ登録済みの場合は登録されているデータを取得
+                            if (props.todo != undefined && props.todo.archived && appDataManager.archives != undefined) {
+                                const archivedOutcomes = appDataManager.archives.find(value => value.refInfo.refType == "ToDo" && value.refInfo.ref.id == props.todo!.id)?.outcomes;
+                                if (archivedOutcomes != undefined) {
+                                    const archivedOutcome = archivedOutcomes.find(outcome => outcome.scheme.id == scheme.id);
+                                    if (archivedOutcome != undefined) {
+                                        defaultValue = archivedOutcome.value;
+                                    }
+                                }
+                            }
+                            if (scheme.statisticsRule == 'String') {
+                                return defaultValue != undefined ? defaultValue as string : "";
+                            }
+                            return defaultValue != undefined ? defaultValue as number : 0;
+                        })()
+                    }
+                })
+            }
+        });
+    })()
+
     const [resultOutcomes, setResultOutcomes] = React.useState(defaultResultOutcomes);
+
+    const [outcomesGroupedInTargets, setOutcomesGroupedInTargets] = React.useState(defaultOutcomesGroupedInTargets);
+
+    // OutcomeScheme選択MenuのAnchor
+    const [selectOutcomeSchemeMenuAnchorEl, setSelectOutcomeSchemeMenuAnchorEl] = React.useState<HTMLElement | null>(null);
 
     // リセット処理
     const resetResultOutcomes = () => {
@@ -476,67 +519,74 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     <div
                         className={classes.outcomeListDiv}
                     >
-                        {resultOutcomes.map(resultOutcome => {
-                            const scheme = resultOutcome.scheme;
-                            if (scheme.statisticsRule == 'String') {
+                        <InputLabel>Outcomes</InputLabel>
+                        {outcomesGroupedInTargets.map(target => {
+                            return target.outcomes.filter(outcome => outcome.enable).map(outcome => {
+                                if (outcome.scheme.statisticsRule == 'String') {
+                                    return (
+                                        <div
+                                            className={classes.outcomeItemDiv}
+                                            key={`${props.todo?.id}${outcome.scheme.id}`}
+                                        >
+                                            <div>
+                                                {outcome.scheme.name}
+                                            </div>
+                                            <Input
+                                                value={outcome.value}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                                    setOutcomesGroupedInTargets(current => current.map(target => {
+                                                        target.outcomes = target.outcomes.map(currentOutcome => {
+                                                            if (currentOutcome.scheme.id != outcome.scheme.id) {
+                                                                return currentOutcome;
+                                                            }
+                                                            currentOutcome.value = e.target.value;
+                                                            return currentOutcome;
+                                                        })
+                                                        return target;
+                                                    }))
+                                                }}
+                                            />
+                                        </div>
+                                    );
+                                }
                                 return (
                                     <div
                                         className={classes.outcomeItemDiv}
-                                        key={`${props.todo?.id}${scheme.id}`}
+                                        key={`${props.todo?.id}${outcome.scheme.id}`}
                                     >
                                         <div>
-                                            {scheme.name}
+                                            {outcome.scheme.name}
                                         </div>
                                         <Input
-                                            value={resultOutcome.value}
+                                            type="number"
+                                            value={outcome.value}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                                setResultOutcomes(current => current.map(value => {
-                                                    if (scheme.id != value.scheme.id) {
-                                                        return value;
-                                                    }
-                                                    var newValue = value;
-                                                    newValue.value = e.target.value;
-                                                    return newValue;
+                                                setOutcomesGroupedInTargets(current => current.map(target => {
+                                                    target.outcomes = target.outcomes.map(currentOutcome => {
+                                                        if (currentOutcome.scheme.id != outcome.scheme.id) {
+                                                            return currentOutcome;
+                                                        }
+                                                        currentOutcome.value = e.target.value;
+                                                        return currentOutcome;
+                                                    })
+                                                    return target;
                                                 }))
                                             }}
+                                            className={clsx(classes.outcomeItemInputNumValue, classes.outcomeInput)}
                                         />
+                                        <div>
+                                            {outcome.scheme.unitName != undefined ? outcome.scheme.unitName : ""}
+                                        </div>
                                     </div>
                                 );
-                            }
-                            return (
-                                <div
-                                    className={classes.outcomeItemDiv}
-                                    key={`${props.todo?.id}${scheme.id}`}
-                                >
-                                    <div>
-                                        {scheme.name}
-                                    </div>
-                                    <Input
-                                        type="number"
-                                        value={resultOutcome.value}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            setResultOutcomes(current => current.map(value => {
-                                                if (scheme.id != value.scheme.id) {
-                                                    return value;
-                                                }
-                                                var newValue = value;
-                                                newValue.value = e.target.value;
-                                                return newValue;
-                                            }))
-                                        }}
-                                        className={clsx(classes.outcomeItemInputNumValue, classes.outcomeInput)}
-                                    />
-                                    <div>
-                                        {scheme.unitName != undefined ? scheme.unitName : ""}
-                                    </div>
-                                </div>
-                            );
+                            })
                         })}
                         <div
                             className={clsx(classes.outcomeItemDiv, classes.addOutcomeSchemeDiv)}
                         >
                             <div
                                 className={classes.addOutcomeSchemeButtonDiv}
+                                onClick={(e: React.MouseEvent<HTMLElement>) => setSelectOutcomeSchemeMenuAnchorEl(e.currentTarget)}
                             >
                                 <Add />
                             </div>
@@ -674,9 +724,27 @@ export default function ArchiveExpressiveDiary(props: Props) {
                 <Button
                     color="primary"
                     onClick={() => {
+                        if (props.todo?.archived) {
+                            props.close();
+                            return;
+                        }
                         appDataManager.registerArchive(
                             props.todo?.targetList,
-                            resultOutcomes,
+                            (() => {
+                                let outcomes: {
+                                    scheme: OutcomeScheme,
+                                    value: string | number
+                                }[] = []
+                                outcomesGroupedInTargets.filter(target => target.outcomes.some(outcome => outcome.enable)).forEach(target => {
+                                    target.outcomes.filter(outcome => outcome.enable).forEach(outcome => {
+                                        outcomes.push({
+                                            scheme: outcome.scheme,
+                                            value: outcome.value
+                                        })
+                                    })
+                                })
+                                return outcomes;
+                            })(),
                             memo,
                             feels.filter(feel => feel.selectedState.value).length > 0 ?
                                 feels.filter(feel => feel.selectedState.value).map(feel => {
@@ -702,6 +770,13 @@ export default function ArchiveExpressiveDiary(props: Props) {
                     Archive
                 </Button>
             </div>
+            {/* 成果スキーマの選択メニュー */}
+            <SelectOutcomeSchemesMenu
+                anchorEl={selectOutcomeSchemeMenuAnchorEl}
+                onClose={() => setSelectOutcomeSchemeMenuAnchorEl(null)}
+                outcomesState={outcomesGroupedInTargets}
+                outcomesStateSetter={setOutcomesGroupedInTargets}
+            />
         </div>
     );
 }
