@@ -1,7 +1,7 @@
 import { Button, Checkbox, Chip, createStyles, Divider, Input, InputLabel, List, ListItem, ListItemIcon, ListItemText, ListSubheader, makeStyles, Menu, TextField, Theme } from "@material-ui/core";
 import React from "react";
 import clsx from 'clsx';
-import { ToDo } from "../../../../lib/interface";
+import { OutcomeScheme, ToDo } from "../../../../lib/interface";
 import { Add, SettingsBackupRestore } from "@material-ui/icons";
 import { defaultFeeingTypes } from "../../../../utils/defaultFeelings";
 import { Percentage } from "../../../../lib/interface/archive";
@@ -730,7 +730,21 @@ export default function ArchiveExpressiveDiary(props: Props) {
                         }
                         appDataManager.registerArchive(
                             props.todo?.targetList,
-                            resultOutcomes,
+                            (() => {
+                                let outcomes: {
+                                    scheme: OutcomeScheme,
+                                    value: string | number
+                                }[] = []
+                                outcomesGroupedInTargets.filter(target => target.outcomes.some(outcome => outcome.enable)).forEach(target => {
+                                    target.outcomes.filter(outcome => outcome.enable).forEach(outcome => {
+                                        outcomes.push({
+                                            scheme: outcome.scheme,
+                                            value: outcome.value
+                                        })
+                                    })
+                                })
+                                return outcomes;
+                            })(),
                             memo,
                             feels.filter(feel => feel.selectedState.value).length > 0 ?
                                 feels.filter(feel => feel.selectedState.value).map(feel => {
