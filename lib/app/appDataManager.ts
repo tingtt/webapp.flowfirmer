@@ -797,7 +797,7 @@ export default class AppDataManager {
                     "data": {
                         refType: refInfo.refType,
                         refId: refInfo.ref.id,
-                        checkInDateTime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime : date,
+                        checkInDateTime: refInfo.refType == 'ToDo' ? refInfo.ref.checkInDatetime != undefined ? refInfo.ref.checkInDatetime : date : date,
                         feelingAndDiary: {
                             diaryFlag: text != undefined && text != "",
                             feelingFlag: feelingList != undefined && feelingList.length != 0,
