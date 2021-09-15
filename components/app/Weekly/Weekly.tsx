@@ -1,6 +1,5 @@
 import React from "react";
 import AppDataManager from "../../../lib/app/appDataManager";
-import { sampleToDos } from "../../../utils/sample-data";
 import ToDoBox from "./Todobox";
 import { useStyles } from "./Weekly.module";
 
@@ -30,7 +29,7 @@ export default function Weekly() {
   const getWeekOfMonth = (year: number, month: number, weekNumber: number) => {
     let start = new Date(year, month - 1, (weekNumber - 1) * 7 + 1);
     let day = start.getDay();
-    start.setDate(start.getDate() + (day ? 0 - day : startnumber));
+    start.setDate(start.getDate() + startnumber - day);
     let end = new Date(start);
     end.setDate(end.getDate() + 6);
     return { start: start, end: end };
@@ -59,6 +58,7 @@ export default function Weekly() {
   //日曜はじめ又は、月曜はじめを決める
   const selectweek = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setstartnumber(Number(e.target.value));
+    console.log(startnumber);
   };
 
   //termのドラッグ＆ドロップ処理
@@ -159,9 +159,6 @@ export default function Weekly() {
               />
             )}
             </g>
-
-            {console.log(changeDate.getMonth(),today.getMonth())}
-            
 
             {/* ガントチャートの枠組み */}
             <path d="M 0 60 v 190" className={classes.tick_thick} />
