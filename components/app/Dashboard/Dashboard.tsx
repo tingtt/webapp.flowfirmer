@@ -332,7 +332,7 @@ export default function Dashboard() {
     console.log(Res)
 
     // 型がundefinedの時は実行しない。(APIから値が取得できない時と同じ)
-    if (typeof graphList === 'undefined'){
+    if (typeof Res === 'undefined'){
         console.log("APIからグラフデータが取得できませんでした。")
     }else {
         graphList = Res.map(value => {
@@ -375,7 +375,7 @@ export default function Dashboard() {
                             {/*    </Paper>*/}
                             {/*</Grid>*/}
                             {/* Chart */}
-                            {graphListSample}
+                            {/* {graphListSample} */}
                             {graphList}
                             
                             <Grid item xs={12} md={12} lg={12}>
