@@ -83,7 +83,7 @@ export default function Weekly() {
   ).length;
 
   if (termlength != undefined) {
-     if (termlength < 4) {
+    if (termlength < 4) {
       termlength += 4 - termlength;
     }
   }
@@ -309,15 +309,19 @@ export default function Weekly() {
       <div className={classes.todo}>
         {/* １週間分のtodoを回す */}
         {React.Children.toArray(
-          [...Array(7)].map((_: undefined) => (
+          [...Array(7)].map((_: undefined, idx: number) => (
             <div className={classes.todobox}>
               {appDataManager.todos &&
                 appDataManager.todos
                   .filter(
                     (value) =>
                       value.startDatetimeScheduled &&
-                      value.startDatetimeScheduled >= weekstart &&
-                      value.startDatetimeScheduled <= weekend
+                      value.startDatetimeScheduled ==
+                        new Date(
+                          weekstart.getFullYear(),
+                          weekstart.getMonth(),
+                          weekstart.getDate() + idx
+                        )
                   )
                   .map((value) => <ToDoBox todo={value} key={value.id} />)}
             </div>
