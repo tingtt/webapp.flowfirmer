@@ -2,7 +2,6 @@ import React from "react";
 import AppDataManager from "../../../lib/app/appDataManager";
 import ToDoBox from "./Todobox";
 import { useStyles } from "./Weekly.module";
-import { sampleToDos } from '../../../utils/sample-data';
 
 export default function Weekly() {
   let today = new Date(); //今日の日付
@@ -312,8 +311,8 @@ export default function Weekly() {
         {React.Children.toArray(
           [...Array(7)].map((_: undefined, idx: number) => (
             <div className={classes.todobox}>
-              {sampleToDos &&
-                sampleToDos
+              {appDataManager.todos &&
+                appDataManager.todos
                   .filter(
                     (value) =>
                       value.startDatetimeScheduled &&
