@@ -323,9 +323,9 @@ export default function Weekly() {
                           weekstart.getDate() + idx
                         ) && value.startDatetimeScheduled <
                         new Date(
-                          weekstart.getFullYear(),
-                          weekstart.getMonth(),
-                          weekstart.getDate() + idx +1
+                          weekend.getFullYear(),
+                          weekend.getMonth(),
+                          weekend.getDate() + idx +1
                         )
                   )
                   .map((value) => <ToDoBox todo={value} key={value.id} />)}
