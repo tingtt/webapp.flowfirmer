@@ -82,8 +82,10 @@ export default function Weekly() {
       0
   ).length;
 
-  if(termlength == 0){
-    termlength += 4
+  if (termlength != undefined) {
+     if (termlength < 4) {
+      termlength += 4 - termlength;
+    }
   }
 
   return (
@@ -149,15 +151,15 @@ export default function Weekly() {
 
             {/*今日の日付をオレンジ色にする  */}
             <g id="today">
-            {changeDate.getMonth() == today.getMonth() && (
-              <rect
-                x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
-                y="60"
-                width="14.3%"
-                height={termlength!! * 40}
-                className={classes.today_highlight}
-              />
-            )}
+              {changeDate.getMonth() == today.getMonth() && (
+                <rect
+                  x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
+                  y="60"
+                  width="14.3%"
+                  height={termlength!! * 40}
+                  className={classes.today_highlight}
+                />
+              )}
             </g>
 
             {/* ガントチャートの枠組み */}
@@ -307,18 +309,15 @@ export default function Weekly() {
       <div className={classes.todo}>
         {/* １週間分のtodoを回す */}
         {React.Children.toArray(
-          [...Array(7)].map((_: undefined, idx: number) => (
+          [...Array(7)].map((_: undefined) => (
             <div className={classes.todobox}>
               {appDataManager.todos &&
                 appDataManager.todos
                   .filter(
                     (value) =>
                       value.startDatetimeScheduled &&
-                      value.startDatetimeScheduled.getDate() -
-                        weekstart.getDate() ==
-                        idx &&
-                      value.startDatetimeScheduled.getMonth() ==
-                        weekstart.getMonth()
+                      value.startDatetimeScheduled >= weekstart &&
+                      value.startDatetimeScheduled <= weekend
                   )
                   .map((value) => <ToDoBox todo={value} key={value.id} />)}
             </div>
