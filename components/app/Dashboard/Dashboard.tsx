@@ -26,78 +26,11 @@ function Copyright() {
     );
 }
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
         height: '100%'
     },
-    contentLeft: {
-        flex: 1,
-        overflow: 'auto',
-        paddingRight: theme.spacing(2)
-    },
-    contentRight: {
-        flex: 1,
-        overflow: 'auto',
-        paddingLeft: theme.spacing(2)
-    },
-    toolbar: {
-        paddingRight: 24, // keep right padding when drawer closed
-    },
-    toolbarIcon: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        padding: '0 8px',
-        ...theme.mixins.toolbar,
-    },
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-    },
-    appBarShift: {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    menuButton: {
-        marginRight: 36,
-    },
-    menuButtonHidden: {
-        display: 'none',
-    },
-    title: {
-        flexGrow: 1,
-    },
-    drawerPaper: {
-        position: 'relative',
-        whiteSpace: 'nowrap',
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    drawerPaperClose: {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-            width: theme.spacing(9),
-        },
-    },
-    appBarSpacer: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
         height: '100vh',
@@ -122,116 +55,25 @@ const dateToTimeStr = (date: Date) => {
     return date.getTime();
 }
 
-type GraphData = { time: number, amount: number }
-type GraphObject = {
-    //string number　どっちかきく ///////////////////////////
+
+/**
+ * 成果データ
+ */
+
+type OutcomeGraphData = { time: number, amount: number }
+type OutcomeGraphObject = {
     targetId: string,
     outcomeId: string,
     title: string,
     unitName: string,
     totalFlg: boolean,
-    data: GraphData[],
-    dataTotal: GraphData[],
+    data: OutcomeGraphData[],
+    dataTotal: OutcomeGraphData[],
 }
 
-// type GraphDataRaw = { time: number, amount: number }
-// type GraphObjectRaw = {
-//     targetId: string,
-//     outcomeId: string
-//     title: string,
-//     unitName: string,
-//     totalFlg: boolean,
-//     data: GraphDataRaw[],
-//     dataTotal: GraphDataRaw[],
-// }
-let Res: GraphObject[]
-let ResSample: GraphObject[]
+let outcomes: OutcomeGraphObject[] = [];
 
-const SampleJson: GraphObject[] = [
-    {
-        targetId: "1",
-        outcomeId: "1",
-        title: "スクワット",
-        unitName: "回",
-        totalFlg: false,
-        data: [
-            { time: new Date(2021, 9, 9).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 10).getTime(), amount: 200 },
-            { time: new Date(2021, 9, 11).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 12).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 13).getTime(), amount: 200 },
-            // { time: new Date(2021, 9, 14).getTime(), amount: 100 },
-            // { time: new Date(2021, 9, 15).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 16).getTime(), amount: 300 },
-
-        ],
-        dataTotal: [
-            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 10, 12).getTime(), amount: 300 },
-            { time: new Date(2021, 9, 11, 12).getTime(), amount: 400 },
-            { time: new Date(2021, 9, 12, 12).getTime(), amount: 500 },
-        ]
-    },
-    {
-        targetId: "2",
-        outcomeId: "2",
-        title: "腹筋",
-        unitName: "回",
-        totalFlg: false,
-        data: [
-            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 10, 12).getTime(), amount: 200 },
-            { time: new Date(2021, 9, 11, 12).getTime(), amount: 500 },
-        ],
-        dataTotal: [
-            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 10, 12).getTime(), amount: 200 },
-            { time: new Date(2021, 9, 11, 12).getTime(), amount: 500 },
-        ]
-    },
-    {
-        targetId: "3",
-        outcomeId: "3",
-        title: "腕立て伏せ",
-        unitName: "回",
-        totalFlg: false,
-        data: [
-            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 10, 12).getTime(), amount: 90 },
-            { time: new Date(2021, 9, 11, 12).getTime(), amount: 110 },
-        ],
-        dataTotal: [
-            { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-            { time: new Date(2021, 9, 10, 12).getTime(), amount: 90 },
-            { time: new Date(2021, 9, 11, 12).getTime(), amount: 110 },
-        ]
-    },
-]
-
-//サンプルデータ経由　SampleJsonをResSampleに代入
-ResSample = SampleJson.map(value => {
-    return {
-        targetId: value.targetId,
-        outcomeId: value.outcomeId,
-        title: value.title,
-        unitName: value.unitName,
-        totalFlg: value.totalFlg,
-        data: value.data.map(row => {
-            return {
-                time: row.time,
-                amount: row.amount
-            } as GraphData;
-        }),
-        dataTotal: value.data.map(row => {
-            return {
-                time: row.time,
-                amount: row.amount
-            } as GraphData;
-        })
-    } as GraphObject
-})
-
-//API経由　APIから取得した値をResに代入
+// call api.
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
     // return;
@@ -243,7 +85,7 @@ axios.post('/api/getOutcomeArchiveByUserId')
     }
 
     // dataをグラフ用のオブジェクトに変換
-    Res = (res.data.data as GraphObject[]).map(outcome => {
+    outcomes = (res.data.data as OutcomeGraphObject[]).map(outcome => {
         // 通常グラフのデータを整形
         outcome.data = outcome.data.map(data => {
             // 日時情報をグラフで扱える形式に変換
@@ -269,94 +111,36 @@ axios.post('/api/getOutcomeArchiveByUserId')
     console.log('err:', err);
 });
 
+
 /*
- * 感情データ 
+ * 感情データ
  */
+
 type FeelingGraphObject = {
     positive: number, // 0 - 100
     negative: number, // -100 - 0
     time: number
-}[]
+}
 
-// { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-const sampleFeelings: FeelingGraphObject = [
-    {
-        positive: 80,
-        negative: 0,
-        time: new Date(2021, 7, 13, 7).getTime()
-    },
-    {
-        positive: 90,
-        negative: 0,
-        time: new Date(2021, 7, 13, 9).getTime()
-    },
-    {
-        positive: 0,
-        negative: -20,
-        time: new Date(2021, 7, 13, 11).getTime()
-    },
-    {
-        positive: 80,
-        negative: 0,
-        time: new Date(2021, 7, 13, 13).getTime()
-    },
-]
+let feelings: FeelingGraphObject[] = [];
 
-
-let graphList
-let graphListSample
+// call api.
+axios.post('/api/getFeelingArchiveByUserId').then(res => {
+    feelings = res.data.data.filter((feelingData: any) =>
+        feelingData.checkInDateTime != undefined && feelingData.positiveValue != undefined && feelingData.negativeValue != undefined
+    ).map((feelingData: any) => {
+        return {
+            positive: feelingData.positiveValue,
+            negative: feelingData.negativeValue,
+            time: dateToTimeStr(new Date(feelingData.checkInDateTime))
+        } as FeelingGraphObject
+    })
+})
 
 export default function Dashboard() {
     const classes = useStyles();
 
-
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-    // グラフの作成 SAMPLE
-    console.log(`ResSampleの中身`)
-    console.log(ResSample)
-
-    graphListSample = ResSample.map(value => {
-        return (
-            <Grid item xs={12} md={6} lg={6}>
-                <Paper className={fixedHeightPaper}>
-                    <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
-                </Paper>
-            </Grid>
-        );
-    });
-    console.log(`graphListSampleの型 ${typeof graphListSample}`);
-
-    // グラフの作成 API
-    console.log(`Resの中身`)
-    console.log(Res)
-
-    // 型がundefinedの時は実行しない。(APIから値が取得できない時と同じ)
-    if (typeof Res === 'undefined'){
-        console.log("APIからグラフデータが取得できませんでした。")
-    }else {
-        graphList = Res.map(value => {
-            return (
-                <Grid item xs={12} md={6} lg={6}>
-                    <Paper className={fixedHeightPaper}>
-                        <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
-                        {console.log(Res)}
-                    </Paper>
-                </Grid>
-            );
-        });
-    }
-
-    console.log(`graphListの型 ${typeof graphList}`);
-
-    // graphList.push(
-    //     <Grid item xs={12} md={6} lg={6}>
-    //         <Paper className={fixedHeightPaper}>
-    //             <Chart title={"a"} unitName={"b"} key={1} graphData={sampleFeelings} />
-    //         </Paper>
-    //     </Grid>
-    // )
-
 
     return (
         <div>
@@ -368,56 +152,22 @@ export default function Dashboard() {
                     {/*<div className={classes.appBarSpacer} />*/}
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={3}>
-                            {/*GanttChart*/}
-                            {/*<Grid item xs={12} md={12} lg={12}>*/}
-                            {/*    <Paper className={fixedHeightPaper}>*/}
-                            {/*        <GanttChart/>*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
-                            {/* Chart */}
-                            {/* {graphListSample} */}
-                            {graphList}
-                            
+                            {/* 成果グラフ */}
+                            {outcomes.map(value => {
+                                return (
+                                    <Grid item xs={12} md={6} lg={6}>
+                                        <Paper className={fixedHeightPaper}>
+                                            <Chart title={value.title} unitName={value.unitName} key={value.targetId} graphData={value.data} />
+                                        </Paper>
+                                    </Grid>
+                                );
+                            })}
+                            {/* 感情グラフ */}
                             <Grid item xs={12} md={12} lg={12}>
                                 <Paper className={fixedHeightPaper}>
-                                    <ChartFeeling graphData={sampleFeelings} />
+                                    <ChartFeeling graphData={feelings} />
                                 </Paper>
                             </Grid>
-                            {/*<Grid item xs={12} md={12} lg={6}>*/}
-                            {/*    <Paper className={fixedHeightPaper}>*/}
-                            {/*        /!* 子に渡す値を設定 *!/*/}
-                            {/*        <Chart title={nameArray[0]} graphData={allData[0]}/>*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
-                            {/*<Grid item xs={12} md={6} lg={6}>*/}
-                            {/*    <Paper className={fixedHeightPaper}>*/}
-                            {/*        <Chart title={nameArray[1]} graphData={allData[1]}/>*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
-                            {/* Recent Deposits */}
-                            {/*<Grid item xs={12} md={6} lg={4}>*/}
-                            {/*    <Paper className={fixedHeightPaper}>*/}
-                            {/*        <Deposits />*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
-                            {/*Test Add*/}
-                            {/*<Grid item xs={12} md={6} lg={6}>*/}
-                            {/*    <Paper className={fixedHeightPaper}>*/}
-                            {/*        <Chart />*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
-                            {/*/!*Test Add*!/*/}
-                            {/*<Grid item xs={12} md={6} lg={6}>*/}
-                            {/*    <Paper className={fixedHeightPaper}>*/}
-                            {/*        <Chart />*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
-                            {/*/!* Recent Orders *!/*/}
-                            {/*<Grid item xs={12}>*/}
-                            {/*    <Paper className={classes.paper}>*/}
-                            {/*        <Orders />*/}
-                            {/*    </Paper>*/}
-                            {/*</Grid>*/}
                         </Grid>
                         <Box pt={4}>
                             <Copyright />
