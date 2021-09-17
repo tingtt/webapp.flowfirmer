@@ -386,6 +386,7 @@ export default function All() {
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
                                             exDiaryDialogStateSetter={setExDiaryDialogState}
+                                            showDate
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
@@ -438,6 +439,7 @@ export default function All() {
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
                                             exDiaryDialogStateSetter={setExDiaryDialogState}
+                                            showDate
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
