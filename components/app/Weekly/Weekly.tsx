@@ -76,7 +76,7 @@ export default function Weekly() {
 
   //Termの数
   if (Termfilter != undefined) {
-    let Termlength = Termfilter.length;
+    Termlength = Termfilter.length;
 
     //Termlengthが0の時に4で固定する
 
