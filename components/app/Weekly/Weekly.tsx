@@ -267,7 +267,6 @@ export default function Weekly() {
                                   getweek.start.getTime()) /
                                   86400000) *
                                   14.3 +
-                                (TermDay * 14.3) / 2 +
                                 "%"
                               }
                               y={41 + (index + 1) * 40}
