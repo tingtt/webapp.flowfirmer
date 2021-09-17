@@ -310,6 +310,7 @@ export default function Today() {
                                             snackbarStateSetter={setSnackBarState}
                                             selectedToDoIdSetter={setSelectedToDoId}
                                             exDiaryDialogStateSetter={setExDiaryDialogState}
+                                            showDate
                                         />
                                         <Divider
                                             className={classes.todoListDivider}
