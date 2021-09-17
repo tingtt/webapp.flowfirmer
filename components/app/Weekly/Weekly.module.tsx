@@ -102,6 +102,12 @@ export const useStyles = makeStyles(() =>
       fontSize: 12,
       fontWeight: "lighter",
     },
+    bar_label_row: {
+      fill: "#000",
+      dominantBaseline: "central",
+      fontSize: 12,
+      fontWeight: "lighter",
+    },
     handle_right: {
       fill: "#000",
       cursor: "ew-resize",
