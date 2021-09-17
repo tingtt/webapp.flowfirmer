@@ -98,13 +98,6 @@ export const useStyles = makeStyles(() =>
     bar_label: {
       fill: "#000",
       dominantBaseline: "central",
-      textAnchor: "middle",
-      fontSize: 12,
-      fontWeight: "lighter",
-    },
-    bar_label_row: {
-      fill: "#000",
-      dominantBaseline: "central",
       fontSize: 12,
       fontWeight: "lighter",
     },

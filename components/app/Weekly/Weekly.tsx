@@ -280,7 +280,7 @@ export default function Weekly() {
                               key={value.name}
                               x={0}
                               y={41 + (index + 1) * 40}
-                              className={classes.bar_label_row}
+                              className={classes.bar_label}
                             >
                               {value.name}
                             </text>
