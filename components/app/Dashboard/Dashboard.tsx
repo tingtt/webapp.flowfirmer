@@ -55,22 +55,23 @@ const dateToTimeStr = (date: Date) => {
     return date.getTime();
 }
 
-type GraphData = { time: number, amount: number }
-type GraphObject = {
-    targetId: string,
-    outcomeId: string,
-    title: string,
-    unitName: string,
-    totalFlg: boolean,
-    data: GraphData[],
-    dataTotal: GraphData[],
-}
 
 /**
  * 成果データ
  */
 
-let outcomes: GraphObject[] = [];
+type OutcomeGraphData = { time: number, amount: number }
+type OutcomeGraphObject = {
+    targetId: string,
+    outcomeId: string,
+    title: string,
+    unitName: string,
+    totalFlg: boolean,
+    data: OutcomeGraphData[],
+    dataTotal: OutcomeGraphData[],
+}
+
+let outcomes: OutcomeGraphObject[] = [];
 
 // call api.
 axios.post('/api/getOutcomeArchiveByUserId')
@@ -84,7 +85,7 @@ axios.post('/api/getOutcomeArchiveByUserId')
     }
 
     // dataをグラフ用のオブジェクトに変換
-    outcomes = (res.data.data as GraphObject[]).map(outcome => {
+    outcomes = (res.data.data as OutcomeGraphObject[]).map(outcome => {
         // 通常グラフのデータを整形
         outcome.data = outcome.data.map(data => {
             // 日時情報をグラフで扱える形式に変換
@@ -110,40 +111,31 @@ axios.post('/api/getOutcomeArchiveByUserId')
     console.log('err:', err);
 });
 
+
 /*
  * 感情データ
  */
+
 type FeelingGraphObject = {
     positive: number, // 0 - 100
     negative: number, // -100 - 0
     time: number
-}[]
+}
 
-// { time: new Date(2021, 9, 9, 12).getTime(), amount: 100 },
-const sampleFeelings: FeelingGraphObject = [
-    {
-        positive: 80,
-        negative: 0,
-        time: new Date(2021, 7, 13, 7).getTime()
-    },
-    {
-        positive: 90,
-        negative: 0,
-        time: new Date(2021, 7, 13, 9).getTime()
-    },
-    {
-        positive: 0,
-        negative: -20,
-        time: new Date(2021, 7, 13, 11).getTime()
-    },
-    {
-        positive: 80,
-        negative: 0,
-        time: new Date(2021, 7, 13, 13).getTime()
-    },
-]
+let feelings: FeelingGraphObject[] = [];
 
-// TODO: 感情データ取得
+// call api.
+axios.post('/api/getFeelingArchiveByUserId').then(res => {
+    feelings = res.data.data.filter((feelingData: any) =>
+        feelingData.checkInDateTime != undefined && feelingData.positiveValue != undefined && feelingData.negativeValue != undefined
+    ).map((feelingData: any) => {
+        return {
+            positive: feelingData.positiveValue,
+            negative: feelingData.negativeValue,
+            time: dateToTimeStr(new Date(feelingData.checkInDateTime))
+        } as FeelingGraphObject
+    })
+})
 
 export default function Dashboard() {
     const classes = useStyles();
@@ -173,7 +165,7 @@ export default function Dashboard() {
                             {/* 感情グラフ */}
                             <Grid item xs={12} md={12} lg={12}>
                                 <Paper className={fixedHeightPaper}>
-                                    <ChartFeeling graphData={sampleFeelings} />
+                                    <ChartFeeling graphData={feelings} />
                                 </Paper>
                             </Grid>
                         </Grid>
