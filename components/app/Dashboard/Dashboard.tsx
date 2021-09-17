@@ -70,9 +70,9 @@ type GraphObject = {
  * 成果データ
  */
 
-let Res: GraphObject[] = [];
+let outcomes: GraphObject[] = [];
 
-//API経由 APIから取得した値をResに代入
+// call api.
 axios.post('/api/getOutcomeArchiveByUserId')
 .then( (res) => {
     // return;
@@ -84,7 +84,7 @@ axios.post('/api/getOutcomeArchiveByUserId')
     }
 
     // dataをグラフ用のオブジェクトに変換
-    Res = (res.data.data as GraphObject[]).map(outcome => {
+    outcomes = (res.data.data as GraphObject[]).map(outcome => {
         // 通常グラフのデータを整形
         outcome.data = outcome.data.map(data => {
             // 日時情報をグラフで扱える形式に変換
@@ -161,7 +161,7 @@ export default function Dashboard() {
                     <Container maxWidth="lg" className={classes.container}>
                         <Grid container spacing={3}>
                             {/* 成果グラフ */}
-                            {Res.map(value => {
+                            {outcomes.map(value => {
                                 return (
                                     <Grid item xs={12} md={6} lg={6}>
                                         <Paper className={fixedHeightPaper}>
