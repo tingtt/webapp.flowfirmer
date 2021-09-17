@@ -103,6 +103,9 @@ export default function Weekly() {
       <button className={classes.button_right} onClick={weekchenge} value="1">
         {">"}
       </button>
+      <text className={classes.year_text}>
+        {changeDate.getFullYear()}
+      </text>
       {/* １週間のガントチャートの記述 */}
       <div className={classes.gantt_warp}>
         <div id="container" className={classes.gantt_container}>
@@ -139,15 +142,16 @@ export default function Weekly() {
 
             {/*今日の日付をオレンジ色にする  */}
             <g id="today">
-              {changeDate.getMonth() == today.getMonth() && (
-                <rect
-                  x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
-                  y="60"
-                  width="14.3%"
-                  height={Termlength!! * 40}
-                  className={classes.today_highlight}
-                />
-              )}
+              {changeDate.getMonth() == today.getMonth() &&
+                changeDate.getFullYear() == today.getFullYear() && (
+                  <rect
+                    x={(today.getDate() - changeDate.getDate()) * 14.3 + "%"}
+                    y="60"
+                    width="14.3%"
+                    height={Termlength!! * 40}
+                    className={classes.today_highlight}
+                  />
+                )}
             </g>
 
             {/* ガントチャートの縦線を作る */}

@@ -72,6 +72,12 @@ export const useStyles = makeStyles(() =>
       fontSize: 16,
       textAnchor: "middle",
     },
+    year_text: {
+      fill: "#333",
+      fontSize: "16",
+      float: "right",
+      marginRight: "50px",
+    },
     bar: {
       fill: "#FFF",
       stroke: "#000",
