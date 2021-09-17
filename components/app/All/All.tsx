@@ -94,7 +94,9 @@ export default function All() {
     const [noDateToDosShown, setNoDateToDosShown] = React.useState<boolean>(true);
     const [delayedToDosShown, setDelayedToDosShown] = React.useState<boolean>(true);
     const [todayPendingToDosShown, setTodayPendingToDosShown] = React.useState<boolean>(true);
-    const [todayCompletedToDosShown, setTodayCompletedToDosShown] = React.useState<boolean>(true);
+    const [tomorrowPendingToDosShown, setTomorrowPendingToDosShown] = React.useState<boolean>(true);
+    const [laterPendingToDosShown, setLaterPendingToDosShown] = React.useState<boolean>(true);
+    const [completedToDosShown, setCompletedToDosShown] = React.useState<boolean>(true);
 
     // snackbar state
     const [snackBarState, setSnackBarState] = React.useState<{open: boolean, msg: string, type?: 'todoCompleted' | 'todoDeleted'}>({open: false, msg: ""});
@@ -224,7 +226,7 @@ export default function All() {
                                             [classes.accordionIconRotate]: !todayPendingToDosShown
                                         })}
                                     />
-                                    <p>Pending</p>
+                                    <p>Today</p>
                                 </div>
                                 {todos.filter(value => {
                                     if (value.startDatetimeScheduled == undefined || value.completed) {
@@ -232,6 +234,132 @@ export default function All() {
                                     }
                                     const date = new Date();
                                     return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
+                                }).sort((a,b) => {
+                                    var comparison: number = 0;
+                                    if (a.startDatetimeScheduled == undefined) {
+                                        if (b.startDatetimeScheduled != undefined) {
+                                            comparison = -1;
+                                        }
+                                    } else {
+                                        if (b.startDatetimeScheduled == undefined) {
+                                            comparison = 1;
+                                        } else {
+                                            a.startDatetimeScheduled < b.startDatetimeScheduled ? comparison = -1 : comparison = 1;
+                                        }
+                                    }
+                                    return comparison;
+                                }).map(value => (
+                                    <div
+                                        className={classes.todoListItemDiv}
+                                        key={value.id}
+                                    >
+                                        <ToDoListItem
+                                            key={value.id}
+                                            todo={value}
+                                            setTodos={setTodos}
+                                            snackbarStateSetter={setSnackBarState}
+                                            selectedToDoIdSetter={setSelectedToDoId}
+                                            exDiaryDialogStateSetter={setExDiaryDialogState}
+                                        />
+                                        <Divider
+                                            className={classes.todoListDivider}
+                                        />
+                                    </div>
+                                ))}
+                            </Collapse>
+                        )}
+                        {/* Tomorrow */}
+                        {todos.filter(value => {
+                            if (value.startDatetimeScheduled == undefined || value.completed) {
+                                return false;
+                            }
+
+                            const date = new Date();
+                            date.setDate(date.getDate() + 1);
+                            return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
+                        }).length > 0 && (
+                            <Collapse in={tomorrowPendingToDosShown} collapsedSize="33px">
+                                <div
+                                    className={classes.accordionToggleButtonDiv}
+                                    onClick={() => setTomorrowPendingToDosShown(current => !current)}
+                                >
+                                    <ArrowDropDown
+                                        className={clsx(classes.accordionIcon, {
+                                            [classes.accordionIconRotate]: !tomorrowPendingToDosShown
+                                        })}
+                                    />
+                                    <p>Tomorrow</p>
+                                </div>
+                                {todos.filter(value => {
+                                    if (value.startDatetimeScheduled == undefined || value.completed) {
+                                        return false;
+                                    }
+                                    const date = new Date();
+                                    date.setDate(date.getDate() + 1);
+                                    return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
+                                }).sort((a,b) => {
+                                    var comparison: number = 0;
+                                    if (a.startDatetimeScheduled == undefined) {
+                                        if (b.startDatetimeScheduled != undefined) {
+                                            comparison = -1;
+                                        }
+                                    } else {
+                                        if (b.startDatetimeScheduled == undefined) {
+                                            comparison = 1;
+                                        } else {
+                                            a.startDatetimeScheduled < b.startDatetimeScheduled ? comparison = -1 : comparison = 1;
+                                        }
+                                    }
+                                    return comparison;
+                                }).map(value => (
+                                    <div
+                                        className={classes.todoListItemDiv}
+                                        key={value.id}
+                                    >
+                                        <ToDoListItem
+                                            key={value.id}
+                                            todo={value}
+                                            setTodos={setTodos}
+                                            snackbarStateSetter={setSnackBarState}
+                                            selectedToDoIdSetter={setSelectedToDoId}
+                                            exDiaryDialogStateSetter={setExDiaryDialogState}
+                                        />
+                                        <Divider
+                                            className={classes.todoListDivider}
+                                        />
+                                    </div>
+                                ))}
+                            </Collapse>
+                        )}
+                        {/* Later */}
+                        {todos.filter(value => {
+                            if (value.startDatetimeScheduled == undefined || value.completed) {
+                                return false;
+                            }
+
+                            const date = new Date();
+                            date.setDate(date.getDate() + 2);
+                            return `${date.getFullYear()}${date.getMonth()}${date.getDate()}` <= `${value.startDatetimeScheduled.getFullYear()}${value.startDatetimeScheduled.getMonth()}${value.startDatetimeScheduled.getDate()}`;
+                        }).length > 0 && (
+                            <Collapse in={laterPendingToDosShown} collapsedSize="33px">
+                                <div
+                                    className={classes.accordionToggleButtonDiv}
+                                    onClick={() => setLaterPendingToDosShown(current => !current)}
+                                >
+                                    <ArrowDropDown
+                                        className={clsx(classes.accordionIcon, {
+                                            [classes.accordionIconRotate]: !laterPendingToDosShown
+                                        })}
+                                    />
+                                    <p>Later</p>
+                                </div>
+                                {todos.filter(value => {
+                                    if (value.startDatetimeScheduled == undefined || value.completed) {
+                                        return false;
+                                    }
+                                    const date = new Date();
+                                    date.setDate(date.getDate() + 2);
+                                    return `${date.getFullYear()}${date.getMonth()}${date.getDate()}` <= `${value.startDatetimeScheduled.getFullYear()}${value.startDatetimeScheduled.getMonth()}${value.startDatetimeScheduled.getDate()}`;
                                 }).sort((a,b) => {
                                     var comparison: number = 0;
                                     if (a.startDatetimeScheduled == undefined) {
@@ -277,14 +405,14 @@ export default function All() {
                             const date = new Date();
                             return value.startDatetimeScheduled.getFullYear() == date.getFullYear() && value.startDatetimeScheduled.getMonth() == date.getMonth() && value.startDatetimeScheduled.getDate() == date.getDate();
                         }).length > 0 && (
-                            <Collapse in={todayCompletedToDosShown} collapsedSize="33px">
+                            <Collapse in={completedToDosShown} collapsedSize="33px">
                                 <div
                                     className={classes.accordionToggleButtonDiv}
-                                    onClick={() => setTodayCompletedToDosShown(current => !current)}
+                                    onClick={() => setCompletedToDosShown(current => !current)}
                                 >
                                     <ArrowDropDown
                                         className={clsx(classes.accordionIcon, {
-                                            [classes.accordionIconRotate]: !todayCompletedToDosShown
+                                            [classes.accordionIconRotate]: !completedToDosShown
                                         })}
                                     />
                                     <p>Completed</p>
