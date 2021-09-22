@@ -3,7 +3,6 @@ import { FeelingType } from "../lib/interface";
 export const defaultFeeingTypes: FeelingType[] = [
     {
         id: 0,
-        user_id: -1,
 
         name: "満足",
 
@@ -12,7 +11,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 1,
-        user_id: -1,
 
         name: "感謝",
 
@@ -21,7 +19,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 2,
-        user_id: -1,
 
         name: "嬉しい",
 
@@ -30,7 +27,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 3,
-        user_id: -1,
 
         name: "ワクワク",
 
@@ -39,7 +35,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 4,
-        user_id: -1,
 
         name: "好き",
 
@@ -48,7 +43,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 5,
-        user_id: -1,
 
         name: "関心",
 
@@ -57,7 +51,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 6,
-        user_id: -1,
 
         name: "面白い",
 
@@ -66,7 +59,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 7,
-        user_id: -1,
 
         name: "楽しい",
 
@@ -75,7 +67,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 8,
-        user_id: -1,
 
         name: "スッキリ",
 
@@ -84,7 +75,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 9,
-        user_id: -1,
 
         name: "ドキドキ",
 
@@ -93,7 +83,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 10,
-        user_id: -1,
 
         name: "安心",
 
@@ -102,7 +91,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 11,
-        user_id: -1,
 
         name: "穏やか",
 
@@ -111,7 +99,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 12,
-        user_id: -1,
 
         name: "普通",
 
@@ -120,7 +107,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 13,
-        user_id: -1,
 
         name: "退屈",
 
@@ -129,7 +115,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 14,
-        user_id: -1,
 
         name: "モヤモヤ",
 
@@ -138,7 +123,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 15,
-        user_id: -1,
 
         name: "緊張",
 
@@ -147,7 +131,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 16,
-        user_id: -1,
 
         name: "不安",
 
@@ -156,7 +139,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 17,
-        user_id: -1,
 
         name: "悲しい",
 
@@ -165,7 +147,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 18,
-        user_id: -1,
 
         name: "疲れた",
 
@@ -174,7 +155,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 19,
-        user_id: -1,
 
         name: "後悔",
 
@@ -183,7 +163,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 20,
-        user_id: -1,
 
         name: "恐れる",
 
@@ -192,7 +171,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 21,
-        user_id: -1,
 
         name: "イライラ",
 
@@ -201,7 +179,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 22,
-        user_id: -1,
 
         name: "怒り",
 
@@ -210,7 +187,6 @@ export const defaultFeeingTypes: FeelingType[] = [
     },
     {
         id: 23,
-        user_id: -1,
 
         name: "嫌い",
 

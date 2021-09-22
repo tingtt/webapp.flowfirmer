@@ -2,6 +2,7 @@ import React from 'react';
 import { Menu, MenuItem } from '@material-ui/core';
 import AppDataManager from '../../../lib/app/appDataManager';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { Target } from '../../../lib/interface';
 
 type Props = {
     menuAnchorEl: null | HTMLElement
@@ -25,7 +26,7 @@ export default function DateTimeInfoSelectMenu(props: Props) {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
+            return  AppDataManager.generateInstance();
         } catch (e) {
             return  AppDataManager.getInstance();
         }
@@ -42,13 +43,16 @@ export default function DateTimeInfoSelectMenu(props: Props) {
     // Target新規追加処理
     const createNewTarget = (targetName: string) => {
         // Targetの新規作成、ID取得処理
-        const newTarget = appDataManager.registerTarget(targetName);
-        if (newTarget != false) {
-            // 新規Targetを選択
-            selectTarget(newTarget.id);
-        }
+        var newTarget: Target | false = false;
+        appDataManager.registerTarget(targetName).then((res) => {
+            newTarget = res;
+            if (newTarget != false) {
+                // 新規Targetを選択
+                selectTarget(newTarget.id);
+            }
+        })
         // メニューを閉じる
-        props.menuAnchorElSetter(null);
+        closeMenu();
     };
 
     return (
@@ -56,8 +60,8 @@ export default function DateTimeInfoSelectMenu(props: Props) {
             anchorEl={props.menuAnchorEl}
             getContentAnchorEl={null}
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
+                vertical: 'bottom',
+                horizontal: 'left',
             }}
             open={Boolean(props.menuAnchorEl)}
             onClose={closeMenu}

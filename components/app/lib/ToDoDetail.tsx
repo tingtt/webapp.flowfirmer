@@ -53,7 +53,7 @@ export default function ToDoDetail(props: Props) {
 
     const appDataManager: AppDataManager = (() => {
         try {
-            return  AppDataManager.generateInstance(document.cookie.split('; ').find((row: string) => row.startsWith('token'))!.split('=')[1]);
+            return  AppDataManager.generateInstance();
         } catch (e) {
             return  AppDataManager.getInstance();
         }
@@ -103,7 +103,7 @@ export default function ToDoDetail(props: Props) {
                         value={props.todo.name}
                         inputProps={{ 'aria-label': 'naked' }}
                         onChange={nameChange}
-                        className={clsx({[classes.colorRed] : props.todo.startDatetimeScheduled != undefined && props.todo.startDatetimeScheduled.getFullYear() <= (new Date()).getFullYear() && props.todo.startDatetimeScheduled.getMonth() <= (new Date()).getMonth() && props.todo.startDatetimeScheduled.getDate() < (new Date()).getDate()})}
+                        className={clsx({[classes.colorRed] : props.todo.startDatetimeScheduled != undefined && ((props.todo.startDatetimeScheduled.getFullYear() * 100 + props.todo.startDatetimeScheduled.getMonth()) * 100 + props.todo.startDatetimeScheduled.getDate() < ((new Date()).getFullYear() * 100 + (new Date()).getMonth()) * 100 + (new Date()).getDate())})}
                         autoComplete="off"
                     />
                 </span>

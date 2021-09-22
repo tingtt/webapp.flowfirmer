@@ -1,16 +1,19 @@
 import React from 'react';
 import { useTheme } from '@material-ui/core/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 import Title from './Title';
 
 
 
 export default function Chart(props) {
     const theme = useTheme();
+    // console.log("props.graphData");
+    // console.log(props.graphData);
+    
     
     return (
         <React.Fragment>
-            <Title>{props.title}</Title>
+            <Title>感情グラフ</Title>
             <ResponsiveContainer>
                 <LineChart
                     data={props.graphData}
@@ -32,27 +35,28 @@ export default function Chart(props) {
                         // type='string'
                     />
                     <YAxis
-                        // dataKey="amount"
+                        dataKey="positive"
                         stroke={theme.palette.text.secondary}
-                        type='number'
+                        domain={[-100,100]}
+                        // type='number'
                         >
                         <Label
                             angle={270}
                             position="left"
                             style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
                         >
-                            {props.unitName == undefined ? "" : props.unitName}
+                            {props.unitName}
                         </Label>
-                    </YAxis>
+                    </YAxis >
                     <Tooltip
                         // wrapperStyle={{ backgroundColor: "red" }}
                         // labelStyle={{ color: "green" }}
                         // itemStyle={{ color: "cyan" }}
 
                         // mountに単位(unitName)を付加
-                        formatter={function(value, name) {
-                        return `${value} ${props.unitName == undefined ? "" : props.unitName}`;
-                        }}
+                        // formatter={function(value, name) {
+                        // return `${value} ${props.unitName}`;
+                        // }}
 
                         // 日付を読みやすい形に変更
                         labelFormatter={function(value) {
@@ -62,7 +66,9 @@ export default function Chart(props) {
                     />
                     {/* <CartesianGrid stroke="#ccc" strokeDasharray="5 5" /> */}
                     <CartesianGrid strokeDasharray="3 3" />
-                    <Line dataKey="amount" stroke={theme.palette.primary.main} dot={true} />
+                    <ReferenceLine y={0} label="" stroke="red" isFront={true} />
+                    <Line type="monotone" dataKey="positive" stroke="#d88884" dot={true} />
+                    <Line type="monotone" dataKey="negative" stroke={theme.palette.primary.main} dot={true} />
 
                 </LineChart>
             </ResponsiveContainer>
