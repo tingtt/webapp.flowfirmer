@@ -1,9 +1,12 @@
 export type Target = {
-    id: number
-    user_id: number
+    id: string
 
     name: string
-    themeColor: string
+    themeColor: {
+        r: number
+        g: number
+        b: number
+    }
 
     outcomeSchemes?: OutcomeScheme[]
 
@@ -16,10 +19,9 @@ export type Target = {
 
 // 成果記録の型
 export type OutcomeScheme = {
-    id: number
-    user_id: number
+    id: string
 
-    target_id: number
+    target_id: string
 
     name: string
     //単位

@@ -1,5 +1,3 @@
-import { Target } from "../interface";
-
 export type NavigationState = {
     name: 'Today'
     hidden?: true
@@ -11,7 +9,7 @@ export type NavigationState = {
     hidden?: true
 } | {
     name: 'Target',
-    target: Target
+    targetId: string
 } | {
     name: 'Dashboard'
     hidden?: true

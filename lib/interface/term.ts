@@ -3,8 +3,7 @@ import { Target } from "./target";
 import { ToDo } from "./todo";
 
 export type Term = {
-    id: number
-    user_id: number
+    id: string
 
     name: string
     description?: string

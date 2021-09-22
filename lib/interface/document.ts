@@ -1,8 +1,7 @@
 import { Target } from "./target";
 
 export type Document = {
-    id: number
-    user_id: number
+    id: string
 
     name: string
     url: URL
