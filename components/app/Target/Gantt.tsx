@@ -164,9 +164,9 @@ export default function GanttChart(props: Props) {
   }, [calendarState])
 
   //数字が動いたときに再描画させたい
-  // const chengeCalendar = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   viewcalendar(calendarState.name, Month, +e.target.value);
-  // };
+  const chengeCalendar = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    viewcalendar(calendarState.name, Month, +e.target.value)
+  }
 
   //tergetidと一致する物だけ
   const targetlist = appDataManager.terms?.filter(
@@ -988,7 +988,7 @@ export default function GanttChart(props: Props) {
 
   return (
     <main>
-      {/* <select id={calendarState.name} name="number" onChange={chengeCalendar}>
+      <select id={calendarState.name} name="number" onChange={chengeCalendar}>
         {React.Children.toArray(
           calendarState.numSelecter.map((value) => (
             <option key={value} value={value}>
@@ -996,7 +996,7 @@ export default function GanttChart(props: Props) {
             </option>
           ))
         )}
-      </select> */}
+      </select>
       <select id="calendar" defaultValue={"Monthly"} onChange={selectChange}>
         <option value="Weekly">週</option>
         <option value="Monthly">月</option>
