@@ -1,36 +1,36 @@
-import { Document } from "./document";
+import { Document } from "./document"
 import { Target } from "./target"
-import { Term } from "./term";
+import { Term } from "./term"
 
 export type ToDo = {
-    id: string
+  id: string
 
-    name: string
-    description?: string
+  name: string
+  description?: string
 
-    startDatetimeScheduled?: Date
+  startDatetimeScheduled?: Date
 
-    // 開始時間情報が登録されているかどうか
-    timeInfoExisted: boolean
+  // 開始時間情報が登録されているかどうか
+  timeInfoExisted: boolean
 
-    processingTimeScheduled?: number
+  processingTimeScheduled?: number
 
-    // 繰り返し周期
-    repeatPattern?: 'Daily' | 'Weekly' | 'Monthly'
-    // 毎週の繰り返す曜日情報
-    repeatDayForWeekly?: number[]
-    // 月の繰り返す日付
-    repeatDateForMonthly?: number
+  // 繰り返し周期
+  repeatPattern?: "Daily" | "Weekly" | "Monthly"
+  // 毎週の繰り返す曜日情報
+  repeatDayForWeekly?: number[]
+  // 月の繰り返す日付
+  repeatDateForMonthly?: number
 
-    targetList?: Target[]
-    term?: Term
+  targetList?: Target[]
+  term?: Term
 
-    documentList?: Document[]
+  documentList?: Document[]
 
-    completed: boolean
+  completed: boolean
 
-    // to-doを完了した日時
-    checkInDatetime?: Date
+  // to-doを完了した日時
+  checkInDatetime?: Date
 
-    archived: boolean
+  archived: boolean
 }

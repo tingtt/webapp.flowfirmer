@@ -1,9 +1,9 @@
-import { Target } from "./target";
+import { Target } from "./target"
 
 export type HabitRemind = {
-    id: string
+  id: string
 
-    name: string
+  name: string
 
-    target?: Target
+  target?: Target
 }

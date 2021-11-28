@@ -1,4 +1,4 @@
-import { createStyles, makeStyles } from "@material-ui/core";
+import { createStyles, makeStyles } from "@material-ui/core"
 
 export const useStyles = makeStyles(() =>
   createStyles({
@@ -49,14 +49,14 @@ export const useStyles = makeStyles(() =>
       fill: "#333",
       fontSize: 12,
       textAnchor: "middle",
-      "&:nth-child(7n)":{
-        fill: "#00F"
+      "&:nth-child(7n)": {
+        fill: "#00F",
       },
-      "&:nth-child(1)":{
-        fill: "#F00"
+      "&:nth-child(1)": {
+        fill: "#F00",
       },
-      "&:nth-child(7n+1)":{
-        fill: "#F00"
+      "&:nth-child(7n+1)": {
+        fill: "#F00",
       },
     },
     monthly_text: {
@@ -86,4 +86,4 @@ export const useStyles = makeStyles(() =>
       fontWeight: "lighter",
     },
   })
-);
+)

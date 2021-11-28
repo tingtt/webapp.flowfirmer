@@ -1,60 +1,60 @@
-import React from "react";
-import AppDataManager from "../../../lib/app/appDataManager";
-import ToDoBox from "./Todobox";
-import { useStyles } from "./Weekly.module";
+import React from "react"
+import AppDataManager from "../../../lib/app/appDataManager"
+import ToDoBox from "./Todobox"
+import { useStyles } from "./Weekly.module"
 
 export default function Weekly() {
-  let today = new Date(); //今日の日付
-  let year = today.getFullYear(); //今年
-  let month = today.getMonth() + 1; //今月
+  let today = new Date() //今日の日付
+  let year = today.getFullYear() //今年
+  let month = today.getMonth() + 1 //今月
 
   //Termの取得するための関数
   const appDataManager: AppDataManager = (() => {
     try {
-      return AppDataManager.generateInstance();
+      return AppDataManager.generateInstance()
     } catch (e) {
-      return AppDataManager.getInstance();
+      return AppDataManager.getInstance()
     }
-  })();
+  })()
 
-  let startday: any; //Termの開始日
-  let endday: any; //Termの終了日
-  let TermDay: number; //Termの期間
-  let Termlength: number; //Termの数
+  let startday: any //Termの開始日
+  let endday: any //Termの終了日
+  let TermDay: number //Termの期間
+  let Termlength: number //Termの数
 
-  const [startnumber, setstartnumber] = React.useState(0);
+  const [startnumber, setstartnumber] = React.useState(0)
 
   //指定した週目の始まりと最後を出す
   const getWeekOfMonth = (year: number, month: number, weekNumber: number) => {
-    let start = new Date(year, month - 1, (weekNumber - 1) * 7 + 1);
-    let day = start.getDay();
-    start.setDate(start.getDate() + startnumber - day);
-    let end = new Date(start);
-    end.setDate(end.getDate() + 6);
-    return { start: start, end: end };
-  };
+    let start = new Date(year, month - 1, (weekNumber - 1) * 7 + 1)
+    let day = start.getDay()
+    start.setDate(start.getDate() + startnumber - day)
+    let end = new Date(start)
+    end.setDate(end.getDate() + 6)
+    return { start: start, end: end }
+  }
 
   //今日が第何週かを出す
   const [week, setweek] = React.useState(
     Math.floor((today.getDate() - today.getDay() + 12) / 7)
-  );
+  )
 
-  const getweek = getWeekOfMonth(year, month, week); //１週間の取得
-  let changeDate = new Date(getweek.start); //数字を出すための処理
-  const classes = useStyles(); //css呼び出し
+  const getweek = getWeekOfMonth(year, month, week) //１週間の取得
+  let changeDate = new Date(getweek.start) //数字を出すための処理
+  const classes = useStyles() //css呼び出し
 
   //ボタンを押した時の処理
   const weekchenge = (e: React.MouseEvent<HTMLButtonElement>) => {
-    let num = Number(e.currentTarget.getAttribute("value"));
-    setweek((current) => current + num); //今週から１週前か後に移動
-    changeDate = getweek.start;
-  };
+    let num = Number(e.currentTarget.getAttribute("value"))
+    setweek((current) => current + num) //今週から１週前か後に移動
+    changeDate = getweek.start
+  }
 
   //日曜はじめ又は、月曜はじめを決める
   const selectweek = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setstartnumber(Number(e.target.value));
-    console.log(startnumber);
-  };
+    setstartnumber(Number(e.target.value))
+    console.log(startnumber)
+  }
 
   //Termのドラッグ＆ドロップ処理
   // const drag = (e: React.MouseEvent<SVGRectElement>) => {
@@ -72,16 +72,16 @@ export default function Weekly() {
     (value) =>
       value.startDatetimeScheduled <= getweek.end &&
       value.endDatetimeScheduled >= getweek.start
-  );
+  )
 
   //Termの数
   if (Termfilter != undefined) {
-    Termlength = Termfilter.length;
+    Termlength = Termfilter.length
 
     //Termlengthが0の時に4で固定する
 
     if (Termlength < 4) {
-      Termlength += 4 - Termlength;
+      Termlength += 4 - Termlength
     }
   }
 
@@ -103,9 +103,7 @@ export default function Weekly() {
       <button className={classes.button_right} onClick={weekchenge} value="1">
         {">"}
       </button>
-      <text className={classes.year_text}>
-        {changeDate.getFullYear()}
-      </text>
+      <text className={classes.year_text}>{changeDate.getFullYear()}</text>
       {/* １週間のガントチャートの記述 */}
       <div className={classes.gantt_warp}>
         <div id="container" className={classes.gantt_container}>
@@ -123,7 +121,7 @@ export default function Weekly() {
                         height="40"
                         className={classes.grid_row}
                       />
-                    );
+                    )
                   })
               )}
             </g>
@@ -188,7 +186,7 @@ export default function Weekly() {
                             "/" +
                             changeDate.getDate()}
                         </text>
-                      );
+                      )
                     } else if (
                       changeDate.getDate() ==
                       new Date(
@@ -198,7 +196,7 @@ export default function Weekly() {
                       ).getDate()
                     ) {
                       // １週間の表示中に月が変わった場合
-                      changeDate.setDate(changeDate.getDate() + 1);
+                      changeDate.setDate(changeDate.getDate() + 1)
                       return (
                         <text
                           key={idx}
@@ -211,10 +209,10 @@ export default function Weekly() {
                             "/" +
                             changeDate.getDate()}
                         </text>
-                      );
+                      )
                     } else {
                       //それ以外
-                      changeDate.setDate(changeDate.getDate() + 1);
+                      changeDate.setDate(changeDate.getDate() + 1)
                       return (
                         <text
                           key={idx}
@@ -224,7 +222,7 @@ export default function Weekly() {
                         >
                           {changeDate.getDate()}
                         </text>
-                      );
+                      )
                     }
                   })()
                 )
@@ -237,9 +235,9 @@ export default function Weekly() {
                 //サンプルに変更中
                 Termfilter &&
                   Termfilter.map((value, index) => {
-                    startday = value.startDatetimeScheduled; //Termの開始日
-                    endday = value.endDatetimeScheduled; //Termの終了日
-                    TermDay = (endday - startday) / 86400000 + 1;
+                    startday = value.startDatetimeScheduled //Termの開始日
+                    endday = value.endDatetimeScheduled //Termの終了日
+                    TermDay = (endday - startday) / 86400000 + 1
 
                     return (
                       <g className={classes.bar_wrapper}>
@@ -316,7 +314,7 @@ export default function Weekly() {
                             />
                           </g> */}
                       </g>
-                    );
+                    )
                   })
               )}
             </g>
@@ -358,5 +356,5 @@ export default function Weekly() {
         )}
       </div>
     </div>
-  );
+  )
 }

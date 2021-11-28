@@ -1,11 +1,11 @@
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import React from "react";
-import { ToDo } from "../../../lib/interface";
-import { Checkbox, Paper } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles"
+import React from "react"
+import { ToDo } from "../../../lib/interface"
+import { Checkbox, Paper } from "@material-ui/core"
 
 type Props = {
-  todo: ToDo;
-};
+  todo: ToDo
+}
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,16 +33,16 @@ const useStyles = makeStyles((theme: Theme) =>
       cursor: "alias",
     },
   })
-);
+)
 
 export default function ToDoBox(props: Props) {
-  const classes = useStyles(props);
+  const classes = useStyles(props)
 
-  const [checked, setChecked] = React.useState<boolean>(props.todo.completed);
+  const [checked, setChecked] = React.useState<boolean>(props.todo.completed)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
+    setChecked(event.target.checked)
+  }
 
   return (
     <div className={classes.root}>
@@ -53,11 +53,9 @@ export default function ToDoBox(props: Props) {
           checked={checked}
           onChange={handleChange}
         />
-        <div className={classes.text} >
-          {props.todo.name}
-        </div>
+        <div className={classes.text}>{props.todo.name}</div>
         {/* <ToDoDetail todo={props.todo} */}
       </Paper>
     </div>
-  );
+  )
 }

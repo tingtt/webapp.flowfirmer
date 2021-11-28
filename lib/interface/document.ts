@@ -1,10 +1,10 @@
-import { Target } from "./target";
+import { Target } from "./target"
 
 export type Document = {
-    id: string
+  id: string
 
-    name: string
-    url: URL
+  name: string
+  url: URL
 
-    targetList: Target[]
+  targetList: Target[]
 }
