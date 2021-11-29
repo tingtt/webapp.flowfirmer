@@ -990,7 +990,7 @@ export default function GanttChart(props: Props) {
     <main>
       <select id={calendarState.name} name="number" onChange={chengeCalendar}>
         {React.Children.toArray(
-          calendarState.numSelecter.map((value) => (
+          (calendarState.numSelecter as Array<number>).map((value) => (
             <option key={value} value={value}>
               {value}
             </option>
